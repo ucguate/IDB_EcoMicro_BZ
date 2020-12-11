@@ -1,4 +1,4 @@
-var sectionsContainer = [], questionsContainer = [], categoriesContainer, typesContainer;
+var sectionsContainer = [], questionsContainer = [], categoriesContainer, typesContainer, CCGenQuestions;
 
 // loan purposes
 function getLoanP(){      
@@ -128,6 +128,7 @@ function getQuestions(){
                 console.log(questionsContainer);
                 buildBI();
                 buildCC();
+                buildCP();
             }
         });
         
@@ -267,6 +268,8 @@ function buildCC(){
     console.log('CCQuestions');
     console.log(CCQuestions);
 
+    CCGenQuestions = CCQuestions;
+
     buildCCPortraits(CCQuestions);
 
 }
@@ -276,17 +279,17 @@ function buildCCPortraits(questions){
     questions.forEach((question, key, arr) => {
         let imgUrl = '';
         if(question.title == 'Drought') {
-            imgUrl = 'pexels-pixabay-60013.jpg';
+            imgUrl = 'assets/img/pexels-pixabay-60013.jpg';
         } else if (question.title == 'Hurricane Ocurrencies') {
-            imgUrl = 'pexels-pixabay-76969.jpg'
+            imgUrl = 'assets/img/pexels-pixabay-76969.jpg'
         } else if (question.title == 'Heavy Raining') {
-            imgUrl = 'pexels-bibhukalyan-acharya-1463530.jpg'
+            imgUrl = 'assets/img/pexels-bibhukalyan-acharya-1463530.jpg'
         } else if (question.title == 'Flooding') {
-            imgUrl = 'toomas-tartes-27HacQwqvA0-unsplash.jpg'
+            imgUrl = 'assets/img/toomas-tartes-27HacQwqvA0-unsplash.jpg'
         } else if (question.title == 'Wildfires') {
-            imgUrl = 'pexels-vladyslav-dukhin-4070727.jpg'
+            imgUrl = 'assets/img/pexels-vladyslav-dukhin-4070727.jpg'
         } else if (question.title == 'Coastal Flooding') {
-            imgUrl = 'falco-negenman-O9uwdPbxroc-unsplash (1).jpg'
+            imgUrl = 'assets/img/falco-negenman-O9uwdPbxroc-unsplash (1).jpg'
         }
 
         let pt = `<div class="col col-3 mb-5">
@@ -297,7 +300,6 @@ function buildCCPortraits(questions){
                 </div>`;
         container += pt;
 
-        buildCard(question);
 
         if(key === arr.length - 1){
             
@@ -307,17 +309,43 @@ function buildCCPortraits(questions){
     });
 }
 
+function buildCards(){
+    $('#CCContentDiv').empty();
+    CCGenQuestions.forEach(element => {
+        buildCard(element);
+    });
+}
+
 function buildCard(question){
-    let pt = `<div class="shadow m-2" style="display: all;">
+
+    let curAddress = $('#customerLocationAddress').val(),
+    curLat = $('#customerLocationLat').val(),
+    curLon = $('#customerLocationLon').val();
+
+    console.log(curAddress, curLat, curLon);
+
+    let curLayer = '', curColor = '';
+    if(question.title == 'Flooding'){
+        curLayer = 'flood';
+        curColor = 'Blues';
+    } else if (question.title == 'Coastal Flooding') {
+        curLayer = 'costal';
+        curColor = 'Purples';
+    } else if (question.title == 'Wildfires') {
+        curLayer = 'fire';
+        curColor = 'Oranges';
+    }
+
+    let pt = `<div class="shadow m-2" style="border-radius: 10px; display: none;" id="${question.title.replace(/\s/g, '')+'_container'}">
                     <div class="row">
                         <div class="col col-5">
                             <div class="embed-responsive embed-responsive-16by9" style="width: 100%; height: 600px;">
                                 <iframe class="embed-responsive-item" 
                                     sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                                    src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=fire&amp;lat=17.557092626044856&amp;lon=-88.28942405059937&amp;z=12&amp;pin=1&amp;color=Oranges"
+                                    src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=${curLayer}&amp;lat=${curLat}&amp;lon=${curLon}&amp;z=12&amp;pin=1&amp;color=${curColor}"
                                 ></iframe>
                             </div>
-                        </div>
+                        </div> 
                         <div class="col my-auto">
                             <div class="row mb-4">
                                 <div class="col text-center">
@@ -327,15 +355,15 @@ function buildCard(question){
                             <div class="row mb-2">
                                 <div class="col">
                                     <h5 class="d-inline-flex">Address: </h5>
-                                    <h6 class="d-inline-flex ml-2" id="${question.title.replace(/\s/g, '')+'_address'}">Placeholder</h6>
+                                    <h6 class="d-inline-flex ml-2" id="${question.title.replace(/\s/g, '')+'_address'}">${curAddress}</h6>
                                 </div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col">
                                     <h5 class="d-inline-flex">Lat: </h5>
-                                    <h6 class="d-inline-flex ml-2" id="${question.title.replace(/\s/g, '')+'_lat'}">Placeholder</h6>
+                                    <h6 class="d-inline-flex ml-2" id="${question.title.replace(/\s/g, '')+'_lat'}">${curLat}</h6>
                                     <h5 class="d-inline-flex ml-4">Lon: </h5>
-                                    <h6 class="d-inline-flex ml-2" id="${question.title.replace(/\s/g, '')+'_lon'}">Placeholder</h6>
+                                    <h6 class="d-inline-flex ml-2" id="${question.title.replace(/\s/g, '')+'_lon'}">${curLon}</h6>
                                 </div>
                             </div>
                             <div class="row">
@@ -363,7 +391,103 @@ function buildCard(question){
 }
 
 function showCard(id){
-    console.log('id: '+id);
+    if(id == 'cardflooding0'){
+        document.getElementById("Flooding_container").style.display = 'block';
+        document.getElementById("CoastalFlooding_container").style.display = 'none';
+        document.getElementById("Wildfires_container").style.display = 'none';
+
+    } else if ( id == 'cardcoastalflooding1'){
+        document.getElementById("CoastalFlooding_container").style.display = 'block';
+        document.getElementById("Flooding_container").style.display = 'none';
+        document.getElementById("Wildfires_container").style.display = 'none';
+    } else if (id == 'cardwildfires2') {
+        document.getElementById("Wildfires_container").style.display = 'block';
+        document.getElementById("Flooding_container").style.display = 'none';
+        document.getElementById("CoastalFlooding_container").style.display = 'none';
+    }
+}
+
+// build CP - climate preparedness
+
+function buildCP(){
+
+    var CPQuestions = questionsContainer.filter(obj => {
+        return obj.section == 3;
+      })
+
+    console.log('CPQuestions');
+    console.log(CPQuestions);
+
+    var CP_HTML = [];
+
+    CPQuestions.forEach((question, key, arr) => {
+        let type = typesContainer.filter(obj => {
+            return obj.id === question.type;
+          })
+        
+        console.log(type[0].name);
+        switch (type[0].name) {
+            case 'Dropdown Single':
+                console.log('dropdown');
+                CP_HTML.push(dropDownSingle2(question));
+                break;
+            case 'Text field':
+                console.log('text field');
+                break;
+            case 'Integer':
+                console.log('integer');
+                break;
+            case 'Number':
+                console.log('number');
+                break;
+            case 'Checkbox group':
+                console.log('checkbox group');
+                CP_HTML.push(checkBox(question));
+                break;
+            case 'Radio Group':
+                CP_HTML.push(radioGroup(question));
+                console.log('radio group');
+                break;
+            case 'Climate Risk Card':
+                console.log('climate risk card');
+                break;
+            case 'Dropdown multiple':
+                console.log('drop down mul');
+                CP_HTML.push(dropdownSingle2(question));
+                break;
+            case 'Geolocation':
+                console.log('geo');
+                break;
+            case 'Range selector slider':
+                console.log('sel slider');
+                break;
+            case 'Range Selector Radio':
+                console.log('range sel');
+                break;
+            case 'Date Range':
+                console.log('date range');
+                break;
+            case 'Date Selector':
+                console.log('date sel');
+                break;
+            case 'Title':
+                console.log('title');
+                break;
+            case 'Sub Title':
+                console.log('integerSub Title');
+                break;
+            default:
+                break;
+          }
+
+          if(key === arr.length - 1){
+            console.log(CP_HTML);
+            CP_HTML.forEach(element => {
+                $('#CPContentDiv').append(element);
+            });
+        }
+    });
+
 }
 
 // input types
