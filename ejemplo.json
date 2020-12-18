@@ -1,0 +1,52 @@
+// paso 1 : POST REQUEST PARA GENERAR ASSESMENT y obtener ASSESMENT ID
+// Action: POST | object: assesment
+// Este post se ejecuta después de validar y hacer next en el slide de CUSTOMER INFORMATION
+
+{
+    "customer_id": 1,
+    "isExisting": "0/1",
+    "user_id": "12341234",
+    "customer_name": "name",
+    "customer_last_name": "last_name",
+    "customer_age": 35,
+    "customer_sex": "MALE/FEMALE",
+    "customer_address": "descriptive direction",
+    "lat": 14.123123,
+    "lon": -90.2134,
+    "loan_purpose": "loan purpose",
+    "business_type":"business type"    
+} 
+
+// El request anterior me retorna un ID el cual usare para envíar el formulario
+// paso 2: post request de preguntas
+// Este tendrá que ser el método custom a diferencia del anterior que se usa el común de phpmaker
+
+{
+    "assesment_id": 1,
+    "answers": [
+        {
+            "question_id": 1,
+            "response": "TRUE/FALSE/YES/NO/...OPEN_TEXT.../NUMBERS/ETC...",
+            "score": "numero segun las respuestas posibles y sus pesos | en blanco si es una pregunta sin peso",
+            "hasWeight": "0/1 | podemos agregar este booleano para asegurar que si tiene peso 'incidencia' sea necesario mandar score",
+            "recommendations": "texto abierto para recomendaciones | si no tiene solo va en blanco",
+            "question_type": "TRUE_FALSE | RADIO | CHECKBOX | etc...   | esto nos puede servir para mostrar la respuesta o indicar en el reporte"
+        },
+        {
+            "question_id": 2,
+            "response": "TRUE/FALSE/YES/NO/...OPEN_TEXT.../NUMBERS/ETC...",
+            "score": "numero segun las respuestas posibles y sus pesos | en blanco si es una pregunta sin peso",
+            "hasWeight": "0/1 | podemos agregar este booleano para asegurar que si tiene peso 'incidencia' sea necesario mandar score",
+            "recommendations": "texto abierto para recomendaciones | si no tiene solo va en blanco",
+            "question_type": "TRUE_FALSE | RADIO | CHECKBOX | etc...   | esto nos puede servir para mostrar la respuesta o indicar en el reporte"
+        },
+        {
+            "question_id": 1,
+            "response": "TRUE/FALSE/YES/NO/...OPEN_TEXT.../NUMBERS/ETC...",
+            "score": "numero segun las respuestas posibles y sus pesos | en blanco si es una pregunta sin peso",
+            "hasWeight": "0/1 | podemos agregar este booleano para asegurar que si tiene peso 'incidencia' sea necesario mandar score",
+            "recommendations": "texto abierto para recomendaciones | si no tiene solo va en blanco",
+            "question_type": "TRUE_FALSE | RADIO | CHECKBOX | etc...   | esto nos puede servir para mostrar la respuesta o indicar en el reporte"
+        }, ... ... ... hasta finalizar el formulario
+    ]
+}

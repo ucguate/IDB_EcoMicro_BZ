@@ -1,12 +1,14 @@
 // getting local storage
-var gToken = '', gEmail = '';
+var gToken = '', gEmail = '', gUser = {};
 gEmail = localStorage.getItem("email");
 gToken = localStorage.getItem("token");
+gUser = JSON.parse(localStorage.getItem('user')); 
+
 
 $(document).ready(function () {
 
-	// getProfile();
-	buildForm();
+	console.log('token: '+gToken);
+	getProfile();
 	console.log(gToken);
 
 });
@@ -27,8 +29,9 @@ $('#logoutBtn').click(function () {
 
 // functions
 function login(email, pass){
+	console.log('logging in');
 
-	var data = "username=" + email + "&password=" + pass + '&action=login';
+	var data = "action=login&username=" + email + "&password=" + pass;
 
     $.post(apiURL, data, function (data) {
 
@@ -40,8 +43,10 @@ function login(email, pass){
 		token = data.JWT;
 		localStorage.setItem("token", token);
 		localStorage.setItem("email", email);
+		localStorage.setItem("user", JSON.stringify(data));
 		gToken = token;
-		gEmail = email
+		gEmail = email;
+		gUser = JSON.parse(data);
         		
 		// if logged in getProfile 
 		getProfile();
@@ -51,8 +56,6 @@ function login(email, pass){
 		token = ''; //not logged in token = none
 		localStorage.setItem('token', token);
 		alert("Login Failed ");
-		$('#loginModal').modal('show');
-		$('#loginFailedToast').toast('show');
 
 	});
 
@@ -67,6 +70,7 @@ function getProfile(){
 
 			console.log('ALERT');
 			console.log(data);
+			buildForm();
 
         },
 		error: function (xhr, ajaxOptions, thrownError) {
@@ -80,5 +84,5 @@ function getProfile(){
 
 function logOut(){
 	localStorage.clear();
-	window.location.href = '/';
+	window.location.href = '/index.html';
 }

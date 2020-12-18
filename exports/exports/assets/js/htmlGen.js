@@ -11,7 +11,7 @@ function getLoanP(){
         },
       };
 
-      console.log(settings);
+    //   console.log(settings);
       
       $.ajax(settings).done(function (response) {
         
@@ -24,8 +24,8 @@ function getLoanP(){
             objContainer.push(option);
 
             if(key === arr.length - 1){
-                console.log(objContainer);
-                dropdownSingle('loanPS','Loan Purposes', objContainer);
+                // console.log(objContainer);
+                dropdownSingle('customerLoanPurposeSelect','Loan Purposes', objContainer);
             }
         });
 
@@ -45,7 +45,7 @@ function getLoanS(){
       
       $.ajax(settings).done(function (response) {
 
-        console.log(response);
+        // console.log(response);
         
         let objContainer = [];
 
@@ -56,8 +56,8 @@ function getLoanS(){
             objContainer.push(option);
 
             if(key === arr.length - 1){
-                console.log(objContainer);
-                dropdownSingle('loanPS','Loan Sectors', objContainer);
+                // console.log(objContainer);
+                dropdownSingle('customerLoanSectorSelect','Loan Sectors', objContainer);
             }
         });
 
@@ -76,7 +76,7 @@ function getSections(){
       
       $.ajax(settings).done(function (response) {
 
-        console.log(response);
+        // console.log(response);
 
         response.sections.forEach((element, key, arr) => {
             let section = new Object();
@@ -86,7 +86,7 @@ function getSections(){
             sectionsContainer.push(section);
 
             if(key === arr.length - 1){
-                console.log(sectionsContainer);
+                // console.log(sectionsContainer);
             }
         });
         
@@ -105,7 +105,7 @@ function getQuestions(){
       
       $.ajax(settings).done(function (response) {
 
-        console.log(response);
+        // console.log(response);
 
         response.questions.forEach((element, key, arr) => {
             
@@ -125,7 +125,7 @@ function getQuestions(){
             questionsContainer.push(question);
 
             if(key === arr.length - 1){
-                console.log(questionsContainer);
+                // console.log(questionsContainer);
                 buildBI();
                 buildCC();
                 buildCP();
@@ -147,12 +147,12 @@ function getCategories(){
       
       $.ajax(settings).done(function (response) {
 
-        console.log(response);
+        // console.log(response);
 
         categoriesContainer = response.question_category;
         
-        console.log('categories');
-        console.log(categoriesContainer);
+        // console.log('categories');
+        // console.log(categoriesContainer);
 
       });
 }
@@ -169,12 +169,11 @@ function getQuestionTypes(){
       
       $.ajax(settings).done(function (response) {
 
-        console.log(response);
+        // console.log(response);
 
         typesContainer = response.question_types;
-        
-        console.log('types');
-        console.log(typesContainer);
+        // console.log('types');
+        // console.log(typesContainer);
 
       });
 }
@@ -183,10 +182,10 @@ function buildBI(){
 
     var BIQuestions = questionsContainer.filter(obj => {
         return obj.section == 1;
-      })
+    })
 
-    console.log('BiQuestions');
-    console.log(BIQuestions);
+    // console.log('BiQuestions');
+    // console.log(BIQuestions);
 
     var BI_HTML = [];
 
@@ -195,7 +194,7 @@ function buildBI(){
             return obj.id === question.type;
           })
         
-        console.log(type[0].name);
+        // console.log(type[0].name);
         switch (type[0].name) {
             case 'Dropdown Single':
                 console.log('dropdown');
@@ -251,7 +250,7 @@ function buildBI(){
           }
 
           if(key === arr.length - 1){
-            console.log(BI_HTML);
+            // console.log(BI_HTML);
             BI_HTML.forEach(element => {
                 $('#BIContentDiv').append(element);
             });
@@ -265,8 +264,8 @@ function buildCC(){
         return obj.section == 2;
       })
 
-    console.log('CCQuestions');
-    console.log(CCQuestions);
+    // console.log('CCQuestions');
+    // console.log(CCQuestions);
 
     CCGenQuestions = CCQuestions;
 
@@ -322,7 +321,7 @@ function buildCard(question){
     curLat = $('#customerLocationLat').val(),
     curLon = $('#customerLocationLon').val();
 
-    console.log(curAddress, curLat, curLon);
+    // console.log(curAddress, curLat, curLon);
 
     let curLayer = '', curColor = '';
     if(question.title == 'Flooding'){
@@ -338,7 +337,7 @@ function buildCard(question){
 
     let pt = `<div class="shadow m-2" style="border-radius: 10px; display: none;" id="${question.title.replace(/\s/g, '')+'_container'}">
                     <div class="row">
-                        <div class="col col-5">
+                        <div class="col col-6">
                             <div class="embed-responsive embed-responsive-16by9" style="width: 100%; height: 600px;">
                                 <iframe class="embed-responsive-item" 
                                     sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
@@ -375,7 +374,7 @@ function buildCard(question){
                             <hr />
                             <div class="row mt-4">
                                 <div class="col">
-                                    <h5 class="d-inline-flex">Observations </h5>
+                                    <h5 class="d-inline-flex">Remarks </h5>
                                 </div>
                             </div>
                             <div class="row mt-1">
@@ -415,8 +414,8 @@ function buildCP(){
         return obj.section == 3;
       })
 
-    console.log('CPQuestions');
-    console.log(CPQuestions);
+    // console.log('CPQuestions');
+    // console.log(CPQuestions);
 
     var CP_HTML = [];
 
@@ -425,7 +424,7 @@ function buildCP(){
             return obj.id === question.type;
           })
         
-        console.log(type[0].name);
+        // console.log(type[0].name);
         switch (type[0].name) {
             case 'Dropdown Single':
                 console.log('dropdown');
@@ -481,7 +480,7 @@ function buildCP(){
           }
 
           if(key === arr.length - 1){
-            console.log(CP_HTML);
+            // console.log(CP_HTML);
             CP_HTML.forEach(element => {
                 $('#CPContentDiv').append(element);
             });
@@ -493,24 +492,18 @@ function buildCP(){
 // input types
 function dropdownSingle(containerID,title, options) {
     console.log('dropdown');
-    let inner = '';
-    let pt1 = `<div class="col">
-                <p class="input-label mb-2">${title}</p>
-                <select class="form-control" id=${title}>
-                    <optgroup label="This is a group">`;
-    
-
+    console.log(options);
+    $('#'+containerID).append($('<option>', {
+        value: 'null',
+        text: 'Select an option'
+    }));
     options.forEach(element => {
-        inner += `<option value="${element.val}">${element.title}</option>`;
+        $('#'+containerID).append($('<option>', {
+            value: element.val,
+            text: element.title,
+        }));
     });
 
-    let pt2 = `</optgroup>
-                </select>
-            </div>`;
-
-    // return pt1+inner+pt2; 
-    console.log(pt1+inner+pt2)
-    $('#'+containerID).append(pt1+inner+pt2);
 }
 
 
@@ -519,7 +512,7 @@ function dropDownSingle2(question) {
     let inner = '';
     let pt1 = `<div class="col">
                 <p class="input-label mb-2">${question.placeholder}</p>
-                <select class="form-control" id=${question.title}>
+                <select class="form-control" id=${question.id}>
                     <optgroup label="This is a group">`;
 
     let scores = question.scores.split('|')
@@ -541,20 +534,19 @@ function radioGroup(question) {
     let inner = '';
     let pt1 = `<div class="col">
                 <p class="input-label mb-2">${question.placeholder}</p>
-                <form>`;
+                `;
 
     let scores = question.scores.split('|')
     let questions = question.questions.split('|')
 
     questions.forEach((element, key, arr)  => {
         inner += `<div class="form-check d-inline-flex ml-3">
-                        <input type="radio" class="form-check-input" id="${question.title.replace(/\s/g, '')}" value="${scores[key].replace(/\s/g, '')}" name="${question.title.replace(/\s/g, '')}" />
+                        <input type="radio" class="form-check-input" id="${question.title.replace(/\s/g, '')}" value="${scores[key].replace(/\s/g, '')}" name="${question.id}" />
                         <label class="form-check-label" for="${question.title.replace(/\s/g, '')}">${element}</label>
                     </div>`;
     });
 
-    let pt2 = `</form>
-            </div>`;
+    let pt2 = `</div>`;
 
     return pt1+inner+pt2; 
 }
@@ -564,20 +556,19 @@ function checkBox(question) {
     let inner = '';
     let pt1 = `<div class="col">
                 <p class="input-label mb-2">${question.placeholder}</p>
-                <form>`;
+                `;
 
     let scores = question.scores.split('|')
     let questions = question.questions.split('|')
 
     questions.forEach((element, key, arr)  => {
         inner += `<div class="form-check d-inline-flex ml-3">
-                        <input type="radio" class="form-check-input" id="${question.title.replace(/\s/g, '')}" value="${scores[key].replace(/\s/g, '')}" name="${question.title.replace(/\s/g, '')}" />
+                        <input type="radio" class="form-check-input" id="${question.title.replace(/\s/g, '')}" value="${scores[key].replace(/\s/g, '')}" name="${question.id}" />
                         <label class="form-check-label" for="${question.title.replace(/\s/g, '')}">${element}</label>
                     </div>`;
     });
 
-    let pt2 = `</form>
-            </div>`;
+    let pt2 = `</div>`;
 
     return pt1+inner+pt2; 
 }

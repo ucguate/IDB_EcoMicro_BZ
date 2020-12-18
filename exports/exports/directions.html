@@ -104,7 +104,7 @@
   <body>
     <div id="map"></div>
     <!-- <button class="btn btn-primary" id="okGeo"    type="button" style="background-color: darkgray;color: #ffffff;font-family: Amiko, sans-serif;font-size: 18px; position: absolute; bottom: 15%; left: 10%;  z-index: 400; font-size:100%;  padding:9px 13px; width:80%;">📍 ir a mi ubicación</button> -->
-    <button class="btn btn-primary" id="okButton" type="button" style="background-color: #158edf;color: #ffffff;font-family: Amiko, sans-serif;font-size: 18px; position: absolute; bottom:  07%; left: 10%;  z-index: 400;  font-size:100%;  padding:9px 13px;  width:80%;">Select point as address location</button>
+    <button class="btn btn-primary" id="okButton" type="button" style="background-color: #158edf;color: #ffffff;font-family: Amiko, sans-serif;font-size: 18px; position: absolute; bottom:  07%; left: 10%;  z-index: 400;  font-size:100%;  padding:9px 13px;  width:80%; display: none;">Select point as address location</button>
     
     <script type="text/javascript">
 
@@ -141,9 +141,12 @@ function getParameterByName(name) {
 }
 
 //---- inicia programa
+     var southWest = L.latLng(15.5,-89.5),
+        northEast = L.latLng(19,-87),
+        mybounds = L.latLngBounds(southWest, northEast);
 
       if (lat*1==0) {lat = 17; lon = -89; z=8; }
-      var map = L.map('map').setView([lat, lon], z);
+      var map = L.map('map',{minZoom: 8, maxZoom: 17,maxBounds : mybounds}).setView([lat, lon], z);
 
       var geocoder = L.Control.Geocoder.nominatim({
         geocodingQueryParams : {countrycodes:'bz'}
