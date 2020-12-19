@@ -50,6 +50,7 @@ function collectAnswers(){
 
                 curQ = document.getElementById(question.id);  
                 curQContainer.question_id = question.id;
+                curQContainer.section_id = question.section;
                 curQContainer.score = curQ.value;
                 curQContainer.value = curQ.options[curQ.selectedIndex].text;
                 curQContainer.scores = question.scores;
@@ -65,6 +66,7 @@ function collectAnswers(){
 
                 curQ = $("input:radio[name="+question.id+"]:checked");
                 curQContainer.question_id = question.id;
+                curQContainer.section_id = question.section;
                 curQContainer.score = curQ.val();
                 curQContainer.value = curQ.next('label:first').html();
                 curQContainer.scores = question.scores;
@@ -79,6 +81,7 @@ function collectAnswers(){
 
                 curQ = $("input:radio[name="+question.id+"]:checked");
                 curQContainer.question_id = question.id;
+                curQContainer.section_id = question.section;
                 curQContainer.score = curQ.val();
                 curQContainer.value = curQ.next('label:first').html();
                 curQContainer.scores = question.scores;
@@ -94,6 +97,7 @@ function collectAnswers(){
 
                 curQ = document.getElementById(question.id);  
                 curQContainer.question_id = question.id;
+                curQContainer.section_id = question.section;
                 curQContainer.score = curQ.value;
                 curQContainer.value = curQ.options[curQ.selectedIndex].text;
                 curQContainer.scores = question.scores;
@@ -111,11 +115,30 @@ function collectAnswers(){
         }
         
         if(key === arr.length - 1){
+            $('#assessmentSavedTxt').empty();
 
             payloadContainer.answers = answersContainer;
             console.log('>>ANSWERS<<<');
             console.log(payloadContainer);
 
+            let settings = {
+                "url": "https://927d1d30.us-south.apigw.appdomain.cloud/bz/_tools/_ins.php",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json",
+                },
+                "data": JSON.stringify(payloadContainer)
+            }
+            $.ajax(settings).done(function (response) {
+                console.log('-->>>>><<<<<<<--');
+                console.log(response);
+                for(var propt in response){
+                    $('#assessmentSavedTxt').append(propt+': '+response[propt]+'<hr/>');
+                }
+                // $('#assessmentSavedTxt').html('Assessment #'+response.assessment_id+'<br> was saved successfully! <br> Answers Saved: '+response.assessment_id+'<br> Total Score: '+response.total_score);
+                $('#assessmentSavedModal').modal('show');
+              });
         }
 
     });

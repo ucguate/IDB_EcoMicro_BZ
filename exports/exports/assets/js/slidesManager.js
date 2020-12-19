@@ -154,8 +154,10 @@ function validateCustomerInfo(){
   customerId = $("#customerId"), customerNameInput = $('#customerNameInput'), customerSexRadios = $("input:radio[name=customerRadioSex]:checked").val(),
   customerAge = $("#customerAgeInput"), customerAddress = $("#customerLocationAddress"),
   customerLat = $("#customerLocationLat"), customerLon = $("#customerLocationLon"),
-  loanPurpose = $('#customerLoanPurposeSelect'), loanSector = $('#customerLoanSectorSelect');
-  
+  loanPurpose = $('#customerLoanPurposeSelect'), loanSector = $('#customerLoanSectorSelect'),
+  loan_purpose_txt = $('#customerLoanPurposeSelect option:selected').text(),
+  loan_sector_txt = $('#customerLoanSectorSelect option:selected').text();
+
   
   // Existing Customer
   if(existingCustomerRadios !== undefined){
@@ -258,7 +260,9 @@ function validateCustomerInfo(){
       payload.lat = customerLat.val();
       payload.lon = customerLon.val();
       payload.loan_purpose = loanPurpose.val();
-      payload.loan_sector = loanSector.val();
+      payload.loan_purpose_txt = loan_purpose_txt;
+      payload.loan_section = loanSector.val();
+      payload.loan_section_txt = loan_sector_txt;
       payload.status = 0; 
       createAssesment(payload);
       return true;
@@ -282,6 +286,7 @@ function createAssesment(payload){
 			if (data.success) {
         console.log(data);
         newAssesmentObj = {payload: payload, assessment:data.assessments};
+        localStorage.setItem('newAssessment', JSON.stringify(newAssesmentObj));
         fillPurSec(newAssesmentObj);
         // if assessment was saved successfuly
         isNewAssessment = false;
@@ -291,6 +296,7 @@ function createAssesment(payload){
         document.querySelector("#assessmentTabs > div").children[1].classList.add("active");
         $('.CISavedToastTxt').text('Assessment #'+data.assessments.id+' for customer '+data.assessments.customer_first_name+' successfully created!');
         $('.CISavedToast').toast('show');
+        buildCP();
 
 			} //success 
 			else {
@@ -318,11 +324,11 @@ function fillPurSec(newAssesmentObj){
   $('#BILoanPurpose').val(newAssesmentObj.payload.loan_purpose);
   $('#BILoanPurpose').append($('<option>', {
     value: newAssesmentObj.payload.loan_purpose,
-    text: newAssesmentObj.payload.loan_purpose,
+    text: newAssesmentObj.payload.loan_purpose_txt,
   }));
-  $('#BILoanSector').val(newAssesmentObj.payload.loan_sector);
+  $('#BILoanSector').val(newAssesmentObj.payload.loan_section);
   $('#BILoanSector').append($('<option>', {
-    value: newAssesmentObj.payload.loan_sector,
-    text: newAssesmentObj.payload.loan_sector,
+    value: newAssesmentObj.payload.loan_section,
+    text: newAssesmentObj.payload.loan_section_txt,
   }));
 }

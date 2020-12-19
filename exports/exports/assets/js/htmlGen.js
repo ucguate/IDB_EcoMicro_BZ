@@ -19,12 +19,13 @@ function getLoanP(){
 
         response.loan_purposes.forEach((element, key, arr) => {
             let option = new Object();
+            option.id = element.id;
             option.val = element.name;
             option.title = element.name;
             objContainer.push(option);
 
             if(key === arr.length - 1){
-                // console.log(objContainer);
+                localStorage.setItem('loanPurposes', JSON.stringify(objContainer));
                 dropdownSingle('customerLoanPurposeSelect','Loan Purposes', objContainer);
             }
         });
@@ -51,6 +52,7 @@ function getLoanS(){
 
         response.loan_section.forEach((element, key, arr) => {
             let option = new Object();
+            option.id = element.id;
             option.val = element.name;
             option.title = element.name;
             objContainer.push(option);
@@ -128,7 +130,6 @@ function getQuestions(){
                 // console.log(questionsContainer);
                 buildBI();
                 buildCC();
-                buildCP();
             }
         });
         
@@ -289,6 +290,8 @@ function buildCCPortraits(questions){
             imgUrl = 'assets/img/pexels-vladyslav-dukhin-4070727.jpg'
         } else if (question.title == 'Coastal Flooding') {
             imgUrl = 'assets/img/falco-negenman-O9uwdPbxroc-unsplash (1).jpg'
+        } else if (question.title == 'Drought') {
+            imgUrl = 'assets/img/drought.jpg'
         }
 
         let pt = `<div class="col col-3 mb-5">
@@ -333,6 +336,9 @@ function buildCard(question){
     } else if (question.title == 'Wildfires') {
         curLayer = 'fire';
         curColor = 'Oranges';
+    } else if (question.title == 'Drought') {
+        curLayer = 'drought';
+        curColor = 'Set1';
     }
 
     let pt = `<div class="shadow m-2" style="border-radius: 10px; display: none;" id="${question.title.replace(/\s/g, '')+'_container'}">
@@ -349,6 +355,7 @@ function buildCard(question){
                             <div class="row mb-4">
                                 <div class="col text-center">
                                     <h2 class="d-inline-flex">${question.title} Risk</h2>
+                                    <input type="hidden" id="${question.title.replace(/\s/g, '')}CardInput"/>
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -368,7 +375,7 @@ function buildCard(question){
                             <div class="row">
                                 <div class="col">
                                     <h5 class="d-inline-flex">Score: </h5>
-                                    <h6 class="d-inline-flex ml-2" id="${question.title.replace(/\s/g, '')+'_score'}">Placeholder</h6>
+                                    <h6 class="d-inline-flex ml-2" id="${question.title.replace(/\s/g, '')}CardVal"></h6>
                                 </div>
                             </div>
                             <hr />
@@ -392,23 +399,40 @@ function buildCard(question){
 function showCard(id){
     if(id == 'cardflooding0'){
         document.getElementById("Flooding_container").style.display = 'block';
+        // 
         document.getElementById("CoastalFlooding_container").style.display = 'none';
         document.getElementById("Wildfires_container").style.display = 'none';
+        document.getElementById("Drought_container").style.display = 'none';
 
     } else if ( id == 'cardcoastalflooding1'){
         document.getElementById("CoastalFlooding_container").style.display = 'block';
+        // 
         document.getElementById("Flooding_container").style.display = 'none';
         document.getElementById("Wildfires_container").style.display = 'none';
+        document.getElementById("Drought_container").style.display = 'none';
+
     } else if (id == 'cardwildfires2') {
         document.getElementById("Wildfires_container").style.display = 'block';
+        // 
         document.getElementById("Flooding_container").style.display = 'none';
         document.getElementById("CoastalFlooding_container").style.display = 'none';
+        document.getElementById("Drought_container").style.display = 'none';
+
+    } else if (id == 'carddrought3') {
+        document.getElementById("Drought_container").style.display = 'block';
+        // 
+        document.getElementById("Wildfires_container").style.display = 'none';
+        document.getElementById("Flooding_container").style.display = 'none';
+        document.getElementById("CoastalFlooding_container").style.display = 'none';
+        
     }
 }
 
 // build CP - climate preparedness
 
 function buildCP(){
+
+    currAssessment = JSON.parse(localStorage.getItem('newAssessment'));
 
     var CPQuestions = questionsContainer.filter(obj => {
         return obj.section == 3;
@@ -417,9 +441,34 @@ function buildCP(){
     // console.log('CPQuestions');
     // console.log(CPQuestions);
 
-    var CP_HTML = [];
+    var CP_HTML = [], sectorTxt = '';
 
-    CPQuestions.forEach((question, key, arr) => {
+    CPQuestionsGen = CPQuestions.filter(obj => {
+        return obj.group == 1; // GENERAL
+      });
+     
+    CPQuestionsSector = CPQuestions.filter(obj => {
+        return obj.group == parseInt(currAssessment.assessment.loan_section)+1;
+    });
+
+    if(currAssessment.assessment.loan_section+1 == 2){
+        sectorTxt = 'Agriculture';
+    } else if (currAssessment.payload.loan_sector+1 == 3){
+        sectorTxt = 'Fisheries';
+    } else if (currAssessment.payload.loan_sector+1 == 4){
+        sectorTxt = 'Livestock';
+    } else if (currAssessment.payload.loan_sector+1 == 5){
+        sectorTxt = 'Commercial';
+    }
+    
+    CP_HTML.push(`
+        <div class="row my-2">
+            <div class="col">
+                <h4>General</h4>
+            </div>
+        </div>`);
+
+    CPQuestionsGen.forEach((question, key, arr) => {
         let type = typesContainer.filter(obj => {
             return obj.id === question.type;
           })
@@ -480,10 +529,94 @@ function buildCP(){
           }
 
           if(key === arr.length - 1){
-            // console.log(CP_HTML);
+            
+            CP_HTML.push(`
+            <div class="row">
+                <div class="col">
+                    <h4>${sectorTxt}</h4>
+                </div>
+            </div>`);
+
+        }
+
+    });
+
+
+    CPQuestionsSector.forEach((question, key, arr) => {
+        let type = typesContainer.filter(obj => {
+            return obj.id === question.type;
+          })
+
+        if(key == 0){
+            CP_HTML.push(`
+            <div class="row">
+                <div class="col">
+                    <h4>${sectorTxt}</h4>
+                </div>
+            </div>`);
+        }
+        
+        // console.log(type[0].name);
+        switch (type[0].name) {
+            case 'Dropdown Single':
+                console.log('dropdown');
+                CP_HTML.push(dropDownSingle2(question));
+                break;
+            case 'Text field':
+                console.log('text field');
+                break;
+            case 'Integer':
+                console.log('integer');
+                break;
+            case 'Number':
+                console.log('number');
+                break;
+            case 'Checkbox group':
+                console.log('checkbox group');
+                CP_HTML.push(checkBox(question));
+                break;
+            case 'Radio Group':
+                CP_HTML.push(radioGroup(question));
+                console.log('radio group');
+                break;
+            case 'Climate Risk Card':
+                console.log('climate risk card');
+                break;
+            case 'Dropdown multiple':
+                console.log('drop down mul');
+                CP_HTML.push(dropdownSingle2(question));
+                break;
+            case 'Geolocation':
+                console.log('geo');
+                break;
+            case 'Range selector slider':
+                console.log('sel slider');
+                break;
+            case 'Range Selector Radio':
+                console.log('range sel');
+                break;
+            case 'Date Range':
+                console.log('date range');
+                break;
+            case 'Date Selector':
+                console.log('date sel');
+                break;
+            case 'Title':
+                console.log('title');
+                break;
+            case 'Sub Title':
+                console.log('integerSub Title');
+                break;
+            default:
+                break;
+          }
+
+          if(key === arr.length - 1){
+ 
             CP_HTML.forEach(element => {
                 $('#CPContentDiv').append(element);
             });
+         
         }
     });
 
@@ -499,7 +632,7 @@ function dropdownSingle(containerID,title, options) {
     }));
     options.forEach(element => {
         $('#'+containerID).append($('<option>', {
-            value: element.val,
+            value: element.id,
             text: element.title,
         }));
     });
@@ -541,8 +674,8 @@ function radioGroup(question) {
 
     questions.forEach((element, key, arr)  => {
         inner += `<div class="form-check d-inline-flex ml-3">
-                        <input type="radio" class="form-check-input" id="${question.title.replace(/\s/g, '')}" value="${scores[key].replace(/\s/g, '')}" name="${question.id}" />
-                        <label class="form-check-label" for="${question.title.replace(/\s/g, '')}">${element}</label>
+                        <input type="radio" class="form-check-input" id="${question.title.replace(/\s/g, '')+key}" value="${scores[key].replace(/\s/g, '')}" name="${question.id}" />
+                        <label class="form-check-label" for="${question.title.replace(/\s/g, '')+key}">${element}</label>
                     </div>`;
     });
 
@@ -563,8 +696,8 @@ function checkBox(question) {
 
     questions.forEach((element, key, arr)  => {
         inner += `<div class="form-check d-inline-flex ml-3">
-                        <input type="radio" class="form-check-input" id="${question.title.replace(/\s/g, '')}" value="${scores[key].replace(/\s/g, '')}" name="${question.id}" />
-                        <label class="form-check-label" for="${question.title.replace(/\s/g, '')}">${element}</label>
+                        <input type="radio" class="form-check-input" id="${question.title.replace(/\s/g, '')+key}" value="${scores[key].replace(/\s/g, '')}" name="${question.id}" />
+                        <label class="form-check-label" for="${question.title.replace(/\s/g, '')+key}">${element}</label>
                     </div>`;
     });
 
