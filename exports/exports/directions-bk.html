@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Address Search</title>
+    <title>Fletex - Buscar direcciones</title>
     <meta name="" content="">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -18,17 +18,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 </head>
 
-<body><title>Directions</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@latest/dist/Control.Geocoder.css">
-<script src="https://unpkg.com/leaflet@latest/dist/leaflet-src.js"></script>
-<script src="https://unpkg.com/leaflet-control-geocoder@latest/dist/Control.Geocoder.js"></script>
+<body>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Directions</title>
 
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no initial-scale=1, maximum-scale=1"
+    />
 
-<link href="https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/css/font-awesome.min.css" rel="stylesheet">
-<style type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@latest/dist/Control.Geocoder.css" />
+  
+    <script src="https://unpkg.com/leaflet@latest/dist/leaflet-src.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder@latest/dist/Control.Geocoder.js"></script>
+
+<!-- <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js'></script> -->
+<!-- <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.mapbox.css' rel='stylesheet' /> -->
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/css/font-awesome.min.css' rel='stylesheet' />
+
+    <style type="text/css">
       body {
         margin: 0;
       }
@@ -89,20 +101,20 @@
  
 
 </style>
-
-
-<div id="map"></div>
-
-<button class="btn btn-primary" id="okButton" type="button" style="background-color: #158edf;color: #ffffff;font-family: Amiko, sans-serif;font-size: 18px; position: absolute; bottom:  07%; left: 10%;  z-index: 400;  font-size:100%;  padding:9px 13px;  width:80%; display: none;">Select point as address location</button>
-<script type="text/javascript">
+  </head>
+  <body>
+    <div id="map"></div>
+    <!-- <button class="btn btn-primary" id="okGeo"    type="button" style="background-color: darkgray;color: #ffffff;font-family: Amiko, sans-serif;font-size: 18px; position: absolute; bottom: 15%; left: 10%;  z-index: 400; font-size:100%;  padding:9px 13px; width:80%;">📍 ir a mi ubicación</button> -->
+    <button class="btn btn-primary" id="okButton" type="button" style="background-color: #158edf;color: #ffffff;font-family: Amiko, sans-serif;font-size: 18px; position: absolute; bottom:  07%; left: 10%;  z-index: 400;  font-size:100%;  padding:9px 13px;  width:80%; display: none;">Select point as address location</button>
+    
+    <script type="text/javascript">
 
 var selectedAddress='';
   var selectedLat,selectedLon;
   var lc;
   
-  var pin = getParameterByName('pin');
-  var lat = getParameterByName('lat'); var lon = getParameterByName('lon'); 
-  var z = getParameterByName('z');
+  var punto = getParameterByName('punto');
+  var lat = getParameterByName('lat'); var lon = getParameterByName('lon'); var z = 17;
 
 document.getElementById("okButton").addEventListener("click", function(){
 		setUbica();
@@ -136,14 +148,6 @@ function getParameterByName(name) {
 
       if (lat*1==0) {lat = 17; lon = -89; z=8; }
       var map = L.map('map',{minZoom: 8, maxZoom: 17,maxBounds : mybounds}).setView([lat, lon], z);
-      
-      if (pin==1) {
-           marker = L.marker([lat,lon]) //antes r.center
-                .bindPopup(getParameterByName('address'))
-                .addTo(map)
-                .openPopup();
-            
-      } //add marker on location
 
       var geocoder = L.Control.Geocoder.nominatim({
         geocodingQueryParams : {countrycodes:'bz'}
@@ -285,7 +289,8 @@ OSM2.addTo(map);
         });
       });
     </script>
-
+  </body>
+</html>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/chart.min.js"></script>

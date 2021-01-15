@@ -5,65 +5,122 @@ var newAssesmentObj = {};
 // onClick save changes button
 $('.saveBtn').click(function(){
   let currentIndex = $('.carousel-item.active').index() + 1;
-  console.log(currentIndex)
+  //console.log(currentIndex)
   if(currentIndex == 2){
     if(isNewAssessment){
       validateCustomerInfo();
     } else {
       $('#mainCarousel').carousel(2);
-      console.log('no es nuevo');
+      //console.log('no es nuevo');
     }
   } else {
-    collectAnswers();
+    collectAnswers('new');
   }
 });
 
 // tab management
 $('.assessmentTab').click(function() {
+  $('.assessmentTab').removeClass('active');
   let id = $(this).attr('id');
+  //console.log(id);
+  var isViewAssessment = $(this).hasClass('viewAssessment');
+  //console.log('isViewAssessment:',isViewAssessment);
 
   if(id == 'tabsCustomerInfo'){
 
     // switch slide
-    $('#mainCarousel').carousel(1);
+    isViewAssessment ? $('#viewCarousel').carousel(1) : $('#mainCarousel').carousel(1);
+    
     // mark as active
-    document.querySelector("#assessmentTabs2 > div").children[0].classList.add("active");
-    document.querySelector("#assessmentTabs > div").children[0].classList.add("active");
+    if(!isViewAssessment){
+      document.querySelector("#assessmentTabs2 > div").children[0].classList.add("active");
+      document.querySelector("#assessmentTabs > div").children[0].classList.add("active");
+    } else {
+      document.querySelector("#viewAssessmentTabs2 > div").children[0].classList.add("active");
+      document.querySelector("#viewAssessmentTabs > div").children[0].classList.add("active");
+    }
+    
     
 
   } else if (id == 'tabsBusinessInfo') {
     
-    if(isNewAssessment){
+    if(isNewAssessment && !isViewAssessment){
       validateCustomerInfo();
     } else {
-      $('#mainCarousel').carousel(2);
-      console.log('no es nuevo');
+      if(!isViewAssessment){
+        $('#mainCarousel').carousel(2);
+        //console.log('no es nuevo');
+        document.querySelector("#assessmentTabs2 > div").children[1].classList.add("active");
+      document.querySelector("#assessmentTabs > div").children[1].classList.add("active");
+      } else {
+        $('#viewCarousel').carousel(2);
+        document.querySelector("#viewAssessmentTabs2 > div").children[1].classList.add("active");
+      document.querySelector("#viewAssessmentTabs > div").children[1].classList.add("active");
+      }
+      
     }
     
     
   } else if (id == 'tabsClimateCards') {
 
-    $('#mainCarousel').carousel(3);
-    // mark as active
-    document.querySelector("#assessmentTabs2 > div").children[2].classList.add("active");
-    document.querySelector("#assessmentTabs > div").children[2].classList.add("active");
+    if(!isViewAssessment){
+      $('#mainCarousel').carousel(3);
+      // mark as active
+      document.querySelector("#assessmentTabs2 > div").children[2].classList.add("active");
+      document.querySelector("#assessmentTabs > div").children[2].classList.add("active");
+
+    } else {
+      $('#viewCarousel').carousel(3);
+      // mark as active
+      document.querySelector("#viewAssessmentTabs2 > div").children[2].classList.add("active");
+      document.querySelector("#viewAssessmentTabs > div").children[2].classList.add("active");
+
+    }
+
+    
 
   } else if (id == 'tabsClimatePrep') {
 
-    $('#mainCarousel').carousel(4);
-    // mark as active
-    document.querySelector("#assessmentTabs2 > div").children[3].classList.add("active");
-    document.querySelector("#assessmentTabs > div").children[3].classList.add("active");
+    if(!isViewAssessment){
+      $('#mainCarousel').carousel(4);
+      // mark as active
+      document.querySelector("#assessmentTabs2 > div").children[3].classList.add("active");
+      document.querySelector("#assessmentTabs > div").children[3].classList.add("active");
+
+    } else {
+      $('#viewCarousel').carousel(4);
+      // mark as active
+      document.querySelector("#viewAssessmentTabs2 > div").children[3].classList.add("active");
+      document.querySelector("#viewAssessmentTabs > div").children[3].classList.add("active");
+      
+    }
+
 
   } else if (id == 'tabsReport') {
+    
+    if(!isViewAssessment){
+      $('#mainCarousel').carousel(5);
+      // mark as active
+      document.querySelector("#assessmentTabs2 > div").children[4].classList.add("active");
+      document.querySelector("#assessmentTabs > div").children[4].classList.add("active");
 
-    $('#mainCarousel').carousel(5);
-    // mark as active
-    document.querySelector("#assessmentTabs2 > div").children[4].classList.add("active");
-    document.querySelector("#assessmentTabs > div").children[4].classList.add("active");
+    } else {
+      $('#viewCarousel').carousel(5);
+      // mark as active
+      document.querySelector("#viewAssessmentTabs2 > div").children[4].classList.add("active");
+      document.querySelector("#viewAssessmentTabs > div").children[4].classList.add("active");
+      
+    }
+
+    
 
   }
 
+});
+
+
+$('#SAVEDOK').click(function () {
+	$('#mainCarousel').carousel(5);
 });
 
 $('#startAssessmentBtn').click(function() {
@@ -72,13 +129,13 @@ $('#startAssessmentBtn').click(function() {
 
 $('#nextBtn').click(function() {
   let currentIndex = $('.carousel-item.active').index() + 1;
-  console.log('Current index on click: '+currentIndex);
+  //console.log('Current index on click: '+currentIndex);
   $('#mainCarousel').carousel('next');
 });
 
 $('#backBtn').click(function() {
   let currentIndex = $('.carousel-item.active').index() + 1;
-  console.log('Current index on click: '+currentIndex);
+  //console.log('Current index on click: '+currentIndex);
   $('#mainCarousel').carousel('prev');
 });
 
@@ -89,7 +146,7 @@ $('#mainCarousel').on('slid.bs.carousel', function () {
     $('.assessmentTab').removeClass('active');
     
     let currentIndex = $('.carousel-item.active').index() + 1;
-    console.log('Current index: '+currentIndex);
+    //console.log('Current index: '+currentIndex);
     
     if(currentIndex == 9){
         
@@ -134,6 +191,8 @@ $('#mainCarousel').on('slid.bs.carousel', function () {
         
     } else if (currentIndex == 4){
         
+    } else if (currentIndex == 5){
+      $('.reportTab').attr('Disabled',false);
     } else if( currentIndex == 1){
 
     }
@@ -143,6 +202,21 @@ $('#mainCarousel').on('slid.bs.carousel', function () {
         $('#nextBtn').show();
     }
 })
+
+// ------------------------ VIEW ASSESSMENT REPORT ----------------------------
+function applyInputClass(action){
+  $('.viewActionsRow').show();
+
+  if(action == 'edit'){
+    $('.viewEditBtn').hide();
+    $('.viewSaveBtn').show();
+    $('.viewCancelBtn').show(); 
+  } else {
+    $('.viewEditBtn').show(); 
+    $('.viewCancelBtn').hide();
+    $('.viewSaveBtn').hide(); 
+  }
+}
 
 
 // -------------------------------- VALIDATORS --------------------------------
@@ -244,10 +318,10 @@ function validateCustomerInfo(){
 
   // time delay and validate
   setTimeout(() => {
-    console.log(allow);
+    //console.log(allow);
     if(allow){
 
-      console.log('can save assessment');
+      //console.log('can save assessment');
       let payload = new Object();
       payload.action = 'add',
       payload.object = 'assessments',
@@ -284,7 +358,7 @@ function createAssesment(payload){
 		data: payload,
 		success: function (data, status, xhr) {
 			if (data.success) {
-        console.log(data);
+        //console.log(data);
         newAssesmentObj = {payload: payload, assessment:data.assessments};
         localStorage.setItem('newAssessment', JSON.stringify(newAssesmentObj));
         fillPurSec(newAssesmentObj);
@@ -296,31 +370,31 @@ function createAssesment(payload){
         document.querySelector("#assessmentTabs > div").children[1].classList.add("active");
         $('.CISavedToastTxt').text('Assessment #'+data.assessments.id+' for customer '+data.assessments.customer_first_name+' successfully created!');
         $('.CISavedToast').toast('show');
-        buildCP();
+        buildCP('new',data.assessments.loan_section);
 
 			} //success 
 			else {
-        console.log('Error en la Insercion de:', data);
+        //console.log('Error en la Insercion de:', data);
         return false;
 			} //else success
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
-      console.log('Error!')
+      //console.log('Error!')
       return false;
 		},
 		beforeSend: function (request) { // Set JWT header
 			request.setRequestHeader('Authorization', 'Bearer ' + gToken);
 		}
   }).fail(function (xhr, status, error) {
-    console.log(error);
+    //console.log(error);
     return false;
   });
 
 }
 
 function fillPurSec(newAssesmentObj){
-  console.log('--------------');
-  console.log(newAssesmentObj);
+  //console.log('--------------');
+  //console.log(newAssesmentObj);
   $('#BILoanPurpose').val(newAssesmentObj.payload.loan_purpose);
   $('#BILoanPurpose').append($('<option>', {
     value: newAssesmentObj.payload.loan_purpose,

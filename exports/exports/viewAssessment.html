@@ -32,7 +32,7 @@
                     <li class="nav-item mx-3">
                         <hr>
                     </li>
-                    <li class="nav-item"><a class="nav-link active" href="home.html"><i class="fas fa-home"></i><span>Home</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="home.html"><i class="fas fa-home"></i><span>Home</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="about.html"><i class="fas fa-info-circle"></i><span>About</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="riskMaps.html"><i class="fas fa-globe-europe"></i><span>Risk Maps</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="climateScenarios.html" style="display: none;"><i class="fas fa-cloud-sun-rain"></i><span>Climate Scenarios</span></a></li>
@@ -52,19 +52,23 @@
                             <p>Climate Risk Assessment Tool</p>
                         </div><img src="assets/img/Screen%20Shot%202020-11-18%20at%2020.20.57.png" style="width: 190px;">
                     </div>
-                    <div class="row actionsRow mb-2" id="actionsRow1" style="display: none;">
-                        <div class="col text-center"><button class="btn btn-danger btn-sm float-left shadow cancelBtn" type="button" data-toggle="modal" data-target="#confirmCancelModal"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" class="bi bi-x-circle-fill mr-2" style="font-size: 16px;">
+                    <div class="row viewActionsRow mb-2" id="actionsRow1" style="display: all;">
+                        <div class="col text-center"><button class="btn btn-danger btn-sm float-left shadow viewCancelBtn" type="button" style="display: none;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" class="bi bi-x-circle-fill mr-2" style="font-size: 16px;">
                                     <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
-                                </svg>Cancel</button><button class="btn btn-success shadow saveBtn" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-cloud-upload mr-2" style="font-size: 22px;">
+                                </svg>Cancel</button><button class="btn btn-success shadow viewSaveBtn" type="button" style="display: none;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-cloud-upload mr-2" style="font-size: 22px;">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"></path>
                                     <polyline points="9 15 12 12 15 15"></polyline>
                                     <line x1="12" y1="12" x2="12" y2="21"></line>
-                                </svg>Save Changes</button></div>
+                                </svg>Save Changes</button><button class="btn btn-warning shadow viewEditBtn" type="button" style="background: var(--warning); display: none;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-pencil mr-2" style="font-size: 22px;">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
+                                    <line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line>
+                                </svg>Edit</button></div>
                     </div>
                     <div class="row mb-4" id="tabsRow1">
-                        <div class="col text-center" id="assessmentTabs" style="display: none;">
-                            <div class="btn-group w-100" role="group" style="font-size: 14px;"><button class="btn btn-primary assessmentTab customerTab" id="tabsCustomerInfo" type="button" style="font-size: 14px;">Customer Information</button><button class="btn btn-primary assessmentTab businessTab" id="tabsBusinessInfo" type="button" style="font-size: 14px;">Business Information</button><button class="btn btn-primary assessmentTab climateCardsTab" id="tabsClimateCards" type="button" style="font-size: 14px;">Climate Cards</button><button class="btn btn-primary assessmentTab climatePrepTab" id="tabsClimatePrep" type="button" style="font-size: 14px;">Climate Preparedness&nbsp;</button><button class="btn btn-primary assessmentTab reportTab" id="tabsReport" type="button" style="font-size: 14px;">Report</button></div>
+                        <div class="col text-center viewAssessmentTabs" id="viewAssessmentTabs" style="display: all;">
+                            <div class="btn-group w-100" role="group" style="font-size: 14px;"><button class="btn btn-primary assessmentTab viewAssessment customerTab" id="tabsCustomerInfo" type="button" style="font-size: 14px;">Customer Information</button><button class="btn btn-primary assessmentTab businessTab viewAssessment" id="tabsBusinessInfo" type="button" style="font-size: 14px;">Business Information</button><button class="btn btn-primary assessmentTab climateCardsTab viewAssessment" id="tabsClimateCards" type="button" style="font-size: 14px;">Climate Cards</button><button class="btn btn-primary assessmentTab climatePrepTab viewAssessment" id="tabsClimatePrep" type="button" style="font-size: 14px;">Climate Preparedness&nbsp;</button><button class="btn btn-primary assessmentTab reportTab viewAssessment" id="tabsReport" type="button" style="font-size: 14px;">Report</button></div>
                         </div>
                     </div>
                     <div class="row">
@@ -95,22 +99,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="carousel slide" data-ride="carousel" data-interval="false" data-keyboard="false" id="mainCarousel">
+                    <div class="carousel slide" data-ride="carousel" data-interval="false" data-keyboard="false" id="viewCarousel">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <div id="welcomeDiv">
-                                    <div class="row mt-5">
-                                        <div class="col" style="margin-top: 70px;">
-                                            <h4 class="text-center">Welcome!</h4>
-                                        </div>
-                                    </div>
-                                    <div class="row">
+                                <div class="text-center" id="loadingDiv">
+                                    <div class="row text-center d-lg-flex justify-content-lg-center mt-5">
                                         <div class="col">
-                                            <h5 class="text-center mt-3">You are about to run a Climate Risk Assessment.</h5>
+                                            <h2 class="mb-5">Loading...</h2><span class="spinner-border text-info" role="status"></span>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col text-center justify-content-around mt-4"><button class="btn btn-primary my-2 mr-3" id="startAssessmentBtn" type="button">New Assessment</button><a class="btn btn-primary" role="button" href="/assessmentsReport.html">View Assessments</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -118,49 +114,51 @@
                                 <div id="customerInformationDiv">
                                     <div class="row">
                                         <div class="col">
-                                            <h4>Customer Information</h4>
                                             <div class="row">
                                                 <div class="col">
-                                                    <p>Customer Information</p>
+                                                    <h4>Customer Information</h4>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col">
+                                                    <p>Customer Information</p>
                                                     <p class="input-label mb-2">Are you and existing customer?</p>
                                                     <form>
-                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input" type="radio" id="existingCustomerRadioNo" value="no" name="existingCustomerRadio"><label class="form-check-label" for="existingCustomerRadioNo">No</label></div>
-                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input" type="radio" id="existingCustomerRadioYes" value="yes" name="existingCustomerRadio"><label class="form-check-label" for="existingCustomerRadioYes">Yes</label></div>
+                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input view_input viewInput" type="radio" id="view-existingCustomerRadioNo" value="no" name="view-existingCustomerRadio" disabled=""><label class="form-check-label" for="existingCustomerRadioNo">No</label></div>
+                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input view_input viewInput" type="radio" id="view-existingCustomerRadioYes" value="yes" name="view-existingCustomerRadio" disabled=""><label class="form-check-label" for="existingCustomerRadioYes">Yes</label></div>
                                                     </form><span id="existingCustomerError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
-                                                <div class="col pt-2" id="customerIdCol" style="display: none;">
-                                                    <p class="mb-2 input-label">Customer ID</p><input type="text" id="customerId" class="form-control w-75 ml-3" placeholder="Customer ID"><span id="customerIdError" class="text-danger errorMsg" style="display: none;"></span>
+                                                <div class="col pt-5" id="view-customerIdCol" style="display: none;">
+                                                    <p class="mb-2 input-label">Customer ID</p><input type="text" id="view-customerId" class="form-control w-75 ml-3 viewInput" placeholder="Customer ID" disabled=""><span id="customerIdError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col">
-                                                    <p class="mb-2 input-label">Customer Name</p><input type="text" id="customerNameInput" class="form-control ml-3 w-75 CI_input" placeholder="Customer Name"><span id="customerNameError" class="text-danger errorMsg" style="display: none;"></span>
+                                                    <p class="mb-2 input-label">Customer Name</p><input type="text" id="view-customerNameInput" class="form-control ml-3 w-75 CI_input viewInput" placeholder="Customer Name" disabled=""><span id="customerNameError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col">
                                                     <p class="mb-2 input-label">Customer Sex</p>
                                                     <form>
-                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input" type="radio" id="customerRadioSexM-1" value="M" name="customerRadioSex"><label class="form-check-label" for="customerRadioSexM">Male</label></div>
-                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input" type="radio" id="customerRadioSexF-1" value="F" name="customerRadioSex"><label class="form-check-label" for="customerRadioSexF">Female</label></div>
+                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input viewInput" type="radio" id="view-customerRadioSexM-1" value="M" name="view-customerRadioSex" disabled=""><label class="form-check-label" for="customerRadioSexM">Male</label></div>
+                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input viewInput" type="radio" id="view-customerRadioSexF-1" value="F" name="view-customerRadioSex" disabled=""><label class="form-check-label" for="customerRadioSexF">Female</label></div>
                                                     </form><span id="customerRadioSexError-1" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col col-6">
-                                                    <p class="mb-2 input-label">Customer Age</p><input type="number" id="customerAgeInput" class="form-control w-75 ml-3 CI_input" placeholder="Age" min="18" max="100"><span id="customerAgeError" class="text-danger errorMsg" style="display: none;"></span>
+                                                    <p class="mb-2 input-label">Customer Age</p><input type="number" id="view-customerAgeInput" class="form-control w-75 ml-3 CI_input viewInput" placeholder="Age" min="18" max="100" disabled=""><span id="customerAgeError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col col-6">
-                                                    <p class="mb-2 input-label">Loan Purpose</p><select id="customerLoanPurposeSelect" class="form-control" placeholder="Loan Purpose"></select><span id="customerLoanPurposeError" class="text-danger errorMsg" style="display: none;"></span>
+                                                    <p class="mb-2 input-label">Loan Purpose</p>
+                                                    <p id="view-customerLoanPurposeTxt" class="mb-2 input-label ml-3"></p><select id="view-customerLoanPurposeSelect" class="form-control" placeholder="Loan Purpose" style="display: none;"></select><span id="customerLoanPurposeError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                                 <div class="col col-6">
-                                                    <p class="mb-2 input-label">Loan Sector</p><select id="customerLoanSectorSelect" class="form-control" placeholder="Loan Sector"></select><span id="customerLoanSectorError" class="text-danger errorMsg" style="display: none;"></span>
+                                                    <p class="mb-2 input-label">Loan Sector</p>
+                                                    <p id="view-customerLoanSectorTxt" class="mb-2 input-label ml-3"></p><select id="view-customerLoanSectorSelect" class="form-control" placeholder="Loan Sector" style="display: none;"></select><span id="customerLoanSectorError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
                                             <div class="row mb-1">
@@ -168,10 +166,8 @@
                                                     <p class="text-left mb-2 input-label">Customer Location</p><span id="customerLocationError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col d-xl-flex align-items-xl-center">
-                                                    <div></div><input type="text" id="customerLocationAddress" class="form-control mb-2 d-inline-flex w-100 CI_input" placeholder="Address Reference">
-                                                </div>
+                                            <div class="row mb-1">
+                                                <div class="col"><input type="text" id="view-customerLocationAddress" class="form-control mb-2 d-inline-flex w-100 CI_input viewInput" placeholder="Address Reference" disabled=""></div>
                                             </div>
                                         </div>
                                         <div class="col">
@@ -179,19 +175,23 @@
                                                 <div class="col col-12">
                                                     <p class="text-left mb-1 input-label">Address Search Map</p>
                                                     <p class="text-left my-2">Please find or click on top of the exact location. You can search for addresses using the search bar and click on the exact location to make the address more precise.&nbsp;</p>
-                                                    <div class="row mb-1">
-                                                        <div class="col text-center">
-                                                            <p class="d-inline-flex mr-2 ml-3">Lat Lon</p>
-                                                        </div>
-                                                        <div class="col col-8"><input type="text" id="customerLocationLat" class="form-control mb-2 d-inline-flex CI_input" placeholder="Lat" readonly="true" style="width: 45%;"><input type="text" id="customerLocationLon" class="form-control mb-2 d-inline-flex ml-2 CI_input" placeholder="Lon" readonly="true" style="width: 45%;"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="col d-md-flex justify-content-md-center col-12">
-                                                    <div class="embed-responsive embed-responsive-16by9 mb-3 mt-2 shadow" style="width: 95%; height: 650px; border-radius: 10px; border-style: solid; border-color: gray;"><iframe class="embed-responsive-item" src="/directions.html"></iframe></div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div><script type="text/javascript">
+                                            <div class="row mb-1">
+                                                <div class="col text-center col-3">
+                                                    <p class="d-inline-flex mr-2" style="font-size: 17px;">Lat Lon</p>
+                                                </div>
+                                                <div class="col"><input type="text" id="view-customerLocationLat" class="form-control mb-2 d-inline-flex CI_input" placeholder="Lat" readonly="true" style="width: 45%;"><input type="text" id="view-customerLocationLon" class="form-control mb-2 d-inline-flex ml-2 CI_input" placeholder="Lon" readonly="true" style="width: 45%;"></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="row">
+                                                        <div class="col d-md-flex justify-content-md-center col-12">
+                                                            <div class="embed-responsive embed-responsive-16by9 mb-3 mt-2 shadow" style="width: 95%; height: 650px; border-radius: 10px; border-style: solid; border-color: gray;"><iframe class="embed-responsive-item" src="/directions.html" id="viewIframe"></iframe></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><script type="text/javascript">
 // Create IE + others compatible event handler
 var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
 var eventer = window[eventMethod];
@@ -251,6 +251,8 @@ eventer(messageEvent,function(e) {
 },false);
     
 </script>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="carousel-item">
@@ -266,10 +268,12 @@ eventer(messageEvent,function(e) {
                                     </div>
                                     <div class="row my-2" id="loanPS">
                                         <div class="col col-6">
-                                            <p class="mb-2 input-label">Loan Purpose</p><select id="BILoanPurpose" class="form-control" placeholder="Loan Purpose" disabled="true"></select>
+                                            <p class="mb-2 input-label">Loan Purpose</p>
+                                            <p id="view-BILoanPurposeTxt" class="mb-2 input-label"></p><select id="view-BILoanPurposeSelect" class="form-control" placeholder="Loan Purpose" disabled="true" style="display: none;"></select>
                                         </div>
                                         <div class="col col-6">
-                                            <p class="mb-2 input-label">Loan Sector</p><select id="BILoanSector" class="form-control" placeholder="Loan Sector" disabled="true"></select>
+                                            <p class="mb-2 input-label">Loan Sector</p>
+                                            <p id="view-BILoanSectorTxt" class="mb-2 input-label"></p><select id="view-BILoanSectorSelect" class="form-control" placeholder="Loan Sector" disabled="true" style="display: none;"></select>
                                         </div>
                                     </div>
                                     <div id="BIContentDiv"></div>
@@ -288,7 +292,7 @@ eventer(messageEvent,function(e) {
                                             <div class="row text-center d-lg-flex align-items-center justify-content-lg-center mt-3 CCImgsDiv" id="CCImgsDiv"></div>
                                         </div>
                                     </div>
-                                    <div id="CCContentDiv" class="CCContentDiv">
+                                    <div id="viewCCContentDiv" class="CCContentDiv">
                                         <div class="shadow m-2" style="display: none;">
                                             <div class="row">
                                                 <div class="col col-5">
@@ -345,13 +349,13 @@ eventer(messageEvent,function(e) {
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <div id="MainCPContentDiv" class="CPContentDiv"></div>
+                                            <div id="ViewCPContentDiv" class="CPContentDiv"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <div id="climateRiskReport">
+                                <div id="viewClimateRiskReport">
                                     <div class="row">
                                         <div class="col">
                                             <h4>Risk Report</h4>
@@ -365,7 +369,7 @@ eventer(messageEvent,function(e) {
                                                     <p>It considers the results of the 3 components of the assessment.</p>
                                                 </div>
                                                 <div class="col d-lg-flex justify-content-lg-center col-4">
-                                                    <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow" style="height: 100px;width: 100px;color: white;border-radius: 20px;background: var(--red);">
+                                                    <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow" style="height: 100px;width: 100px;color: white;border-radius: 20px; background: var(--red);">
                                                         <h5>HIGH</h5>
                                                     </div>
                                                 </div>
@@ -379,7 +383,7 @@ eventer(messageEvent,function(e) {
                                                 <div class="col d-lg-flex justify-content-lg-center col-4">
                                                     <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 30px;width: 100px;color: white;border-radius: 20px;background: var(--success);">
                                                         <h5>LOW</h5>
-                                                    </div><i class="fa fa-info-circle mt-2" style="color: #75b2dd;"></i>
+                                                    </div><a class="ml-2" href="#" data-toggle="tooltip" data-placement="top" title="Hooray!" style="font-size: 20px;">i</a>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -389,7 +393,7 @@ eventer(messageEvent,function(e) {
                                                 <div class="col d-lg-flex justify-content-lg-center col-4">
                                                     <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 30px;width: 100px;color: white;border-radius: 20px;background: var(--danger);">
                                                         <h5>HIGH</h5>
-                                                    </div><i class="fa fa-info-circle mt-2" style="color: #75b2dd;"></i>
+                                                    </div><a class="ml-2" href="#" data-toggle="tooltip" data-placement="top" title="Hooray!" style="font-size: 20px;">i</a>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -399,7 +403,7 @@ eventer(messageEvent,function(e) {
                                                 <div class="col d-lg-flex justify-content-lg-center col-4">
                                                     <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 30px;width: 100px;color: white;border-radius: 20px;background: var(--success);">
                                                         <h5>LOW</h5>
-                                                    </div><i class="fa fa-info-circle mt-2" style="color: #75b2dd;"></i>
+                                                    </div><a class="ml-2" href="#" data-toggle="tooltip" data-placement="top" title="Hooray!" style="font-size: 20px;">i</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -438,15 +442,11 @@ eventer(messageEvent,function(e) {
                                             <h3>Recommended Actions</h3>
                                         </div>
                                     </div>
-                                    <div class="row mt-1">
-                                        <div class="col">
-                                            <p>The project location is highly vulnerable to flooding.<br>Given the conditions shown in the information, it is recommended to carry out more research on the feasibility of financing.<br>In addition, it is recommended to carry out an evaluation of the characteristics of the site, assessing adaptation measures and vulnerability to flash flood events.</p>
-                                        </div>
-                                    </div>
+                                    <div id="viewReportRecommendations"></div>
                                 </div>
                             </div>
                         </div>
-                        <div><a class="carousel-control-prev" href="#mainCarousel" role="button" data-slide="prev"><span class="carousel-control-prev-icon"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#mainCarousel" role="button" data-slide="next"><span class="carousel-control-next-icon"></span><span class="sr-only">Next</span></a></div>
+                        <div><a class="carousel-control-prev" href="#viewCarousel" role="button" data-slide="prev"><span class="carousel-control-prev-icon"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#viewCarousel" role="button" data-slide="next"><span class="carousel-control-next-icon"></span><span class="sr-only">Next</span></a></div>
                     </div>
                     <div class="row">
                         <div class="col text-center mt-2">
@@ -477,24 +477,23 @@ eventer(messageEvent,function(e) {
                         </div>
                     </div>
                     <div class="row mt-4" id="tabsRow2">
-                        <div class="col text-center" id="assessmentTabs2" style="display: none;">
-                            <div class="btn-group w-100" role="group" style="font-size: 14px;"><button class="btn btn-primary assessmentTab customerTab" id="tabsCustomerInfo" type="button" style="font-size: 14px;">Customer Information</button><button class="btn btn-primary assessmentTab businessTab" id="tabsBusinessInfo" type="button" style="font-size: 14px;">Business Information</button><button class="btn btn-primary assessmentTab climateCardsTab" id="tabsClimateCards" type="button" style="font-size: 14px;">Climate Cards</button><button class="btn btn-primary assessmentTab climatePrepTab" id="tabsClimatePrep" type="button" style="font-size: 14px;">Climate Preparedness&nbsp;</button><button class="btn btn-primary assessmentTab reportTab" id="tabsReport" type="button" style="font-size: 14px;">Report</button></div>
+                        <div class="col text-center viewAssessmentTabs" id="viewAssessmentTabs2" style="display: all;">
+                            <div class="btn-group w-100" role="group" style="font-size: 14px;"><button class="btn btn-primary assessmentTab customerTab viewAssessment" id="tabsCustomerInfo" type="button" style="font-size: 14px;">Customer Information</button><button class="btn btn-primary assessmentTab businessTab viewAssessment" id="tabsBusinessInfo" type="button" style="font-size: 14px;">Business Information</button><button class="btn btn-primary assessmentTab climateCardsTab viewAssessment" id="tabsClimateCards" type="button" style="font-size: 14px;">Climate Cards</button><button class="btn btn-primary assessmentTab climatePrepTab viewAssessment" id="tabsClimatePrep" type="button" style="font-size: 14px;">Climate Preparedness&nbsp;</button><button class="btn btn-primary assessmentTab reportTab viewAssessment" id="tabsReport" type="button" style="font-size: 14px;">Report</button></div>
                         </div>
                     </div>
-                    <div class="row actionsRow my-2" id="actionsRow2" style="display: none;">
-                        <div class="col text-center"><button class="btn btn-danger btn-sm float-left shadow cancelBtn" type="button" data-toggle="modal" data-target="#confirmCancelModal"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" class="bi bi-x-circle-fill mr-2" style="font-size: 16px;">
+                    <div class="row viewActionsRow my-2" id="actionsRow2" style="display: none;">
+                        <div class="col text-center"><button class="btn btn-danger btn-sm float-left shadow viewCancelBtn" type="button" style="display: none;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" class="bi bi-x-circle-fill mr-2" style="font-size: 16px;">
                                     <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
-                                </svg>Cancel</button><button class="btn btn-success shadow saveBtn" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-cloud-upload mr-2" style="font-size: 22px;">
+                                </svg>Cancel</button><button class="btn btn-success shadow viewSaveBtn" type="button" style="display: none;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-cloud-upload mr-2" style="font-size: 22px;">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"></path>
                                     <polyline points="9 15 12 12 15 15"></polyline>
                                     <line x1="12" y1="12" x2="12" y2="21"></line>
-                                </svg>Save Changes</button></div>
-                    </div>
-                    <div class="text-right mt-3" id="controlBtns" style="display: none;">
-                        <div class="row mb-3">
-                            <div class="col pr-5"><button class="btn btn-primary mr-4 px-3" id="backBtn" type="button" style="display: none;"><i class="fas fa-chevron-left mr-2"></i>Back</button><button class="btn btn-primary mr-4 px-3 lastSlideBtn" id="finishBtn" type="button" style="display: none;"><i class="fas fa-check-circle mr-2"></i>Finish</button><button class="btn btn-primary mr-4 px-3 lastSlideBtn" id="emailBtn" type="button" style="display: none;"><i class="fas fa-envelope mr-2"></i>Email</button><button class="btn btn-primary mr-4 px-3 lastSlideBtn" id="printBtn" type="button" style="display: none;"><i class="fas fa-print mr-2"></i>Print</button><button class="btn btn-primary px-3" id="nextBtn" type="button" style="display: none;">Next<i class="fas fa-chevron-right ml-2"></i></button></div>
-                        </div>
+                                </svg>Save Changes</button><button class="btn btn-warning shadow viewEditBtn" type="button" style="background: var(--warning); display: all;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-pencil mr-2" style="font-size: 22px;">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
+                                    <line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line>
+                                </svg>Edit</button></div>
                     </div>
                     <div class="modal fade" role="dialog" tabindex="-1" id="usersModal">
                         <div class="modal-dialog modal-lg" role="document">

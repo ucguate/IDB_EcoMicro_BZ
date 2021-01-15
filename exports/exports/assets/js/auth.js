@@ -7,9 +7,16 @@ gUser = JSON.parse(localStorage.getItem('user'));
 
 $(document).ready(function () {
 
-	console.log('token: '+gToken);
-	getProfile();
-	console.log(gToken);
+	//console.log(window.location);
+	//console.log('token: '+gToken);
+	
+	if(window.location.pathname !== '/index.html' && gToken == null ){
+		window.location.href = '/index.html';
+	} else if(gUser.userid && gToken){
+		getProfile(gUser.userid);
+	}   
+	
+
 
 });
 
@@ -25,11 +32,12 @@ $('#logoutBtn').click(function () {
 	logOut();
 });
 
+
 // ------------------------------------------------------------
 
 // functions
 function login(email, pass){
-	console.log('logging in');
+	//console.log('logging in');
 
 	var data = "action=login&username=" + email + "&password=" + pass;
 
@@ -37,8 +45,8 @@ function login(email, pass){
 
 		window.location.href = '/home.html';
 
-		console.log('success');
-		console.log(data);
+		//console.log('success');
+		//console.log(data);
 		
 		token = data.JWT;
 		localStorage.setItem("token", token);
@@ -49,7 +57,7 @@ function login(email, pass){
 		gUser = JSON.parse(data);
         		
 		// if logged in getProfile 
-		getProfile();
+		getProfile(gUser.userid);
 	
 	}).fail(function (xhr, status, error) {
 
@@ -61,20 +69,27 @@ function login(email, pass){
 
 }
 
-function getProfile(){
-    var url = apiURL + "?action=list&object=users&email=" + gEmail;
+function getProfile(id){
+    var url = apiURL + "?action=view&object=users&id=" + id;
     $.ajax({
 		url: url,
 		type: "GET",
 		success: function (data, status, xhr) {
 
-			console.log('ALERT');
-			console.log(data);
+			//console.log('ALERT:');
+			//console.log(data);
 			buildForm();
+			$('#userProfileID').text(data.users.id);
+			$('#userProfileFNames').text(data.users.first_names);
+			$('#userProfileLNames').text(data.users.last_names);
+			$('#userProfileEmail').text(data.users.email);
 
         },
 		error: function (xhr, ajaxOptions, thrownError) {
-            console.log('Error');
+			//console.log('Error');
+			if(window.location.pathname !== '/index.html' ){
+				window.location.href = '/index.html';
+			} 
         },
 		beforeSend: function (request) { // Set JWT header
 			request.setRequestHeader('Authorization', 'Bearer ' + gToken);
