@@ -370,51 +370,20 @@ eventer(messageEvent,function(e) {
                                                 </div>
                                                 <div class="col d-lg-flex justify-content-lg-center col-4">
                                                     <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow" style="height: 100px;width: 100px;color: white;border-radius: 20px; background: var(--red);">
-                                                        <h5>HIGH</h5>
+                                                        <h5 id="viewReportScore"></h5>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <div class="row">
-                                                <div class="col text-right d-inline-block float-left d-lg-flex justify-content-lg-end align-items-lg-end">
-                                                    <h5 class="text-right justify-content-end mt-1">Business Information:</h5>
-                                                </div>
-                                                <div class="col d-lg-flex justify-content-lg-center col-4">
-                                                    <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 30px;width: 100px;color: white;border-radius: 20px;background: var(--success);">
-                                                        <h5>LOW</h5>
-                                                    </div><a class="ml-2" href="#" data-toggle="tooltip" data-placement="top" title="Hooray!" style="font-size: 20px;">i</a>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col text-right d-inline-block float-left d-lg-flex justify-content-lg-end align-items-lg-end">
-                                                    <h5 class="text-right justify-content-end mt-1">Climate Cards:</h5>
-                                                </div>
-                                                <div class="col d-lg-flex justify-content-lg-center col-4">
-                                                    <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 30px;width: 100px;color: white;border-radius: 20px;background: var(--danger);">
-                                                        <h5>HIGH</h5>
-                                                    </div><a class="ml-2" href="#" data-toggle="tooltip" data-placement="top" title="Hooray!" style="font-size: 20px;">i</a>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col text-right d-inline-flex d-lg-flex justify-content-lg-end align-items-lg-center">
-                                                    <h5 class="text-right d-inline-flex justify-content-lg-end mt-1">Climate Preparedness</h5>
-                                                </div>
-                                                <div class="col d-lg-flex justify-content-lg-center col-4">
-                                                    <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 30px;width: 100px;color: white;border-radius: 20px;background: var(--success);">
-                                                        <h5>LOW</h5>
-                                                    </div><a class="ml-2" href="#" data-toggle="tooltip" data-placement="top" title="Hooray!" style="font-size: 20px;">i</a>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div class="col" id="viewReportScores"></div>
                                     </div>
                                     <div class="row d-lg-flex justify-content-lg-center mt-4">
                                         <div class="col">
                                             <div>
                                                 <h4 class="text-center">Flooding</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=flood&amp;z=8&amp;pin=0&amp;color=Blues"></iframe></div>
-                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 40px;color: white;border-radius: 10px;background: var(--danger);">
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=flood&amp;z=8&amp;pin=0&amp;color=Blues" id="viewFloodingReport"></iframe></div>
+                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewFloodingResult" style="height: 40px;color: white;border-radius: 10px;background: var(--danger);">
                                                 <h5>HIGH RISK, 7</h5>
                                             </div>
                                         </div>
@@ -422,8 +391,8 @@ eventer(messageEvent,function(e) {
                                             <div>
                                                 <h4 class="text-center">Wildfires</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=fire&amp;z=8&amp;pin=0&amp;color=Oranges"></iframe></div>
-                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 40px;color: white;border-radius: 10px;background: var(--warning);">
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=fire&amp;z=8&amp;pin=0&amp;color=Oranges" id="viewWildfiresReport"></iframe></div>
+                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewWildfiresResult" style="height: 40px;color: white;border-radius: 10px;background: var(--warning);">
                                                 <h5>MEDIUM, 7</h5>
                                             </div>
                                         </div>
@@ -431,8 +400,8 @@ eventer(messageEvent,function(e) {
                                             <div>
                                                 <h4 class="text-center">Drought</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?color=Set1&amp;lay=drought&amp;min=1"></iframe></div>
-                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 40px;color: white;border-radius: 10px;background: var(--success);">
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?color=Set1&amp;lay=drought&amp;min=1" id="viewDroughtReport"></iframe></div>
+                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewDroughtResult" style="height: 40px;color: white;border-radius: 10px;background: var(--success);">
                                                 <h5>LOW, 1</h5>
                                             </div>
                                         </div>

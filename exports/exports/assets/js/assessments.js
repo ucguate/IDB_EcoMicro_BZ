@@ -5,9 +5,42 @@ function viewAssessment(id, action){
     window.location.href = '/viewAssessment.html?assessment_id='+id+'&action=edit';
   } else if (action == 'delete') {
     $('#confirmDeleteModal').modal('show');
+    $('#confirmDeleteAssessmentBtn').attr('assessment_id', id);
   }
   
 }
+
+$( "#confirmDeleteAssessmentBtn" ).click(function() {
+
+    editAssessment($(this).attr('assessment_id'));
+});
+
+// EDIT ASSESSMENT
+function editAssessment(id){
+  $('#assessmentsReportTableBody').empty();
+  var settings = {
+    url: apiURL + '',
+    type: "POST",
+    data: {
+        action: 'edit',
+        object: 'assessments',
+        id: id,
+        status: 2
+    },
+    "headers": {
+      "Authorization": "Bearer "+gToken
+    },
+  };
+
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+        location.reload();
+    });
+}
+
+// --------------------------------------------------
+// -------------------- REPORT ----------------------
+// --------------------------------------------------
 
 function getAssessmentsReport(){
     $('#assessmentsReportTableBody').empty();
@@ -35,7 +68,18 @@ function getAssessmentsReport(){
                     <td>${element.loan_purpose_name}</td>
                     <td>${element.loan_section_name}</td>
                     <td>${element.total_score ? element.total_score : '' }</td>
-                    <td>${element.status}</td>
+                    <td>
+                      ${
+                        element.status == 0 ? 'New' : 
+                        element.status == 1 ? 'Completed' :
+                        element.status == 2 ? 'Deleted' : 'Err' 
+                      }
+                    </td>
+                    <td>
+                      ${ new Date(element.updated_at).toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }
+                     - ${ new Date(element.updated_at).toLocaleTimeString('en-EN', { hour: 'numeric', minute: 'numeric', hour12: true }) }
+
+                    </td>
                     <td></td>
                 </tr>
             `;
@@ -43,18 +87,23 @@ function getAssessmentsReport(){
             if(key === arr.length - 1){
                 var table = $('#assessmentsReportTable').DataTable(
                   {
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ],
+                    order: [[ 0, "desc" ]],
                     columnDefs: [{
-                       targets: 7,
+                       targets: 8,
                        render: function(data, type, row, meta){
                           if(type === 'display'){
                              data = data +
-                                '<div class="links">' +
-                                  '<a class="viewAssessmentAction mr-3 text-primary" onclick="viewAssessment('+row[0]+', \'view\')" ><i class="fas fa-eye"></i></a>' +
-                                  '<a class="viewAssessmentAction mr-3 text-warning" onclick="viewAssessment('+row[0]+', \'edit\')" ><i class="fas fa-edit"></i></a>' +
-                                  '<a class="viewAssessmentAction text-danger" onclick="viewAssessment('+row[0]+', \'delete\')" ><i class="fas fa-trash"></i></a>' +
-                                '</div>';                     
+                                `<div class="links">
+                                  <a class="viewAssessmentAction mr-3 text-primary" onclick="viewAssessment(${row[0]}, \'view\')" ><i class="fas fa-eye"></i></a>
+                                  <a class="viewAssessmentAction mr-3 text-warning" onclick="viewAssessment(${row[0]}, \'edit\')" ><i class="fas fa-edit"></i></a>
+                                  ${row[6] == 'Deleted' ? '' : 
+                                  '<a class="viewAssessmentAction text-danger" onclick="viewAssessment('+row[0]+', \'delete\')" ><i class="fas fa-trash"></i></a>'} 
+                                </div>`;                     
                           }
-                
                           return data;
                        }
                     }]
@@ -109,12 +158,35 @@ function getAssessmentQuestionsAnswers(assessment_id){
 // GENERATE REPORT
 
 function buildReport(assessment_id, type){
-  var recommendationsContainer;
+  var recommendationsContainer, SSContainer, SContainer, floodingMap, wildfiresMap, droughtMap,
+    floodingRes, wildfiresRes, droughtRes;
 
   if(type == 'view'){
-    recommendationsContainer = 'viewReportRecommendations'
+    recommendationsContainer = 'viewReportRecommendations',
+    SSContainer = 'viewReportScores',
+    // 
+    floodingMap = 'viewFloodingReport',
+    wildfiresMap = 'viewWildfiresReport',
+    droughtMap = 'viewDroughtReport',
+    // 
+    floodingRes = 'viewFloodingResult',
+    wildfiresRes = 'viewWildfiresResult',
+    droughtRes = 'viewDroughtResult',
+    // 
+    SContainer = 'viewReportScore';
   } else if (type == 'new'){
-    recommendationsContainer = 'reportRecommendations'
+    recommendationsContainer = 'reportRecommendations',
+    SSContainer = 'reportScores',
+    // 
+    floodingMap = 'floodingReport',
+    wildfiresMap = 'wildfiresReport',
+    droughtMap = 'droughtReport',
+    // 
+    floodingRes = 'floodingResult',
+    wildfiresRes = 'wildfiresResult',
+    droughtRes = 'droughtResult',
+    // 
+    SContainer = 'reportScore';
   }
 
 
@@ -127,15 +199,19 @@ function buildReport(assessment_id, type){
     },
   };
 
-  var recommendationsHTML = '';
+  var recommendationsHTML = '', SSHTML = '';
     
   $.ajax(settings).done(function (response) {
 
     console.log(response);
     
     if(response){
+      // SCORE
+      $('#'+SContainer).text(response.assessment[0].total_score);
 
-      response.recommendations.forEach((element, index, array) => {
+      // RECOMMENDATIONS
+      if(response.recommendations){
+        response.recommendations.forEach((element, index, array) => {
 
           recommendationsHTML += `
           <div class="row mt-1">
@@ -146,11 +222,35 @@ function buildReport(assessment_id, type){
         </div>
         `
         if(index == array.length-1){
-          console.log('XXXX');
-          console.log(recommendationsHTML);
           $('#'+recommendationsContainer).append(recommendationsHTML);
         }
       });
+      }
+
+      // SCORES 
+      response.section_scores.forEach((element, index, array) => {
+        SSHTML += `
+          <div class="row">
+              <div class="col text-right d-inline-block float-left d-lg-flex justify-content-lg-end align-items-lg-end">
+                  <h5 class="text-right justify-content-end mt-1">${element.title}</h5>
+              </div>
+              <div class="col d-lg-flex justify-content-lg-center col-4">
+                  <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 30px;width: 100px;color: white;border-radius: 20px;background: var(--success);">
+                      <h5>${element.section_score}</h5>
+                  </div><a class="ml-2" href="#" data-toggle="tooltip" data-placement="top" title="${element.desc} " style="font-size: 20px;">i</a>
+              </div>
+          </div>
+        `
+        if(index == array.length-1){
+          $('#'+SSContainer).append(SSHTML);
+        }
+      });
+
+      // RISK MAPS
+      $('#'+floodingMap).attr('src', `https://ftxpush.web.app/geocoder/bzriskmap.html?lay=flood&lat=${response.assessment[0].lat}&lon=${response.assessment[0].lon}&z=12&pin=1&color=Blues`);
+      $('#'+wildfiresMap).attr('src', `https://ftxpush.web.app/geocoder/bzriskmap.html?lay=fire&lat=${response.assessment[0].lat}&lon=${response.assessment[0].lon}&z=12&pin=1&color=Oranges`);
+      $('#'+droughtMap).attr('src', `https://ftxpush.web.app/geocoder/bzriskmap.html?lay=drought&lat=${response.assessment[0].lat}&lon=${response.assessment[0].lon}&z=12&pin=1&color=Set1`);
+
      
     }
     
