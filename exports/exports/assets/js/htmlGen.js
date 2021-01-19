@@ -2,7 +2,7 @@ var sectionsContainer = [], questionsContainer = [], categoriesContainer, typesC
 
 // loan purposes
 function getLoanP(){    
-
+    console.log('Loan Purposes');
     var settings = {
         "url": apiURL+"?action=list&object=loan_purposes",
         "method": "GET",
@@ -19,13 +19,15 @@ function getLoanP(){
                 buildLoanPurposesDropDowns(response.loan_purposes);        
             });
     } else {
-        ////console.log('optimizing loan purposes');
+        //console.log('optimizing loan purposes');
         buildLoanPurposesDropDowns(JSON.parse(localStorage.getItem("loanPurposes")));    
     }
  
 }
 
 function buildLoanPurposesDropDowns(array){
+    console.log('BUILD LOAN PUR');
+    console.log(array);
     let objContainer = [];
         
     array.forEach((element, key, arr) => {
@@ -353,13 +355,15 @@ function buildCards(){
     $('#CCContentDiv').empty();
     CCGenQuestions.forEach(element => {
         if(element.active == 1){
+            console.log('CARD:');
+            console.log(element);
             buildCard(element);
         }
     });
 }
 
 function buildCard(question){
-
+    console.log('BUILD CARD', question);
     let curAddress = $('#customerLocationAddress').val(),
     curLat = $('#customerLocationLat').val(),
     curLon = $('#customerLocationLon').val();
@@ -387,7 +391,7 @@ function buildCard(question){
                             <div class="embed-responsive embed-responsive-16by9" style="width: 100%; height: 600px;">
                                 <iframe class="embed-responsive-item" 
                                     sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                                    src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=${curLayer}&amp;lat=${curLat}&amp;lon=${curLon}&amp;z=12&amp;pin=1&amp;color=${curColor}"
+                                    src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=${curLayer}&amp;lat=${curLat}&amp;lon=${curLon}&amp;z=12&amp;pin=1&amp;color=${curColor}"
                                 ></iframe>
                             </div>
                         </div> 
@@ -414,26 +418,43 @@ function buildCard(question){
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="d-inline-flex">Score: </h5>
+                                    <h3 class="d-inline-flex">Score: <span id="${curLayer+'_score'}"> </span> </h3>
                                     <h6 class="d-inline-flex ml-2" id="${question.title.replace(/\s/g, '')}CardVal"></h6>
                                 </div>
                             </div>
                             <hr />
-                            <div class="row mt-4">
-                                <div class="col">
-                                    <h5 class="d-inline-flex">Remarks </h5>
-                                </div>
-                            </div>
-                            <div class="row mt-1">
-                                <div class="col d-lg-flex justify-content-lg-center">
-                                    <textarea class="form-control w-75" id="${question.title.replace(/\s/g, '')+'_obs'}"></textarea>
-                                </div>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>`;
 
     $('#CCContentDiv').append(pt);
+}
+
+function assignScore(type, value) {
+    var score;
+    
+    CCGenQuestions.forEach(element => {
+        console.log('ASSIGN SCORE', type, value);
+        console.log(element);
+
+        let riskValue = parseInt(value);
+        let cleanValues = element.questions.replace(/\s/g, '');
+        let riskValues = cleanValues.split("|");
+        let cleanScores = element.scores.replace(/\s/g, '');
+        let riskScores = cleanScores.split("|");
+        let riskIndex = riskValues.indexOf(riskValue.toString());
+
+        if(riskIndex !== -1){
+            score = riskScores[riskIndex];
+        } else {
+            score = 0;
+        }
+
+        document.getElementById(type+'_score').innerText = score;
+
+        
+    });
 }
 
 function buildCardView(lat, lon, address, question){
@@ -465,7 +486,7 @@ function buildCardView(lat, lon, address, question){
                             <div class="embed-responsive embed-responsive-16by9" style="width: 100%; height: 600px;">
                                 <iframe class="embed-responsive-item" 
                                     sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                                    src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=${curLayer}&amp;lat=${curLat}&amp;lon=${curLon}&amp;z=12&amp;pin=1&amp;color=${curColor}"
+                                    src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=${curLayer}&amp;lat=${curLat}&amp;lon=${curLon}&amp;z=12&amp;pin=1&amp;color=${curColor}"
                                 ></iframe>
                             </div>
                         </div> 
@@ -492,21 +513,12 @@ function buildCardView(lat, lon, address, question){
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="d-inline-flex">Score: ${question.score}</h5>
+                                    <h3 class="d-inline-flex">Score: ${question.score}</h3>
                                     <h6 class="d-inline-flex ml-2" style="display:none;" id="${question.title.replace(/\s/g, '')}CardVal"></h6>
                                 </div>
                             </div>
                             <hr />
-                            <div class="row mt-4">
-                                <div class="col">
-                                    <h5 class="d-inline-flex">Remarks </h5>
-                                </div>
-                            </div>
-                            <div class="row mt-1">
-                                <div class="col d-lg-flex justify-content-lg-center">
-                                    <textarea class="form-control w-75" id="${question.title.replace(/\s/g, '')+'_obs'}"></textarea>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>`;
@@ -798,7 +810,7 @@ function radioGroup(question) {
                 inner+= 
                 `   </div>
                         <div class="col col-5">
-                            <p class="mt-3">Recommendations</p>
+                            <p class="mt-3">Remarks</p>
                             <textarea class="ml-4 mt-1 recommendations" cols="40" id="${question.id}"></textarea>
                         </div>
                     </div>              

@@ -131,8 +131,8 @@ function collectAnswers(type){
 
             case 'Climate Risk Card':
 
-                console.log('CRC');
-                console.log(question);
+                // console.log('CRC');
+                // console.log(question);
                 var cleanTitle = question.title.replace(/\s/g, '');
                 
                 if(cleanTitle == 'Drought' ){
@@ -263,7 +263,7 @@ function collectAnswers(type){
                 let currentIndex = $('.carousel-item.active').index() + 1;
                 
                 if(currentIndex == 5){
-                    buildReport(payloadContainer.assessment_id);
+                    buildReport(payloadContainer.assessment_id, type);
                     for(var propt in response){
                         $('#assessmentSavedTxt').append(propt+': '+response[propt]+'<hr/>');
                     }
@@ -288,7 +288,7 @@ $('.viewEditBtn').click(function(){
     $('.viewCancelBtn').show();
     $('.viewSaveBtn').show();
     
-    console.log('Edit');
+    // console.log('Edit');
     
     var x = document.getElementsByClassName("viewInput");
     var i;
@@ -303,7 +303,7 @@ $('.viewCancelBtn').click(function(){
     $('.viewCancelBtn').hide();
     $('.viewSaveBtn').hide();
     
-    console.log('Cancel');
+    // console.log('Cancel');
     
     var x = document.getElementsByClassName("viewInput");
     var i;
@@ -313,7 +313,7 @@ $('.viewCancelBtn').click(function(){
 });
 
 $('.viewSaveBtn').click(function(){
-    collectAnswers('view')
+    collectAnswers('view');
 });
 
 
@@ -362,8 +362,8 @@ function buildView(payload){
         
         setTimeout(() => {
             answers.forEach((element, index, array) => {
-                // ////console.log(element.id);
-                ////console.log(element);
+                // console.log(element.id);
+                // console.log(element);
                 switch (element.question_type) {
                     case "2":
                         document.getElementById(element.question_id).setAttribute("disabled", "disabled");

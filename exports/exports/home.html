@@ -126,7 +126,7 @@
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col">
-                                                    <p class="input-label mb-2">Are you and existing customer?</p>
+                                                    <p class="input-label mb-2">Is an existing customer?</p>
                                                     <form>
                                                         <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input" type="radio" id="existingCustomerRadioNo" value="no" name="existingCustomerRadio"><label class="form-check-label" for="existingCustomerRadioNo">No</label></div>
                                                         <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input" type="radio" id="existingCustomerRadioYes" value="yes" name="existingCustomerRadio"><label class="form-check-label" for="existingCustomerRadioYes">Yes</label></div>
@@ -147,7 +147,7 @@
                                                     <form>
                                                         <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input" type="radio" id="customerRadioSexM-1" value="M" name="customerRadioSex"><label class="form-check-label" for="customerRadioSexM">Male</label></div>
                                                         <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input" type="radio" id="customerRadioSexF-1" value="F" name="customerRadioSex"><label class="form-check-label" for="customerRadioSexF">Female</label></div>
-                                                    </form><span id="customerRadioSexError-1" class="text-danger errorMsg" style="display: none;"></span>
+                                                    </form><span id="customerRadioSexError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
@@ -170,7 +170,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col d-xl-flex align-items-xl-center">
-                                                    <div></div><input type="text" id="customerLocationAddress" class="form-control mb-2 d-inline-flex w-100 CI_input" placeholder="Address Reference">
+                                                    <div></div><textarea id="customerLocationAddress" class="form-control mb-2 d-inline-flex w-100 CI_input" placeholder="Address Reference" rows="10"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -225,23 +225,29 @@ eventer(messageEvent,function(e) {
         
         if(e.data.lay == 'drought'){
             console.log('getting '+e.data.lay);
+            reportRisk(e.data, 'new');
             document.getElementById("DroughtCardInput").value = e.data.val[0];
-            document.getElementById("DroughtCardVal").innerHTML = e.data.val[0];
+            assignScore('drought', e.data.val[0]);
+            //document.getElementById("DroughtCardVal").innerHTML = e.data.val[0];
             
         } else if (e.data.lay == 'fire') {
             console.log('getting '+e.data.lay);
+            reportRisk(e.data, 'new');
             document.getElementById("WildfiresCardInput").value = e.data.val[0];
-            document.getElementById("WildfiresCardVal").innerHTML = e.data.val[0];
+            assignScore('fire', e.data.val[0]);
+            //document.getElementById("WildfiresCardVal").innerHTML = e.data.val[0];
             
         } else if (e.data.lay == 'flood'){
             console.log('getting '+e.data.lay);
+            reportRisk(e.data, 'new');
             document.getElementById("FloodingCardInput").value = e.data.val[0];
-            document.getElementById("FloodingCardVal").innerHTML = e.data.val[0];
+            assignScore('flood', e.data.val[0]);
+            //document.getElementById("FloodingCardVal").innerHTML = e.data.val[0];
             
         } else if (e.data.lay == 'costal'){
             console.log('getting '+e.data.lay);
             document.getElementById("CoastalFloodingCardInput").value = e.data.val[0];
-            document.getElementById("CoastalFloodingCardVal").innerHTML = e.data.val[0];
+           assignScore('costal', e.data.val[0]); //document.getElementById("CoastalFloodingCardVal").innerHTML = e.data.val[0];
         }
         
     } else {
@@ -354,9 +360,59 @@ eventer(messageEvent,function(e) {
                                 <div id="climateRiskReport">
                                     <div class="row">
                                         <div class="col">
-                                            <h4>Risk Report</h4>
+                                            <h3>Risk Report</h3>
                                         </div>
                                     </div>
+                                    <div>
+                                        <div class="row mt-2">
+                                            <div class="col">
+                                                <h4>Customer Information</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Name:</h5>
+                                                <h6 class="d-inline-block ml-2" id="reportCustomerName"></h6>
+                                            </div>
+                                            <div class="col" id="reportCustomerIDCol">
+                                                <h5 class="d-inline-block">Personal ID:</h5>
+                                                <h6 class="d-inline-block ml-2" id="reportCustomerID"></h6>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Sex:</h5>
+                                                <h6 class="d-inline-block ml-2" id="reportCustomerSex"></h6>
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Age:</h5>
+                                                <h6 class="d-inline-block ml-2" id="reportCustomerAge"></h6>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col col-8">
+                                                <h5 class="d-inline-block">Address:</h5>
+                                                <h6 class="d-inline-block ml-2" id="reportCustomerAddress"></h6>
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Lat:</h5>
+                                                <h6 class="d-inline-block ml-2" id="reportCustomerLat"></h6>
+                                                <h5 class="d-inline-block ml-5">Lon:</h5>
+                                                <h6 class="d-inline-block ml-2" id="reportCustomerLon"></h6>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Loan Purpose:</h5>
+                                                <h6 class="d-inline-block ml-2" id="reportCustomerLoanP"></h6>
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Loan Sector:</h5>
+                                                <h6 class="d-inline-block ml-2" id="reportCustomerLoanS"></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
                                     <div class="row">
                                         <div class="col">
                                             <div class="row">
@@ -365,82 +421,61 @@ eventer(messageEvent,function(e) {
                                                     <p>It considers the results of the 3 components of the assessment.</p>
                                                 </div>
                                                 <div class="col d-lg-flex justify-content-lg-center col-4">
-                                                    <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow" style="height: 100px;width: 100px;color: white;border-radius: 20px;background: var(--red);">
-                                                        <h5>HIGH</h5>
+                                                    <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow" style="height: 100px;width: 100px;color: white;border-radius: 20px;background: var(--secondary);">
+                                                        <h5 id="reportScore"></h5>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <div class="row">
-                                                <div class="col text-right d-inline-block float-left d-lg-flex justify-content-lg-end align-items-lg-end">
-                                                    <h5 class="text-right justify-content-end mt-1">Business Information:</h5>
-                                                </div>
-                                                <div class="col d-lg-flex justify-content-lg-center col-4">
-                                                    <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 30px;width: 100px;color: white;border-radius: 20px;background: var(--success);">
-                                                        <h5>LOW</h5>
-                                                    </div><i class="fa fa-info-circle mt-2" style="color: #75b2dd;"></i>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col text-right d-inline-block float-left d-lg-flex justify-content-lg-end align-items-lg-end">
-                                                    <h5 class="text-right justify-content-end mt-1">Climate Cards:</h5>
-                                                </div>
-                                                <div class="col d-lg-flex justify-content-lg-center col-4">
-                                                    <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 30px;width: 100px;color: white;border-radius: 20px;background: var(--danger);">
-                                                        <h5>HIGH</h5>
-                                                    </div><i class="fa fa-info-circle mt-2" style="color: #75b2dd;"></i>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col text-right d-inline-flex d-lg-flex justify-content-lg-end align-items-lg-center">
-                                                    <h5 class="text-right d-inline-flex justify-content-lg-end mt-1">Climate Preparedness</h5>
-                                                </div>
-                                                <div class="col d-lg-flex justify-content-lg-center col-4">
-                                                    <div class="d-lg-flex justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 30px;width: 100px;color: white;border-radius: 20px;background: var(--success);">
-                                                        <h5>LOW</h5>
-                                                    </div><i class="fa fa-info-circle mt-2" style="color: #75b2dd;"></i>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div class="col" id="reportScores"></div>
                                     </div>
                                     <div class="row d-lg-flex justify-content-lg-center mt-4">
                                         <div class="col">
                                             <div>
                                                 <h4 class="text-center">Flooding</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=flood&amp;z=8&amp;pin=0&amp;color=Blues"></iframe></div>
-                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 40px;color: white;border-radius: 10px;background: var(--danger);">
-                                                <h5>HIGH RISK, 7</h5>
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=flood&amp;z=8&amp;pin=0&amp;color=Blues" id="floodingReport"></iframe></div>
+                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-2" id="newRiskContainer_flood" style="height: 40px;color: white;border-radius: 10px;background: #dddddd;">
+                                                <h5 id="newRiskScore_flood"></h5>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div>
                                                 <h4 class="text-center">Wildfires</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=fire&amp;z=8&amp;pin=0&amp;color=Oranges"></iframe></div>
-                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 40px;color: white;border-radius: 10px;background: var(--warning);">
-                                                <h5>MEDIUM, 7</h5>
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=fire&amp;z=8&amp;pin=0&amp;color=Oranges" id="wildfiresReport"></iframe></div>
+                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-2" id="newRiskContainer_fire" style="height: 40px;color: white;border-radius: 10px;background: #dddddd;">
+                                                <h5 id="newRiskScore_fire"></h5>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div>
                                                 <h4 class="text-center">Drought</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?color=Set1&amp;lay=drought&amp;min=1"></iframe></div>
-                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2" style="height: 40px;color: white;border-radius: 10px;background: var(--success);">
-                                                <h5>LOW, 1</h5>
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?color=Set1&amp;lay=drought&amp;min=1" id="droughtReport"></iframe></div>
+                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-2" id="newRiskContainer_drought" style="height: 40px;color: white;border-radius: 10px;background: #dddddd;">
+                                                <h5 id="newRiskScore_drought"></h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col">
-                                            <h3>Recommended Actions</h3>
+                                            <h3>Recommendations</h3>
                                         </div>
                                     </div>
                                     <div class="row mt-1">
                                         <div class="col">
-                                            <p>The project location is highly vulnerable to flooding.<br>Given the conditions shown in the information, it is recommended to carry out more research on the feasibility of financing.<br>In addition, it is recommended to carry out an evaluation of the characteristics of the site, assessing adaptation measures and vulnerability to flash flood events.</p>
+                                            <p id="reportRecommendations"></p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <h3>Remarks</h3>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="col">
+                                            <p id="reportComments"></p>
                                         </div>
                                     </div>
                                 </div>

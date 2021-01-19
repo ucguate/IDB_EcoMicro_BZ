@@ -2,12 +2,16 @@
 const apiURL = 'https://927d1d30.us-south.apigw.appdomain.cloud/bz/api/';
 
 $(document).ready(function() {    
+    
     getQuestionTypes();
-    getLoanP();
-    getLoanS();
+    // getLoanP();
+    // getLoanS();
     getSections();
+
     if(window.location.pathname == '/assessmentsReport.html'){
         getAssessmentsReport();
+    } else if (window.location.pathname == '/home.html') {
+
     } else if (window.location.pathname == '/viewAssessment.html') {
         var assessment_id = getUrlParameter('assessment_id');
         var action = getUrlParameter('action');

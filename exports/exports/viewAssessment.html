@@ -18,7 +18,38 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 </head>
 
-<body id="page-top">
+<body id="page-top"><script type="text/javascript">
+
+window.addEventListener("message", (e) => {
+    if (e.data.type == 'riskmap'){
+        
+        if(e.data.lay == 'drought'){
+            console.log('getting: '+e.data.lay);
+            reportRisk(e.data, 'view');
+            
+        } else if (e.data.lay == 'fire') {
+            console.log('getting '+e.data.lay);
+            reportRisk(e.data, 'view');
+            
+        } else if (e.data.lay == 'flood'){
+            console.log('getting '+e.data.lay);
+            reportRisk(e.data, 'view');
+            
+        } else if (e.data.lay == 'costal'){
+            console.log('getting '+e.data.lay);
+            reportRisk(e.data, 'view');
+
+        }
+        
+    }
+    return;
+ 
+  // ...
+}, false);
+    
+
+    
+</script>
     <div id="wrapper">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 collapsed toggled" style="background: #75b2dd;">
             <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
@@ -124,31 +155,31 @@
                                                     <p>Customer Information</p>
                                                     <p class="input-label mb-2">Are you and existing customer?</p>
                                                     <form>
-                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input view_input viewInput" type="radio" id="view-existingCustomerRadioNo" value="no" name="view-existingCustomerRadio" disabled=""><label class="form-check-label" for="existingCustomerRadioNo">No</label></div>
-                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input view_input viewInput" type="radio" id="view-existingCustomerRadioYes" value="yes" name="view-existingCustomerRadio" disabled=""><label class="form-check-label" for="existingCustomerRadioYes">Yes</label></div>
+                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input view_input viewInput-1" type="radio" id="view-existingCustomerRadioNo" value="no" name="view-existingCustomerRadio" disabled=""><label class="form-check-label" for="existingCustomerRadioNo">No</label></div>
+                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input view_input viewInput-1" type="radio" id="view-existingCustomerRadioYes" value="yes" name="view-existingCustomerRadio" disabled=""><label class="form-check-label" for="existingCustomerRadioYes">Yes</label></div>
                                                     </form><span id="existingCustomerError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                                 <div class="col pt-5" id="view-customerIdCol" style="display: none;">
-                                                    <p class="mb-2 input-label">Customer ID</p><input type="text" id="view-customerId" class="form-control w-75 ml-3 viewInput" placeholder="Customer ID" disabled=""><span id="customerIdError" class="text-danger errorMsg" style="display: none;"></span>
+                                                    <p class="mb-2 input-label">Customer ID</p><input type="text" id="view-customerId" class="form-control w-75 ml-3 viewInput-1" placeholder="Customer ID" disabled=""><span id="customerIdError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col">
-                                                    <p class="mb-2 input-label">Customer Name</p><input type="text" id="view-customerNameInput" class="form-control ml-3 w-75 CI_input viewInput" placeholder="Customer Name" disabled=""><span id="customerNameError" class="text-danger errorMsg" style="display: none;"></span>
+                                                    <p class="mb-2 input-label">Customer Name</p><input type="text" id="view-customerNameInput" class="form-control ml-3 w-75 CI_input viewInput-1" placeholder="Customer Name" disabled=""><span id="customerNameError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col">
                                                     <p class="mb-2 input-label">Customer Sex</p>
                                                     <form>
-                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input viewInput" type="radio" id="view-customerRadioSexM-1" value="M" name="view-customerRadioSex" disabled=""><label class="form-check-label" for="customerRadioSexM">Male</label></div>
-                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input viewInput" type="radio" id="view-customerRadioSexF-1" value="F" name="view-customerRadioSex" disabled=""><label class="form-check-label" for="customerRadioSexF">Female</label></div>
+                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input viewInput-1" type="radio" id="view-customerRadioSexM-1" value="M" name="view-customerRadioSex" disabled=""><label class="form-check-label" for="customerRadioSexM">Male</label></div>
+                                                        <div class="form-check d-inline-flex ml-3"><input class="form-check-input CI_input viewInput-1" type="radio" id="view-customerRadioSexF-1" value="F" name="view-customerRadioSex" disabled=""><label class="form-check-label" for="customerRadioSexF">Female</label></div>
                                                     </form><span id="customerRadioSexError-1" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col col-6">
-                                                    <p class="mb-2 input-label">Customer Age</p><input type="number" id="view-customerAgeInput" class="form-control w-75 ml-3 CI_input viewInput" placeholder="Age" min="18" max="100" disabled=""><span id="customerAgeError" class="text-danger errorMsg" style="display: none;"></span>
+                                                    <p class="mb-2 input-label">Customer Age</p><input type="number" id="view-customerAgeInput" class="form-control w-75 ml-3 CI_input viewInput-1" placeholder="Age" min="18" max="100" disabled=""><span id="customerAgeError" class="text-danger errorMsg" style="display: none;"></span>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
@@ -167,7 +198,7 @@
                                                 </div>
                                             </div>
                                             <div class="row mb-1">
-                                                <div class="col"><input type="text" id="view-customerLocationAddress" class="form-control mb-2 d-inline-flex w-100 CI_input viewInput" placeholder="Address Reference" disabled=""></div>
+                                                <div class="col"><input type="text" id="view-customerLocationAddress" class="form-control mb-2 d-inline-flex w-100 CI_input viewInput-1" placeholder="Address Reference" disabled=""></div>
                                             </div>
                                         </div>
                                         <div class="col">
@@ -191,66 +222,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div><script type="text/javascript">
-// Create IE + others compatible event handler
-var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-var eventer = window[eventMethod];
-var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
-
-// Listen to message from child window
-eventer(messageEvent,function(e) {
-  console.log('>>> parent received message:  ',e.data);
-
-    // if onclick event on map 
-    if( typeof e.data[0] !== "undefined"){
-        console.log('es on click');
-        $('#customerLocationAddress').val(e.data[0].name);
-        $('#customerLocationLat').val(e.data[0].center.lat);
-        $('#customerLocationLon').val(e.data[0].center.lng);
-        setTimeout(() => {
-            buildCards();
-        }, 500);
-        
-    } else if (e.data.selectedAddress){
-        console.log('es direccion');
-        $('#customerLocationAddress').val(e.data.selectedAddress);
-        $('#customerLocationLat').val(e.data.selectedLat);
-        $('#customerLocationLon').val(e.data.selectedLon);
-        
-        setTimeout(() => {
-            buildCards();
-        }, 500);
-        
-    } else if (e.data.type == 'riskmap'){
-        
-        if(e.data.lay == 'drought'){
-            console.log('getting '+e.data.lay);
-            document.getElementById("DroughtCardInput").value = e.data.val[0];
-            document.getElementById("DroughtCardVal").innerHTML = e.data.val[0];
-            
-        } else if (e.data.lay == 'fire') {
-            console.log('getting '+e.data.lay);
-            document.getElementById("WildfiresCardInput").value = e.data.val[0];
-            document.getElementById("WildfiresCardVal").innerHTML = e.data.val[0];
-            
-        } else if (e.data.lay == 'flood'){
-            console.log('getting '+e.data.lay);
-            document.getElementById("FloodingCardInput").value = e.data.val[0];
-            document.getElementById("FloodingCardVal").innerHTML = e.data.val[0];
-            
-        } else if (e.data.lay == 'costal'){
-            console.log('getting '+e.data.lay);
-            document.getElementById("CoastalFloodingCardInput").value = e.data.val[0];
-            document.getElementById("CoastalFloodingCardVal").innerHTML = e.data.val[0];
-        }
-        
-    } else {
-
-    }
-    
-},false);
-    
-</script>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -358,9 +330,59 @@ eventer(messageEvent,function(e) {
                                 <div id="viewClimateRiskReport">
                                     <div class="row">
                                         <div class="col">
-                                            <h4>Risk Report</h4>
+                                            <h3>Risk Report</h3>
                                         </div>
                                     </div>
+                                    <div>
+                                        <div class="row mt-2">
+                                            <div class="col">
+                                                <h4>Customer Information</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Name:</h5>
+                                                <h6 class="d-inline-block ml-2" id="viewReportCustomerName"></h6>
+                                            </div>
+                                            <div class="col" id="viewReportCustomerIDCol">
+                                                <h5 class="d-inline-block">Personal ID:</h5>
+                                                <h6 class="d-inline-block ml-2" id="viewReportCustomerID"></h6>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Sex:</h5>
+                                                <h6 class="d-inline-block ml-2" id="viewReportCustomerSex"></h6>
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Age:</h5>
+                                                <h6 class="d-inline-block ml-2" id="viewReportCustomerAge"></h6>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col col-8">
+                                                <h5 class="d-inline-block">Address:</h5>
+                                                <h6 class="d-inline-block ml-2" id="viewReportCustomerAddress"></h6>
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Lat:</h5>
+                                                <h6 class="d-inline-block ml-2" id="viewReportCustomerLat"></h6>
+                                                <h5 class="d-inline-block ml-5">Lon:</h5>
+                                                <h6 class="d-inline-block ml-2" id="viewReportCustomerLon"></h6>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1">
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Loan Purpose:</h5>
+                                                <h6 class="d-inline-block ml-2" id="viewReportCustomerLoanP"></h6>
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="d-inline-block">Loan Sector:</h5>
+                                                <h6 class="d-inline-block ml-2" id="viewReportCustomerLoanS"></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
                                     <div class="row">
                                         <div class="col">
                                             <div class="row">
@@ -382,36 +404,42 @@ eventer(messageEvent,function(e) {
                                             <div>
                                                 <h4 class="text-center">Flooding</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=flood&amp;z=8&amp;pin=0&amp;color=Blues" id="viewFloodingReport"></iframe></div>
-                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewFloodingResult" style="height: 40px;color: white;border-radius: 10px;background: var(--danger);">
-                                                <h5>HIGH RISK, 7</h5>
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=flood&amp;z=8&amp;pin=0&amp;color=Blues" id="viewFloodingReport"></iframe></div>
+                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewRiskContainer_flood" style="height: 40px;color: white;border-radius: 10px;background: #dddddd;">
+                                                <h5 id="viewRiskScore_flood"></h5>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div>
                                                 <h4 class="text-center">Wildfires</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?lay=fire&amp;z=8&amp;pin=0&amp;color=Oranges" id="viewWildfiresReport"></iframe></div>
-                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewWildfiresResult" style="height: 40px;color: white;border-radius: 10px;background: var(--warning);">
-                                                <h5>MEDIUM, 7</h5>
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=fire&amp;z=8&amp;pin=0&amp;color=Oranges" id="viewWildfiresReport"></iframe></div>
+                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewRiskContainer_fire" style="height: 40px;color: white;border-radius: 10px;background: #dddddd;">
+                                                <h5 id="viewRiskScore_fire"></h5>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div>
                                                 <h4 class="text-center">Drought</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://ftxpush.web.app/geocoder/bzriskmap.html?color=Set1&amp;lay=drought&amp;min=1" id="viewDroughtReport"></iframe></div>
-                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewDroughtResult" style="height: 40px;color: white;border-radius: 10px;background: var(--success);">
-                                                <h5>LOW, 1</h5>
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?color=Set1&amp;lay=drought&amp;min=1" id="viewDroughtReport"></iframe></div>
+                                            <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewRiskContainer_drought" style="height: 40px;color: white;border-radius: 10px;background: #dddddd;">
+                                                <h5 id="viewRiskScore_drought"></h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col">
-                                            <h3>Recommended Actions</h3>
+                                            <h3 class="mt-3">Recommendations</h3>
                                         </div>
                                     </div>
                                     <div id="viewReportRecommendations"></div>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <h3 class="mt-3">Remarks</h3>
+                                        </div>
+                                    </div>
+                                    <div id="viewReportComments"></div>
                                 </div>
                             </div>
                         </div>

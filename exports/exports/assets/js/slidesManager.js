@@ -141,9 +141,13 @@ $('#backBtn').click(function() {
 
 
 $('#mainCarousel').on('slid.bs.carousel', function () {
+    
     // deactivate all tabs before change
     $('.assessmentTab').attr('aria-pressed', false);
     $('.assessmentTab').removeClass('active');
+
+    // scroll to top
+    $("html, body").animate({ scrollTop: 0 }, "slow");
     
     let currentIndex = $('.carousel-item.active').index() + 1;
     //console.log('Current index: '+currentIndex);
@@ -201,7 +205,12 @@ $('#mainCarousel').on('slid.bs.carousel', function () {
         $('.lastSlideBtn').hide();
         $('#nextBtn').show();
     }
-})
+});
+
+$('#viewCarousel').on('slid.bs.carousel', function () {
+  // scroll to top
+  $("html, body").animate({ scrollTop: 0 }, "slow");
+});
 
 // ------------------------ VIEW ASSESSMENT REPORT ----------------------------
 function applyInputClass(action){
@@ -222,7 +231,7 @@ function applyInputClass(action){
 // -------------------------------- VALIDATORS --------------------------------
 
 function validateCustomerInfo(){
-  let allow = false;
+  let allow = true;
   // Get Inputs
   var existingCustomerRadios = $("input:radio[name=existingCustomerRadio]:checked").val(),
   customerId = $("#customerId"), customerNameInput = $('#customerNameInput'), customerSexRadios = $("input:radio[name=customerRadioSex]:checked").val(),
@@ -232,10 +241,13 @@ function validateCustomerInfo(){
   loan_purpose_txt = $('#customerLoanPurposeSelect option:selected').text(),
   loan_sector_txt = $('#customerLoanSectorSelect option:selected').text();
 
+  console.log('VALIDATION:');
+  console.log(customerAddress.val(), customerLat.val(), customerLon.val());
+  console.log((customerAddress.val().length > 3) && (customerLat.val().length > 3 ) && (customerLon.val().length > 3));
   
   // Existing Customer
   if(existingCustomerRadios !== undefined){
-    allow = true;
+    
     $('#existingCustomerError').hide();
   } else {
     allow = false;
@@ -246,7 +258,7 @@ function validateCustomerInfo(){
   if(existingCustomerRadios == 'yes'){
 
     if(customerId.val().length > 3){
-      allow = true;
+      
       $('#customerIdError').hide();
     } else {
       allow = false;
@@ -255,12 +267,12 @@ function validateCustomerInfo(){
     }
     
   } else {
-    allow = true;
+    
   }
 
   // customer name
   if(customerNameInput.val().length > 3){
-    allow = true;
+    
     $('#customerNameError').hide();
   } else {
     allow = false;
@@ -270,7 +282,6 @@ function validateCustomerInfo(){
 
   // customer sex radios
   if(customerSexRadios !== undefined){
-    allow = true;
     $('#customerRadioSexError').hide();
   } else {
     allow = false;
@@ -280,7 +291,7 @@ function validateCustomerInfo(){
 
   // customer age
   if(customerAge.val() > 17){
-    allow = true;
+    
     $('#customerAgeError').hide();
   } else {
     allow = false;
@@ -289,8 +300,8 @@ function validateCustomerInfo(){
   }
 
   // customer location
-  if(customerAddress.val().length > 3 && customerLat.val() && customerLon.val()){
-    allow = true;
+  if((customerAddress.val().length > 3) && (customerLat.val().length > 3 ) && (customerLon.val().length > 3)){
+    
     $('#customerLocationError').hide();
   } else {
     allow = false;
@@ -299,7 +310,7 @@ function validateCustomerInfo(){
   }
 
   if(loanPurpose.val() !== 'null'){
-    allow = true;
+    
     $('#customerLoanPurposeError').hide();
   } else {
     allow = false;
@@ -308,7 +319,7 @@ function validateCustomerInfo(){
   }
 
   if(loanSector.val() !== 'null'){
-    allow = true;
+    
     $('#customerLoanSectorError').hide();
   } else {
     allow = false;
