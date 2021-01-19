@@ -11,7 +11,6 @@ function viewAssessment(id, action){
 }
 
 $( "#confirmDeleteAssessmentBtn" ).click(function() {
-
     editAssessment($(this).attr('assessment_id'));
 });
 
@@ -222,7 +221,7 @@ function buildReport(assessment_id, type){
       // SCORE
       // $('#'+SContainer).text(response.assessment[0].total_score);
 
-      var Ggrade = parseFloat(response.assessment[0].total_score)/parseFloat(response.scores[0].max_score);
+      var Ggrade = parseFloat(response.assessment[0].total_score)/parseFloat(response.scores.score_max);
 
       // calculating score
       // high > 66
@@ -274,11 +273,7 @@ function buildReport(assessment_id, type){
       // SCORES 
       response.section_scores.forEach((element, index, array) => {
 
-        var max_section_score = response.max_min_section_scores.filter(obj => {
-          return obj.section_id === element.id
-        });
-
-        var grade = parseFloat(element.section_score)/parseFloat(max_section_score[0].max_score);
+        var grade = parseFloat(element.section_score)/parseFloat(response.scores[`max${[index+1]}`]);
 
         // calculating score
         // high > 66
@@ -327,6 +322,43 @@ function buildReport(assessment_id, type){
       $('#'+customerLon).text(response.assessment[0].lon);
       $('#'+customerLoanP).text(response.loan_purpose[0].name);
       $('#'+customerLoanS).text(response.loan_section[0].name);
+
+
+      // REPORT TABLES IF view assessment
+      if (type == 'view'){
+        response.answers.forEach((element, key, arr) => {
+            
+          // ////console.log(element);
+          let tableRow = `
+              <tr>
+                  <td>${element.id}</td>
+                  <td>${element.assessment_id}</td>
+                  <td>${element.question_id}) ${element.title}</td>
+                  <td>${element.placeholder}</td>
+                  <td>${element.questions}</td>
+                  <td>${element.response}</td>
+                  <td>${element.score}</td>
+                  <td>
+                    ${ new Date(element.updated_at).toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }
+                   - ${ new Date(element.updated_at).toLocaleTimeString('en-EN', { hour: 'numeric', minute: 'numeric', hour12: true }) }
+
+                  </td>
+              </tr>
+          `;
+          $('#viewAssessmentReportTableBody').append(tableRow);
+          if(key === arr.length - 1){
+                  var table = $('#viewAssessmentReportTable').DataTable(
+                    {
+                      dom: 'Bfrtip',
+                      buttons: [
+                          'copy', 'csv', 'excel', 'pdf', 'print'
+                      ],
+                      order: [[ 0, "desc" ]]
+                    }
+                  );
+              }
+          });
+      } 
 
      
     }
@@ -415,5 +447,40 @@ function reportRisk(data, type){
   }
   $('#'+scoreContainerID).text(scoreTxt);
   $('#'+containerID).css('background-color', scoreColor);
+
+}
+
+// print report
+
+$( "#printReportBtn" ).click(function() {
+  
+  if(window.location.pathname == '/viewAssessment.html'){
+    printReport('viewClimateRiskReport');
+  } else if (window.location.pathname == '/home.html') {
+    printReport('climateRiskReport');
+  } 
+});
+
+function printReport(divId){
+  $('#'+divId).printThis(
+    {
+      loadCSS: "style.css",
+      importStyle: true,         // import style tags
+
+    }
+  );
+
+  // var divToPrint=document.getElementById(divId);
+
+  // var newWin=window.open('','Print-Window');
+
+  // newWin.document.open();
+
+  // newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+  // newWin.document.close();
+
+  // setTimeout(function(){newWin.close();},10);
+  // window.print();
 
 }

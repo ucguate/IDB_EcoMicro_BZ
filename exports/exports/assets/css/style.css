@@ -24,3 +24,10 @@ a.carousel-control-prev {
   display: none;
 }
 
+.div2Print {
+}
+
+#printReportBtn @print {
+  display: none;
+}
+

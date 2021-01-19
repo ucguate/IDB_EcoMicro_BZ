@@ -326,11 +326,15 @@ window.addEventListener("message", (e) => {
                                     </div>
                                 </div>
                             </div>
-                            <div class="carousel-item">
+                            <div class="carousel-item"><button class="btn float-right" id="printReportBtn" type="button" style="background: #75b2dd;color: rgb(255,255,255); display: none;">Print<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" class="bi bi-printer-fill ml-2">
+                                        <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2H5z"></path>
+                                        <path fill-rule="evenodd" d="M11 9H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1z"></path>
+                                        <path fill-rule="evenodd" d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2V7zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"></path>
+                                    </svg></button>
                                 <div id="viewClimateRiskReport">
                                     <div class="row">
                                         <div class="col">
-                                            <h3>Risk Report</h3>
+                                            <h3 class="d-inline-block">Risk Report</h3>
                                         </div>
                                     </div>
                                     <div>
@@ -404,7 +408,7 @@ window.addEventListener("message", (e) => {
                                             <div>
                                                 <h4 class="text-center">Flooding</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=flood&amp;z=8&amp;pin=0&amp;color=Blues" id="viewFloodingReport"></iframe></div>
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh; max-height: 600px;"><iframe class="embed-responsive-item" src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=flood&amp;z=8&amp;pin=0&amp;color=Blues" id="viewFloodingReport"></iframe></div>
                                             <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewRiskContainer_flood" style="height: 40px;color: white;border-radius: 10px;background: #dddddd;">
                                                 <h5 id="viewRiskScore_flood"></h5>
                                             </div>
@@ -413,7 +417,7 @@ window.addEventListener("message", (e) => {
                                             <div>
                                                 <h4 class="text-center">Wildfires</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=fire&amp;z=8&amp;pin=0&amp;color=Oranges" id="viewWildfiresReport"></iframe></div>
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh; max-height: 600px;"><iframe class="embed-responsive-item" src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=fire&amp;z=8&amp;pin=0&amp;color=Oranges" id="viewWildfiresReport"></iframe></div>
                                             <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewRiskContainer_fire" style="height: 40px;color: white;border-radius: 10px;background: #dddddd;">
                                                 <h5 id="viewRiskScore_fire"></h5>
                                             </div>
@@ -422,7 +426,7 @@ window.addEventListener("message", (e) => {
                                             <div>
                                                 <h4 class="text-center">Drought</h4>
                                             </div>
-                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh;"><iframe class="embed-responsive-item" src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?color=Set1&amp;lay=drought&amp;min=1" id="viewDroughtReport"></iframe></div>
+                                            <div class="embed-responsive embed-responsive-16by9" style="height: 85vh; max-height: 600px;"><iframe class="embed-responsive-item" src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?color=Set1&amp;lay=drought&amp;min=1" id="viewDroughtReport"></iframe></div>
                                             <div class="d-lg-flex mx-auto justify-content-lg-center align-items-lg-center shadow pt-2 mt-1" id="viewRiskContainer_drought" style="height: 40px;color: white;border-radius: 10px;background: #dddddd;">
                                                 <h5 id="viewRiskScore_drought"></h5>
                                             </div>
@@ -440,6 +444,39 @@ window.addEventListener("message", (e) => {
                                         </div>
                                     </div>
                                     <div id="viewReportComments"></div>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <h3 class="mt-3">Answers Report Table</h3>
+                                        </div>
+                                    </div>
+                                    <div id="viewReportTableContainer"><table id="viewAssessmentReportTable" class="table table-striped table-bordered" style="width:100%; font-size: 13px;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Assessment</th>
+                <th>Question ID</th>
+                <th>Question</th>
+                <th>Options</th>
+                <th>Response</th>
+                <th>Score</th>
+                <th>Updated At</th>
+            </tr>
+        </thead>
+        <tbody id="viewAssessmentReportTableBody">
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Assessment</th>
+                <th>Question ID</th>
+                <th>Question</th>
+                <th>Options</th>
+                <th>Response</th>
+                <th>Score</th>
+                <th>Updated At</th>
+            </tr>
+        </tfoot>
+    </table></div>
                                 </div>
                             </div>
                         </div>
@@ -601,6 +638,7 @@ window.addEventListener("message", (e) => {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js" integrity="sha512-d5Jr3NflEZmFDdFHZtxeJtBzk0eB+kkRXWFQqEc1EKmolXjHm2IKCA7kTvXBNjIYzjXfD5XzIjaaErpkZHCkBg==" crossorigin="anonymous"></script>
     <script src="assets/js/index.js"></script>
     <script src="assets/js/slidesManager.js"></script>
     <script src="assets/js/theme.js"></script>
