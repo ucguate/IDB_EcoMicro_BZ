@@ -47,30 +47,30 @@ project
 └───database #folder to store image assets * not relevant as used images are inside exports folder.
 │   │   script.sql # dump sql file to restore the whole database structure and required data. 
 └───exports #folder where all static files that make up the web application are stored.
-│   └───assets
-│   │   │   file111.txt
-│   └───exports
-│       │   file111.txt
-│   firebase.json # dump sql file to restore the whole database structure and required data. 
+│   └───assets #static assets including: bootstrap library, fonts, css and js files. 
+│   │   └───bootstrap #bootstrap
+│   │   └───fonts #fonts
+│   │   └───img #images
+│   │   └───js #js files used for templating, animations and styles.
+│   └───exports #
+│       └─── assets #packed static assets ready for publication.
+│       │       └─── js #js files used to generate forms and determine risk reports.
+│       └─── bzmaps #html and js files that make up the mapping framework for determining risk values and address location.
+│       │   |   *.tif  alto includes .tif files used to generate risk analysis maps. 
+│       │   home.html
+│       │   viewAssessment.html
+│       │   index.html
+│       │   login.html
+│       │   climateScenarios.html
+│       │   riskMaps.html
+│       │   videoTutorials.html
+│       │   about.html
+│       │   assessmentReport.html
+│       │   directions.html
+│   firebase.json # json file which includes the basic configuration to deploy into firebase hosting. 
 │   README.md 
 │
-└───folder1
-│   │   file011.txt
-│   │   file012.txt
-│   │
-│   └───subfolder1
-│       │   file111.txt
-│       │   file112.txt
-│       │   ...
-│   
-└───folder2
-    │   file021.txt
-    │   file022.txt
 ```
-
-The folder that stores all the files to serve (build) is: exports / exports / *
-
-The rest of the files that are outside are configuration and development.
 
 
 
