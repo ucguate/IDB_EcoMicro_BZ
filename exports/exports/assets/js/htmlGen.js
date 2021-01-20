@@ -162,6 +162,8 @@ function buildQuestionsContainer(questions){
         question.scores = element.scores,
         question.section = element.section,
         question.type = element.type;
+        question.trigger_related_val = element.trigger_related_val;
+        question.related = element.related;
         questionsContainer.push(question);
 
         if(key === arr.length - 1){
@@ -227,11 +229,20 @@ function buildBI(){
     // ////console.log(BIQuestions);
 
     var BI_HTML = [];
+    var relatedListenersId = [];
 
     BIQuestions.forEach((question, key, arr) => {
         let type = typesContainer.filter(obj => {
             return obj.id === question.type;
-          })
+          });
+
+        if(question.related){
+            var tempObj = new Object();
+            tempObj.related = question.related;
+            tempObj.trigger_related_val = question.trigger_related_val
+            relatedListenersId.push(tempObj);
+        }
+        
         
         // ////console.log(type[0].name);
         switch (type[0].name) {
@@ -289,10 +300,31 @@ function buildBI(){
           }
 
           if(key === arr.length - 1){
-            // ////console.log(BI_HTML);
+            //console.log(BI_HTML);
             BI_HTML.forEach(element => {
                 $('#BIContentDiv').append(element);
             });
+            setTimeout(() => {
+                relatedListenersId.forEach(element => {
+                    document.querySelectorAll('input[name="'+element.related+'"]').forEach((elem) => {
+                        elem.addEventListener("change", function(event) {
+                          var item = event.target;
+                          console.log('element',element,' item',item);
+                          x = document.getElementById('related'+element.related);
+                          if (x.style.display === "none" && item.parentElement.innerText === element.trigger_related_val ) {
+                            x.style.display = "block";
+                          } else {
+                            x.style.display = "none";
+                            var radios = x.querySelectorAll('input[type="radio"]');
+                            for(var i=0;i<radios.length;i++){
+                                radios[i].checked=false;
+                            }
+                          }
+                        });
+                    });
+                });
+            }, 800);
+            
         }
     });
 
@@ -789,7 +821,6 @@ function dropDownSingle2(question) {
 }
 
 function radioGroup(question) {
-
     let inner = '';
     let pt1 = `<div class="row">
                     <div class="col col-7">
@@ -829,10 +860,12 @@ function radioGroup(question) {
 }
 
 function checkBox(question) {
-
+    console.log('CHECKBOX',question);
     let inner = '';
-    let pt1 = `<div class="col">
-                <p class="input-label mb-2">${question.placeholder}</p>
+    let pt1 = `<div class="col" id="${question.related ? 'related'+question.related : 'notRelated'+question.id}" style="${question.related ? 'display: none' : ''}">
+                <p class="input-label mb-2" >
+                    ${question.placeholder}
+                </p>
                 `;
 
     let scores = question.scores.split('|')

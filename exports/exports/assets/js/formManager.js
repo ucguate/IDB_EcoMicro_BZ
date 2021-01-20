@@ -377,6 +377,10 @@ function buildView(payload){
                                 myEl.disabled = true;
                                 myEl.classList.add("viewInput");
                             }
+                            if(element.score !== "0.00"){
+                                x = document.getElementById('related'+element.related);
+                                x.style.display = "block";
+                            }
                         
                         try {
                             document.getElementsByName(element.question_id).forEach(e => {

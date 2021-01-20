@@ -88,7 +88,7 @@ function getAssessmentsReport(){
                   {
                     dom: 'Bfrtip',
                     buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
+                        'csv', 'excel', 'pdf'
                     ],
                     order: [[ 0, "desc" ]],
                     columnDefs: [{
@@ -145,7 +145,7 @@ function getAssessmentQuestionsAnswers(assessment_id){
         }).catch(() => {
           console.log('Algo salió mal');
         });
-      }, 350);
+      }, 1500);
     }
     
 
@@ -323,37 +323,48 @@ function buildReport(assessment_id, type){
       $('#'+customerLoanP).text(response.loan_purpose[0].name);
       $('#'+customerLoanS).text(response.loan_section[0].name);
 
-
-      // REPORT TABLES IF view assessment
+      var topMessage = `Assessment ID: ${response.assessment[0].id} Score: ${response.assessment[0].total_score} 
+      Customer name: ${response.assessment[0].customer_first_name} ${response.assessment[0].customer_id ? 'Customer ID: '+response.assessment[0].customer_id: ''} 
+      Loan Purpose: ${response.loan_purpose[0].name}. Loan Sector: ${response.loan_section[0].name} 
+      Date: ${ new Date(response.assessment[0].updated_at).toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) } - ${ new Date(response.assessment[0].updated_at).toLocaleTimeString('en-EN', { hour: 'numeric', minute: 'numeric', hour12: true }) }
+      `;
+      // REPORT TABLES IF view assessment 
       if (type == 'view'){
         response.answers.forEach((element, key, arr) => {
             
           // ////console.log(element);
           let tableRow = `
               <tr>
-                  <td>${element.id}</td>
+                  <td>${element.question_id}</td>
                   <td>${element.assessment_id}</td>
-                  <td>${element.question_id}) ${element.title}</td>
+                  <td>${element.title}</td>
                   <td>${element.placeholder}</td>
                   <td>${element.questions}</td>
                   <td>${element.response}</td>
                   <td>${element.score}</td>
-                  <td>
-                    ${ new Date(element.updated_at).toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }
-                   - ${ new Date(element.updated_at).toLocaleTimeString('en-EN', { hour: 'numeric', minute: 'numeric', hour12: true }) }
-
-                  </td>
               </tr>
           `;
           $('#viewAssessmentReportTableBody').append(tableRow);
           if(key === arr.length - 1){
                   var table = $('#viewAssessmentReportTable').DataTable(
                     {
+                      pageLength: 50,
                       dom: 'Bfrtip',
                       buttons: [
-                          'copy', 'csv', 'excel', 'pdf', 'print'
+                        {
+                            extend: 'csv',
+                            messageTop: topMessage
+                        },
+                        {
+                          extend: 'excel',
+                          messageTop: topMessage
+                        },
+                        {
+                              extend: 'pdf',
+                              messageTop: topMessage
+                        },
                       ],
-                      order: [[ 0, "desc" ]]
+                      order: [[ 0, "asc" ]]
                     }
                   );
               }
