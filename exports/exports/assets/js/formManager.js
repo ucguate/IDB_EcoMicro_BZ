@@ -54,7 +54,7 @@ function collectAnswers(type){
         let curQ = null;
         let curQType = typesContainer.filter(obj => {
             return obj.id === question.type;
-        })
+        });
         
         switch (curQType[0].name) {
 
@@ -216,20 +216,6 @@ function collectAnswers(type){
                     answersContainer.push(curQContainer);
 
                 } 
-                // else if (cleanTitle == 'CoastalFlooding' && ) {
-
-                //     curQ = document.getElementById('CoastalFloodingCardInput');
-                //     curQContainer.question_id = question.id;
-                //     curQContainer.section_id = question.section;
-                //     curQContainer.score = curQ.value;
-                //     curQContainer.value = 'CoastalFloodingCardInput';
-                //     curQContainer.scores = question.scores;
-                //     curQContainer.recommendations = '';
-                //     curQContainer.question_type = question.type;
-                //     curQContainer.question_type_txt = curQType[0].name;
-                //     curQContainer.questions = question.questions;
-                //     answersContainer.push(curQContainer);
-                // }
                 
                 break;
 
@@ -255,20 +241,22 @@ function collectAnswers(type){
                 "data": JSON.stringify(payloadContainer)
             }
             $.ajax(settings).done(function (response) {
-                // ////console.log(response);
+                // ////console.log(response);<
                 if(type == 'view'){
                     $( ".viewCancelBtn" ).trigger( "click" );
                 } 
 
                 let currentIndex = $('.carousel-item.active').index() + 1;
                 
-                if(currentIndex == 5){
+                if(currentIndex == 5 && type =='view'){
                     buildReport(payloadContainer.assessment_id, type);
                     for(var propt in response){
                         $('#assessmentSavedTxt').append(propt+': '+response[propt]+'<hr/>');
                     }
                     $('#assessmentSavedModal').modal('show');
-                } else {
+                } else if (currentIndex == 5 && type =='new'){
+                    window.location.href = '/viewAssessment.html?assessment_id='+payloadContainer.assessment_id+'&action=view';
+                }  else {
                     $('.DataSavedToastTxt').text('Data for Assessment #'+response.assessment_id+' saved successfully');
                     $('.DataSavedToast').toast('show');
                 }
@@ -319,14 +307,15 @@ $('.viewSaveBtn').click(function(){
 
 function buildView(payload){
     return new Promise(function(resolve, reject) { 
-        var sample = payload.answers[0];
+        console.log(payload);
+        // var sample = payload.answers[0];
         var assessment = payload.assessment[0];
         var answers = payload.answers;
         var loan_purpose = payload.loan_purpose[0];
         var loan_section = payload.loan_section[0];
 
-        ////console.log('SAMPLE:');
-        ////console.log(sample);
+        // console.log('SAMPLE:');
+        // console.log(sample);
         // setting existing customer && customer ID
         if(assessment.customer_id){
             $("input[name=view-existingCustomerRadio][value=" + 'yes' + "]").prop('checked', true);
@@ -431,6 +420,7 @@ function buildView(payload){
                     default:
                         break;
                 }
+                
                 if(index == array.length-1){
                     resolve(true);
                 }

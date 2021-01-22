@@ -139,11 +139,11 @@ function getAssessmentQuestionsAnswers(assessment_id){
           ////console.log('Llego')
           buildView(response).then(r =>{
             buildReport(assessment_id, 'view');
-          }).catch(() => {
-            console.log('Algo salió mal');
+          }).catch((e) => {
+            console.log('error', e);
           });
-        }).catch(() => {
-          console.log('Algo salió mal');
+        }).catch((e) => {
+          console.log('error',e);
         });
       }, 1500);
     }
@@ -329,6 +329,8 @@ function buildReport(assessment_id, type){
       Date: ${ new Date(response.assessment[0].updated_at).toLocaleDateString('en-EN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) } - ${ new Date(response.assessment[0].updated_at).toLocaleTimeString('en-EN', { hour: 'numeric', minute: 'numeric', hour12: true }) }
       `;
       // REPORT TABLES IF view assessment 
+      $('#viewAssessmentReportTableBody').empty();
+      
       if (type == 'view'){
         response.answers.forEach((element, key, arr) => {
             
@@ -339,34 +341,37 @@ function buildReport(assessment_id, type){
                   <td>${element.assessment_id}</td>
                   <td>${element.title}</td>
                   <td>${element.placeholder}</td>
-                  <td>${element.questions}</td>
                   <td>${element.response}</td>
                   <td>${element.score}</td>
               </tr>
           `;
           $('#viewAssessmentReportTableBody').append(tableRow);
           if(key === arr.length - 1){
-                  var table = $('#viewAssessmentReportTable').DataTable(
-                    {
-                      pageLength: 50,
-                      dom: 'Bfrtip',
-                      buttons: [
-                        {
-                            extend: 'csv',
-                            messageTop: topMessage
-                        },
-                        {
-                          extend: 'excel',
+              try {
+                $('#viewAssessmentReportTable').DataTable(
+                  {
+                    pageLength: 50,
+                    dom: 'Bfrtip',
+                    buttons: [
+                      {
+                          extend: 'csv',
                           messageTop: topMessage
-                        },
-                        {
-                              extend: 'pdf',
-                              messageTop: topMessage
-                        },
-                      ],
-                      order: [[ 0, "asc" ]]
-                    }
-                  );
+                      },
+                      {
+                        extend: 'excel',
+                        messageTop: topMessage
+                      },
+                      {
+                            extend: 'pdf',
+                            messageTop: topMessage
+                      },
+                    ],
+                    order: [[ 0, "asc" ]]
+                  }
+                );
+              } catch (error) {
+                console.error(error);
+              }
               }
           });
       } 

@@ -18,7 +18,72 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 </head>
 
-<body id="page-top">
+<body id="page-top"><script type="text/javascript">
+// Create IE + others compatible event handler
+var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+var eventer = window[eventMethod];
+var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+// Listen to message from child window
+eventer(messageEvent,function(e) {
+  console.log('>>parent received message<< :  ',e.data);
+
+    // if onclick event on map 
+    if( typeof e.data[0] !== "undefined"){
+        console.log('es on click');
+        $('#customerLocationAddress').val(e.data[0].name);
+        $('#customerLocationLat').val(e.data[0].center.lat);
+        $('#customerLocationLon').val(e.data[0].center.lng);
+        setTimeout(() => {
+            buildCards();
+        }, 500);
+        
+    } else if (e.data.selectedAddress){
+        console.log('es direccion');
+        $('#customerLocationAddress').val(e.data.selectedAddress);
+        $('#customerLocationLat').val(e.data.selectedLat);
+        $('#customerLocationLon').val(e.data.selectedLon);
+        
+        setTimeout(() => {
+            buildCards();
+        }, 500);
+        
+    } else if (e.data.type == 'riskmap'){
+        console.log('>Riskmap<');
+        if(e.data.lay == 'drought'){
+            console.log('getting '+e.data.lay);
+            reportRisk(e.data, 'new');
+            document.getElementById("DroughtCardInput").value = e.data.val[0];
+            assignScore('drought', e.data.val[0]);
+            //document.getElementById("DroughtCardVal").innerHTML = e.data.val[0];
+            
+        } else if (e.data.lay == 'fire') {
+            console.log('getting '+e.data.lay);
+            reportRisk(e.data, 'new');
+            document.getElementById("WildfiresCardInput").value = e.data.val[0];
+            assignScore('fire', e.data.val[0]);
+            //document.getElementById("WildfiresCardVal").innerHTML = e.data.val[0];
+            
+        } else if (e.data.lay == 'flood'){
+            console.log('getting '+e.data.lay);
+            reportRisk(e.data, 'new');
+            document.getElementById("FloodingCardInput").value = e.data.val[0];
+            assignScore('flood', e.data.val[0]);
+            //document.getElementById("FloodingCardVal").innerHTML = e.data.val[0];
+            
+        } else if (e.data.lay == 'costal'){
+            console.log('getting '+e.data.lay);
+            document.getElementById("CoastalFloodingCardInput").value = e.data.val[0];
+           assignScore('costal', e.data.val[0]); //document.getElementById("CoastalFloodingCardVal").innerHTML = e.data.val[0];
+        }
+        
+    } else {
+
+    }
+    
+},false);
+    
+</script>
     <div id="wrapper">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 collapsed toggled" style="background: #75b2dd;">
             <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
@@ -64,7 +129,7 @@
                     </div>
                     <div class="row mb-4" id="tabsRow1">
                         <div class="col text-center" id="assessmentTabs" style="display: none;">
-                            <div class="btn-group w-100" role="group" style="font-size: 14px;"><button class="btn btn-primary assessmentTab customerTab" id="tabsCustomerInfo" type="button" style="font-size: 14px;">Customer Information</button><button class="btn btn-primary assessmentTab businessTab" id="tabsBusinessInfo" type="button" style="font-size: 14px;">Business Information</button><button class="btn btn-primary assessmentTab climateCardsTab" id="tabsClimateCards" type="button" style="font-size: 14px;">Climate Cards</button><button class="btn btn-primary assessmentTab climatePrepTab" id="tabsClimatePrep" type="button" style="font-size: 14px;">Climate Preparedness&nbsp;</button><button class="btn btn-primary assessmentTab reportTab" id="tabsReport" type="button" style="font-size: 14px;">Report</button></div>
+                            <div class="btn-group w-100" role="group" style="font-size: 14px;"><button class="btn btn-primary assessmentTab customerTab" id="tabsCustomerInfo" type="button" style="font-size: 14px;">Customer Information</button><button class="btn btn-primary assessmentTab businessTab" id="tabsBusinessInfo" type="button" style="font-size: 14px;">Business Information</button><button class="btn btn-primary assessmentTab climateCardsTab" id="tabsClimateCards" type="button" style="font-size: 14px;">Climate Cards</button><button class="btn btn-primary assessmentTab reportTab" id="tabsReport" type="button" style="font-size: 14px; display: none;">Report</button><button class="btn btn-primary assessmentTab climatePrepTab" id="tabsClimatePrep" type="button" style="font-size: 14px;">Climate Preparedness&nbsp;</button></div>
                         </div>
                     </div>
                     <div class="row">
@@ -191,72 +256,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div><script type="text/javascript">
-// Create IE + others compatible event handler
-var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-var eventer = window[eventMethod];
-var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
-
-// Listen to message from child window
-eventer(messageEvent,function(e) {
-  console.log('>>> parent received message:  ',e.data);
-
-    // if onclick event on map 
-    if( typeof e.data[0] !== "undefined"){
-        console.log('es on click');
-        $('#customerLocationAddress').val(e.data[0].name);
-        $('#customerLocationLat').val(e.data[0].center.lat);
-        $('#customerLocationLon').val(e.data[0].center.lng);
-        setTimeout(() => {
-            buildCards();
-        }, 500);
-        
-    } else if (e.data.selectedAddress){
-        console.log('es direccion');
-        $('#customerLocationAddress').val(e.data.selectedAddress);
-        $('#customerLocationLat').val(e.data.selectedLat);
-        $('#customerLocationLon').val(e.data.selectedLon);
-        
-        setTimeout(() => {
-            buildCards();
-        }, 500);
-        
-    } else if (e.data.type == 'riskmap'){
-        
-        if(e.data.lay == 'drought'){
-            console.log('getting '+e.data.lay);
-            reportRisk(e.data, 'new');
-            document.getElementById("DroughtCardInput").value = e.data.val[0];
-            assignScore('drought', e.data.val[0]);
-            //document.getElementById("DroughtCardVal").innerHTML = e.data.val[0];
-            
-        } else if (e.data.lay == 'fire') {
-            console.log('getting '+e.data.lay);
-            reportRisk(e.data, 'new');
-            document.getElementById("WildfiresCardInput").value = e.data.val[0];
-            assignScore('fire', e.data.val[0]);
-            //document.getElementById("WildfiresCardVal").innerHTML = e.data.val[0];
-            
-        } else if (e.data.lay == 'flood'){
-            console.log('getting '+e.data.lay);
-            reportRisk(e.data, 'new');
-            document.getElementById("FloodingCardInput").value = e.data.val[0];
-            assignScore('flood', e.data.val[0]);
-            //document.getElementById("FloodingCardVal").innerHTML = e.data.val[0];
-            
-        } else if (e.data.lay == 'costal'){
-            console.log('getting '+e.data.lay);
-            document.getElementById("CoastalFloodingCardInput").value = e.data.val[0];
-           assignScore('costal', e.data.val[0]); //document.getElementById("CoastalFloodingCardVal").innerHTML = e.data.val[0];
-        }
-        
-    } else {
-
-    }
-    
-},false);
-    
-</script>
+                                    </div>
                                 </div>
                             </div>
                             <div class="carousel-item">
@@ -517,7 +517,7 @@ eventer(messageEvent,function(e) {
                     </div>
                     <div class="row mt-4" id="tabsRow2">
                         <div class="col text-center" id="assessmentTabs2" style="display: none;">
-                            <div class="btn-group w-100" role="group" style="font-size: 14px;"><button class="btn btn-primary assessmentTab customerTab" id="tabsCustomerInfo" type="button" style="font-size: 14px;">Customer Information</button><button class="btn btn-primary assessmentTab businessTab" id="tabsBusinessInfo" type="button" style="font-size: 14px;">Business Information</button><button class="btn btn-primary assessmentTab climateCardsTab" id="tabsClimateCards" type="button" style="font-size: 14px;">Climate Cards</button><button class="btn btn-primary assessmentTab climatePrepTab" id="tabsClimatePrep" type="button" style="font-size: 14px;">Climate Preparedness&nbsp;</button><button class="btn btn-primary assessmentTab reportTab" id="tabsReport" type="button" style="font-size: 14px;">Report</button></div>
+                            <div class="btn-group w-100" role="group" style="font-size: 14px;"><button class="btn btn-primary assessmentTab customerTab" id="tabsCustomerInfo" type="button" style="font-size: 14px;">Customer Information</button><button class="btn btn-primary assessmentTab businessTab" id="tabsBusinessInfo" type="button" style="font-size: 14px;">Business Information</button><button class="btn btn-primary assessmentTab climateCardsTab" id="tabsClimateCards" type="button" style="font-size: 14px;">Climate Cards</button><button class="btn btn-primary assessmentTab reportTab" id="tabsReport" type="button" style="font-size: 14px; display: none;">Report</button><button class="btn btn-primary assessmentTab climatePrepTab" id="tabsClimatePrep" type="button" style="font-size: 14px;">Climate Preparedness&nbsp;</button></div>
                         </div>
                     </div>
                     <div class="row actionsRow my-2" id="actionsRow2" style="display: none;">

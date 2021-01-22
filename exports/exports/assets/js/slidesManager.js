@@ -382,6 +382,7 @@ function createAssesment(payload){
         $('.CISavedToastTxt').text('Assessment #'+data.assessments.id+' for customer '+data.assessments.customer_first_name+' successfully created!');
         $('.CISavedToast').toast('show');
         buildCP('new',data.assessments.loan_section);
+        collectAnswers('new');
 
 			} //success 
 			else {

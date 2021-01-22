@@ -365,7 +365,7 @@ function buildCCPortraits(questions){
         }
 
         let pt = `<div class="col col-3 mb-5">
-                    <a onClick="showCard('${'card'+question.title.replace(/\s/g, '').toLowerCase()+key}');">
+                    <a onClick="showCard('${'card_'+question.id}');">
                         <img class="w-100 h-100" src="${imgUrl}" />
                         <p class="text-center">${question.title}</p>
                     </a>
@@ -403,19 +403,20 @@ function buildCard(question){
     // ////console.log(curAddress, curLat, curLon);
 
     let curLayer = '', curColor = '';
-    if(question.title == 'Flooding'){
+    // Flooding
+    if(question.id == 19){
         curLayer = 'flood';
         curColor = 'Blues';
-    } else if (question.title == 'Coastal Flooding') {
-        curLayer = 'costal';
-        curColor = 'Purples';
-    } else if (question.title == 'Wildfires') {
+    // Wildfires
+    } else if (question.id == 60) {
         curLayer = 'fire';
         curColor = 'Oranges';
-    } else if (question.title == 'Drought') {
+    // Drought
+    } else if (question.id == 62) {
         curLayer = 'drought';
         curColor = 'Set1';
     }
+    console.log('CURLAYER', curLayer);
 
     let pt = `<div class="shadow m-2" style="border-radius: 10px; display: none;" id="${question.title.replace(/\s/g, '')+'_container'}">
                     <div class="row">
@@ -559,29 +560,29 @@ function buildCardView(lat, lon, address, question){
 }
 
 function showCard(id){
-    ////console.log(id);
-    if(id == 'cardflooding0'){
+    console.log(id);
+    if(id == 'card_19'){
         document.getElementById("Flooding_container").style.display = 'block';
         // 
         // document.getElementById("CoastalFlooding_container").style.display = 'none';
         document.getElementById("Wildfires_container").style.display = 'none';
         document.getElementById("Drought_container").style.display = 'none';
 
-    } else if ( id == 'cardcoastalflooding1'){
+    } else if ( id == 'card_xx'){
         document.getElementById("CoastalFlooding_container").style.display = 'block';
         // 
         document.getElementById("Flooding_container").style.display = 'none';
         document.getElementById("Wildfires_container").style.display = 'none';
         document.getElementById("Drought_container").style.display = 'none';
 
-    } else if (id == 'cardwildfires2') {
+    } else if (id == 'card_60') {
         document.getElementById("Wildfires_container").style.display = 'block';
         // 
         document.getElementById("Flooding_container").style.display = 'none';
         // document.getElementById("CoastalFlooding_container").style.display = 'none';
         document.getElementById("Drought_container").style.display = 'none';
 
-    } else if (id == 'carddrought3') {
+    } else if (id == 'card_62') {
         document.getElementById("Drought_container").style.display = 'block';
         // 
         document.getElementById("Wildfires_container").style.display = 'none';
