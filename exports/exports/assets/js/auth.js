@@ -45,8 +45,8 @@ function login(email, pass){
 
 		window.location.href = '/home.html';
 
-		//console.log('success');
-		//console.log(data);
+		// console.log('success LOGIN');
+		// console.log(data);
 		
 		token = data.JWT;
 		localStorage.setItem("token", token);
@@ -55,7 +55,6 @@ function login(email, pass){
 		gToken = token;
 		gEmail = email;
 		gUser = JSON.parse(data);
-        		
 		// if logged in getProfile 
 		getProfile(gUser.userid);
 	
@@ -83,6 +82,9 @@ function getProfile(id){
 			$('#userProfileFNames').text(data.users.first_names);
 			$('#userProfileLNames').text(data.users.last_names);
 			$('#userProfileEmail').text(data.users.email);
+			$('#userNameWelcome').text('Hello, '+data.users.first_names+' '+data.users.last_names);
+			$('#helloUserSpan').text('Hello, '+data.users.first_names+' '+data.users.last_names);
+			$('#userNameWelcomeDiv').show();
 
         },
 		error: function (xhr, ajaxOptions, thrownError) {

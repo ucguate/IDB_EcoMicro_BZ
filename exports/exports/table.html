@@ -20,7 +20,7 @@
 
 <body id="page-top">
     <div id="wrapper">
-        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 collapsed toggled" style="background: #75b2dd;">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 collapsed toggled" style="background: #919693;">
             <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
                     <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-globe-americas"></i></div>
                     <div class="sidebar-brand-text mx-3"><span style="font-size: 10px;">Risk Assessment Tool</span></div>
@@ -38,7 +38,7 @@
                     <li class="nav-item"><a class="nav-link" href="climateScenarios.html" style="display: none;"><i class="fas fa-cloud-sun-rain"></i><span>Climate Scenarios</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="assessmentsReport.html"><i class="fas fa-clipboard-list"></i><span>Assessment Reports</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="videoTutorials.html"><i class="fas fa-play-circle"></i><span>Video Tutorials</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="users.html"><i class="fas fa-users"></i><span>Users</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="users.html" style="display: none;"><i class="fas fa-users"></i><span>Users</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -59,7 +59,7 @@
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">Hello User</span><img class="border rounded-circle img-profile" src="assets/img/icons8-globe-144.png"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small" id="helloUserSpan"></span><img class="border rounded-circle img-profile" src="assets/img/icons8-globe-144.png"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="profile.html"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="logout.html"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
@@ -102,7 +102,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
+                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="avatars/avatar1.jpeg">Airi Satou</td>
                                             <td>Accountant</td>
                                             <td>Tokyo</td>
                                             <td>33</td>
@@ -110,7 +110,7 @@
                                             <td>$162,700</td>
                                         </tr>
                                         <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar2.jpeg">Angelica Ramos</td>
+                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="avatars/avatar2.jpeg">Angelica Ramos</td>
                                             <td>Chief Executive Officer(CEO)</td>
                                             <td>London</td>
                                             <td>47</td>
@@ -118,7 +118,7 @@
                                             <td>$1,200,000</td>
                                         </tr>
                                         <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar3.jpeg">Ashton Cox</td>
+                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="avatars/avatar3.jpeg">Ashton Cox</td>
                                             <td>Junior Technical Author</td>
                                             <td>San Francisco</td>
                                             <td>66</td>
@@ -126,7 +126,7 @@
                                             <td>$86,000</td>
                                         </tr>
                                         <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar4.jpeg">Bradley Greer</td>
+                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="avatars/avatar4.jpeg">Bradley Greer</td>
                                             <td>Software Engineer</td>
                                             <td>London</td>
                                             <td>41</td>
@@ -134,7 +134,7 @@
                                             <td>$132,000</td>
                                         </tr>
                                         <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar5.jpeg">Brenden Wagner</td>
+                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="avatars/avatar5.jpeg">Brenden Wagner</td>
                                             <td>Software Engineer</td>
                                             <td>San Francisco</td>
                                             <td>28</td>
@@ -142,7 +142,7 @@
                                             <td>$206,850</td>
                                         </tr>
                                         <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Brielle Williamson</td>
+                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="avatars/avatar1.jpeg">Brielle Williamson</td>
                                             <td>Integration Specialist</td>
                                             <td>New York</td>
                                             <td>61</td>
@@ -150,7 +150,7 @@
                                             <td>$372,000</td>
                                         </tr>
                                         <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar2.jpeg">Bruno Nash<br></td>
+                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="avatars/avatar2.jpeg">Bruno Nash<br></td>
                                             <td>Software Engineer</td>
                                             <td>London</td>
                                             <td>38</td>
@@ -158,7 +158,7 @@
                                             <td>$163,500</td>
                                         </tr>
                                         <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar3.jpeg">Caesar Vance</td>
+                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="avatars/avatar3.jpeg">Caesar Vance</td>
                                             <td>Pre-Sales Support</td>
                                             <td>New York</td>
                                             <td>21</td>
@@ -166,7 +166,7 @@
                                             <td>$106,450</td>
                                         </tr>
                                         <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar4.jpeg">Cara Stevens</td>
+                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="avatars/avatar4.jpeg">Cara Stevens</td>
                                             <td>Sales Assistant</td>
                                             <td>New York</td>
                                             <td>46</td>
@@ -174,7 +174,7 @@
                                             <td>$145,600</td>
                                         </tr>
                                         <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar5.jpeg">Cedric Kelly</td>
+                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="avatars/avatar5.jpeg">Cedric Kelly</td>
                                             <td>Senior JavaScript Developer</td>
                                             <td>Edinburgh</td>
                                             <td>22</td>
@@ -216,7 +216,7 @@
             </div>
             <footer class="bg-white sticky-footer p-0">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><img src="assets/img/Screen%20Shot%202020-11-18%20at%2023.08.20.png" style="width: 200px;"></div>
+                    <div class="text-center my-auto copyright"><img class="mt-5" src="assets/img/854034742_1280x720.jpg" style="width: 200px;"></div>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
@@ -237,6 +237,7 @@
     <script src="assets/js/index.js"></script>
     <script src="assets/js/slidesManager.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script src="assets/js/themeConfig.js"></script>
 </body>
 
 </html>

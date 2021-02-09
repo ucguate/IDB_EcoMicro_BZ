@@ -249,7 +249,10 @@ function collectAnswers(type){
                 let currentIndex = $('.carousel-item.active').index() + 1;
                 
                 if(currentIndex == 5 && type =='view'){
-                    buildReport(payloadContainer.assessment_id, type);
+                    // buildReport(payloadContainer.assessment_id, type);
+                    alert('Assessment#'+payloadContainer.assessment_id+' Saved Successfully')
+                    location.reload();
+
                     for(var propt in response){
                         $('#assessmentSavedTxt').append(propt+': '+response[propt]+'<hr/>');
                     }

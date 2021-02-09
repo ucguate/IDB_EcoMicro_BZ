@@ -85,7 +85,7 @@ eventer(messageEvent,function(e) {
     
 </script>
     <div id="wrapper">
-        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 collapsed toggled" style="background: #75b2dd;">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 collapsed toggled" style="background: #919693;">
             <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
                     <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-globe-americas"></i></div>
                     <div class="sidebar-brand-text mx-3"><span style="font-size: 10px;">Risk Assessment Tool</span></div>
@@ -103,7 +103,7 @@ eventer(messageEvent,function(e) {
                     <li class="nav-item"><a class="nav-link" href="climateScenarios.html" style="display: none;"><i class="fas fa-cloud-sun-rain"></i><span>Climate Scenarios</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="assessmentsReport.html"><i class="fas fa-clipboard-list"></i><span>Assessment Reports</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="videoTutorials.html"><i class="fas fa-play-circle"></i><span>Video Tutorials</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="users.html"><i class="fas fa-users"></i><span>Users</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="users.html" style="display: none;"><i class="fas fa-users"></i><span>Users</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -113,14 +113,15 @@ eventer(messageEvent,function(e) {
                 <div class="container-fluid pt-2">
                     <div class="d-sm-flex justify-content-between align-items-center mb-2">
                         <div>
-                            <h4 class="text-dark mb-0">Toledo Teachers Credit Union</h4>
+                            <h4 class="text-dark mb-0 CU_name"></h4>
                             <p>Climate Risk Assessment Tool</p>
-                        </div><img src="assets/img/Screen%20Shot%202020-11-18%20at%2020.20.57.png" style="width: 190px;">
+                        </div>
+                        <p class="ml-auto mr-3" id="userNameWelcomeDiv"><i class="fas fa-user mr-2"></i><span id="userNameWelcome"></span></p><img class="logo1Placeholder" src="assets/img/logos/placeholder.png" style="width: 190px;">
                     </div>
                     <div class="row actionsRow mb-2" id="actionsRow1" style="display: none;">
                         <div class="col text-center"><button class="btn btn-danger btn-sm float-left shadow cancelBtn" type="button" data-toggle="modal" data-target="#confirmCancelModal"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" class="bi bi-x-circle-fill mr-2" style="font-size: 16px;">
                                     <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
-                                </svg>Cancel</button><button class="btn btn-success shadow saveBtn" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-cloud-upload mr-2" style="font-size: 22px;">
+                                </svg>Cancel</button><button class="btn btn-success shadow saveBtn" type="button" style="display: none;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-cloud-upload mr-2" style="font-size: 22px;">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1"></path>
                                     <polyline points="9 15 12 12 15 15"></polyline>
@@ -627,7 +628,7 @@ eventer(messageEvent,function(e) {
             </div>
             <footer class="bg-white sticky-footer p-0">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><img src="assets/img/Screen%20Shot%202020-11-18%20at%2023.08.20.png" style="width: 200px;"></div>
+                    <div class="text-center my-auto copyright"><img class="mt-5" src="assets/img/854034742_1280x720.jpg" style="width: 200px;"></div>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
@@ -648,6 +649,7 @@ eventer(messageEvent,function(e) {
     <script src="assets/js/index.js"></script>
     <script src="assets/js/slidesManager.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script src="assets/js/themeConfig.js"></script>
 </body>
 
 </html>
