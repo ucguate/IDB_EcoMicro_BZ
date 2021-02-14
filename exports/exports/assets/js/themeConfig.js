@@ -1,10 +1,19 @@
-const activeCU = "SFXCU"  
+const activeCU = "DAI"  
 
 var logo1Src = null, CU_name = null, CU_shortName = null, CU_sector = null, pColor = null, sColor = null;
 
 switch (activeCU) {
+    case "DAI":
+        logo1Src = "assets/img/logos/DAI_logo.png",
+        CU_name = "DAI",
+        CU_shortName = "DAI",
+        CU_sector = "Livestock",
+        pColor = "#647782",
+        sColor = "#F49C00";
+        break;
+        
     case "LICU":
-        logo1Src = "/logos/LICU_logo.png",
+        logo1Src = "assets/img/logos/LICU_logo.png",
         CU_name = "La Inmaculada Credit Union",
         CU_shortName = "LICU",
         CU_sector = "Livestock",
@@ -13,7 +22,7 @@ switch (activeCU) {
         break;
 
     case "TTCU":
-        logo1Src = "/logos/TTCU_logo.png",
+        logo1Src = "assets/img/logos/TTCU_logo.png",
         CU_name = "Toledo Teachers Credit Union",
         CU_shortName = "TTCU"
         CU_sector = "Agriculture & Fisheries";
@@ -22,7 +31,7 @@ switch (activeCU) {
         break;
 
     case "SFXCU":
-        logo1Src = "/logos/SFXCU_logo.png",
+        logo1Src = "assets/img/logos/SFXCU_logo.png",
         CU_name = "St. Francis Xavier Credit Union",
         CU_shortName = "SFXCU"
         CU_sector = "Agriculture & Fisheries",

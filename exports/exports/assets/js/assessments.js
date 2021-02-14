@@ -117,7 +117,7 @@ function getAssessmentsReport(){
 function getAssessmentQuestionsAnswers(assessment_id){
   $('#assessmentsReportTableBody').empty();
   var settings = {
-    "url": "https://927d1d30.us-south.apigw.appdomain.cloud/bz/_tools/_report.php?id="+assessment_id,
+    "url": toolsURL+"_report.php?id="+assessment_id,
     "method": "GET",
     "timeout": 0,
     "headers": {
@@ -203,7 +203,7 @@ function buildReport(assessment_id, type){
   $('#'+SSContainer).empty();
 
   var settings = {
-    "url": "https://927d1d30.us-south.apigw.appdomain.cloud/bz/_tools/_report.php?id="+assessment_id,
+    "url": toolsURL+"_report.php?id="+assessment_id,
     "method": "GET",
     "timeout": 0,
     "headers": {
@@ -303,9 +303,9 @@ function buildReport(assessment_id, type){
      
 
       // RISK MAPS
-      $('#'+floodingMap).attr('src', `https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=flood&lat=${response.assessment[0].lat}&lon=${response.assessment[0].lon}&z=12&pin=1&color=Blues`);
-      $('#'+wildfiresMap).attr('src', `https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=fire&lat=${response.assessment[0].lat}&lon=${response.assessment[0].lon}&z=12&pin=1&color=Oranges`);
-      $('#'+droughtMap).attr('src', `https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=drought&lat=${response.assessment[0].lat}&lon=${response.assessment[0].lon}&z=12&pin=1&color=Set1`);
+      $('#'+floodingMap).attr('src', `bzmaps/bzriskmap.html?lay=flood&lat=${response.assessment[0].lat}&lon=${response.assessment[0].lon}&z=12&pin=1&color=Blues`);
+      $('#'+wildfiresMap).attr('src', `bzmaps/bzriskmap.html?lay=fire&lat=${response.assessment[0].lat}&lon=${response.assessment[0].lon}&z=12&pin=1&color=Oranges`);
+      $('#'+droughtMap).attr('src', `bzmaps/bzriskmap.html?lay=drought&lat=${response.assessment[0].lat}&lon=${response.assessment[0].lon}&z=12&pin=1&color=Set1`);
 
       // CUSTOMER DATA
       $('#'+customerName).text(response.assessment[0].customer_first_name);

@@ -349,19 +349,19 @@ function buildCCPortraits(questions){
        
         let imgUrl = '';
         if(question.title == 'Drought') {
-            imgUrl = 'https://cat-bidlab.web.app/assets/img/pexels-pixabay-60013.jpg';
+            imgUrl = 'assets/img/climateCards/d.jpg';
         } else if (question.title == 'Hurricane Ocurrencies') {
-            imgUrl = 'https://cat-bidlab.web.app/assets/img/pexels-pixabay-76969.jpg'
+            imgUrl = 'assets/img/climateCards/hro.jpg'
         } else if (question.title == 'Heavy Raining') {
-            imgUrl = 'https://cat-bidlab.web.app/assets/img/pexels-bibhukalyan-acharya-1463530.jpg'
+            imgUrl = 'assets/img/climateCards/hr.jpg'
         } else if (question.title == 'Flooding') {
-            imgUrl = 'https://cat-bidlab.web.app/assets/img/toomas-tartes-27HacQwqvA0-unsplash.jpg'
+            imgUrl = 'assets/img/climateCards/fl.jpg'
         } else if (question.title == 'Wildfires') {
-            imgUrl = 'https://cat-bidlab.web.app/assets/img/pexels-vladyslav-dukhin-4070727.jpg'
+            imgUrl = 'assets/img/climateCards/wf.jpg'
         } else if (question.title == 'Coastal Flooding') {
-            imgUrl = 'https://cat-bidlab.web.app/assets/img/falco-negenman-O9uwdPbxroc-unsplash (1).jpg'
+            imgUrl = 'assets/img/climateCards/cf.jpg'
         } else if (question.title == 'Drought') {
-            imgUrl = 'https://cat-bidlab.web.app/assets/img/drought.jpg'
+            imgUrl = 'assets/img/climateCards/d.jpg'
         }
 
         let pt = `<div class="col col-3 mb-5">
@@ -424,7 +424,7 @@ function buildCard(question){
                             <div class="embed-responsive embed-responsive-16by9" style="width: 100%; height: 600px;">
                                 <iframe class="embed-responsive-item" 
                                     sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                                    src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=${curLayer}&amp;lat=${curLat}&amp;lon=${curLon}&amp;z=12&amp;pin=1&amp;color=${curColor}"
+                                    src="bzmaps/bzriskmap.html?lay=${curLayer}&amp;lat=${curLat}&amp;lon=${curLon}&amp;z=12&amp;pin=1&amp;color=${curColor}"
                                 ></iframe>
                             </div>
                         </div> 
@@ -519,7 +519,7 @@ function buildCardView(lat, lon, address, question){
                             <div class="embed-responsive embed-responsive-16by9" style="width: 100%; height: 600px;">
                                 <iframe class="embed-responsive-item" 
                                     sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                                    src="https://cat-bidlab.web.app/bzmaps/bzriskmap.html?lay=${curLayer}&amp;lat=${curLat}&amp;lon=${curLon}&amp;z=12&amp;pin=1&amp;color=${curColor}"
+                                    src="bzmaps/bzriskmap.html?lay=${curLayer}&amp;lat=${curLat}&amp;lon=${curLon}&amp;z=12&amp;pin=1&amp;color=${curColor}"
                                 ></iframe>
                             </div>
                         </div> 

@@ -232,7 +232,7 @@ function collectAnswers(type){
             ////console.log(payloadContainer);
 
             let settings = {
-                "url": "https://927d1d30.us-south.apigw.appdomain.cloud/bz/_tools/_ins.php",
+                "url": toolsURL+"_tools/_ins.php",
                 "method": "POST",
                 "timeout": 0,
                 "headers": {
