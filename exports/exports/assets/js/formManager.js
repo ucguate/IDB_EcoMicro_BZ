@@ -232,7 +232,7 @@ function collectAnswers(type){
             ////console.log(payloadContainer);
 
             let settings = {
-                "url": toolsURL+"_tools/_ins.php",
+                "url": toolsURL+"_ins.php",
                 "method": "POST",
                 "timeout": 0,
                 "headers": {
