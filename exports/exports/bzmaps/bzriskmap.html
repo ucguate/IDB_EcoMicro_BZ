@@ -252,7 +252,7 @@
                         message.lon = curlon;
                         message.val = geoblaze.identify(georaster, [curlon, curlat]);
                         console.log('Llamando a postMessage',message);
-                        parent.postMessage(message, "http://tarp.on.gt/");
+                        parent.postMessage(message, location.origin);
 
                     } //pin
 
