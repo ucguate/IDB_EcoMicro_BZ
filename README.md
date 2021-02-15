@@ -72,6 +72,13 @@ project
 │
 ```
 
+# Instalation procedure
+  1. Clone this repo
+  2. After cloning repo move the contents of folder: "exports/exports/*" to your public folder
+  3. Run the sql (form_maker_09_02_2020.sql) file located inside "exports/exports/mysql" 
+    1. mysql -u user -p < form_maker_09_02_2020.sql
+  4. Modify admin panel and api files database connection settings:
+    1. ....
 
 
 
