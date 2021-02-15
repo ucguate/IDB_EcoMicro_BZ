@@ -1,5 +1,5 @@
 // global variables
-const apiURL = location.origin+'/api/';
+const apiURL = location.origin+'/admin/api/';
 const toolsURL = location.origin+'/admin/_tools/';
 
 $(document).ready(function() {   
