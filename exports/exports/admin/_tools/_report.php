@@ -7,8 +7,8 @@ $id = $_GET['id'];
 
 
 $servername = "localhost";
-$username = "tarp_admin";
-$password = "tarp_pass";
+$username = "ecom";
+$password = "T@rp$2020";
 $dbname = "tarp_db";
 
 // $servername = "localhost";
