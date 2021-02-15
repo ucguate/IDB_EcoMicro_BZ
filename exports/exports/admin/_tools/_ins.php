@@ -10,9 +10,10 @@ if ($metodo !='POST') { echo 'Bad Request. Post Expected...UCG '.date('c'); die(
 
 //dbconnection
 $servername = "localhost";
-$username = "root";
-$password = "mysql";
+$username = "ecom";
+$password = "T@rp$2020";
 $dbname = "tarp_db";
+
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection</h3>
