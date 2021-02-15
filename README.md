@@ -89,7 +89,9 @@ project
     2. change database conection on report builder:
       1. modify both files: "admin/_tools/_report.php" and "admin/_tools/_ins.php"
         change database: user, password, and name. 
- 5. install PHP XML parser
+  5. grant permissions on: "/admin/_tools/posts"
+      1. chmod 777 posts/
+  6. install PHP XML parser
   1. sudo apt-get install php7.4-xml
   2. sudo service apache2 restart
      
