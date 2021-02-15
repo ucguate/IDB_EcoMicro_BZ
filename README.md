@@ -74,11 +74,19 @@ project
 
 # Instalation procedure
   1. Clone this repo
-  2. After cloning repo move the contents of folder: "exports/exports/*" to your public folder
+  2. After cloning repo move the contents of folder: "exports/exports/*" to your public folder example (inside exports/exports... ): cp -r * /
   3. Run the sql (form_maker_09_02_2020.sql) file located inside "exports/exports/mysql" 
-    1. mysql -u user -p < form_maker_09_02_2020.sql
+    1. connect to mysql: mysql -u user -p
+    2. create database: CREATE DATABASE tarp_db;
+    3. exit database: exit;
+    3. run sql file (make sure to select file under exports/exports/) : mysql --user="ecom" --database="tarp_db" -p < "form_maker_09_02_2020.sql"
+    4. enter mysql password
+    5. verify tables where created.
   4. Modify admin panel and api files database connection settings:
-    1. ....
+    1. modify file "admin/ewcfg.php": 
+      1. search for: CONNECTION_INFO and change: db user, password and db name
+      2. search for: PRODUCTION_CONNECTION_INFO and change: db user, password and db name
+
 
 
 
