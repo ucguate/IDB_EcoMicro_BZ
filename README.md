@@ -86,6 +86,9 @@ project
     1. modify file "admin/ewcfg.php": 
       1. search for: CONNECTION_INFO and change: db user, password and db name
       2. search for: PRODUCTION_CONNECTION_INFO and change: db user, password and db name
+    2. change database conection on report builder:
+      1. modify file: "admin/_tools/_report.php
+        change database: user, password, and name. 
  5. install PHP XML parser
   1. sudo apt-get install php7.4-xml
   2. sudo service apache2 restart
