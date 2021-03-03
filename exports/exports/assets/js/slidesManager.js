@@ -241,9 +241,9 @@ function validateCustomerInfo(){
   loan_purpose_txt = $('#customerLoanPurposeSelect option:selected').text(),
   loan_sector_txt = $('#customerLoanSectorSelect option:selected').text();
 
-  console.log('VALIDATION:');
-  console.log(customerAddress.val(), customerLat.val(), customerLon.val());
-  console.log((customerAddress.val().length > 3) && (customerLat.val().length > 3 ) && (customerLon.val().length > 3));
+  // console.log('VALIDATION:');
+  // console.log(customerAddress.val(), customerLat.val(), customerLon.val());
+  // console.log((customerAddress.val().length > 3) && (customerLat.val().length > 3 ) && (customerLon.val().length > 3));
   
   // Existing Customer
   if(existingCustomerRadios !== undefined){

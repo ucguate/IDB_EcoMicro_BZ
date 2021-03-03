@@ -119,7 +119,7 @@
         // originally from https://globalwindatlas.info/downloads/gis-files
 
         // available color scales can be found by running console.log(chroma.brewer);
-        console.log(chroma.brewer);
+        // console.log(chroma.brewer);
         var scale = chroma.scale(getParameterByName("color")); //https://gka.github.io/chroma.js/#chroma-scale
         if (getParameterByName("color") == '') {
             scale = chroma.scale(['#dfc27d', 'green', 'blue', 'yellow', 'red', 'purple']).domain([0, 0.1, 0.4, 0.6, 0.8, 1]);
@@ -148,7 +148,7 @@
                     min = georaster.mins[0];
                     max = georaster.maxs[0];
                     range = georaster.ranges[0];
-                    console.log('Min,Max,Range', min, max, range);
+                    //console.log('Min,Max,Range', min, max, range);
                     //  document.getElementById('info').innerHTML = 'Max: ' + Math.round(max);
                     range = scalemax > 0 ? scalemax - scalemin : range;
                     min = scalemin >= 0 ? scalemin : min;
@@ -178,7 +178,7 @@
                         },
                         resolution: 256
                     });
-                    console.log("layer:", layer);
+                    //console.log("layer:", layer);
                     layer.addTo(map);
 
                     //  map.fitBounds(layer.getBounds());
@@ -200,7 +200,7 @@
                     for (var i = 0, l = bucket; i < l; i++) {
                         color_scale.push(scale(valcolor / range).hex());
                         limits.push(round(valcolor, 0));
-                        console.log('valcolor', valcolor, 'scale function', scale(valcolor).hex());
+                        //console.log('valcolor', valcolor, 'scale function', scale(valcolor).hex());
                         valcolor = valcolor + step;
                     }
 
@@ -212,20 +212,20 @@
                         var colors = color_scale;
                         var labels = [];
                         // Add min & max
-                        console.log('limits', limits);
-                        console.log('colors', colors);
+                        //console.log('limits', limits);
+                        //console.log('colors', colors);
                         //	limits = [15, 20, 25, 30, 35, 40];
                         limits.forEach(function (limit, index) {
                             limits[index] = round(limits[index], 1);
                         }); //redondear limits
 
-                        console.log('limitsR', limits);
+                        //console.log('limitsR', limits);
                         div.innerHTML = '<div class="labels"><div class="min">min: ' + round(min) + '</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="info"></span> \
 			<div class="max">' + 'max: ' + round(max) + '</div></div>'
                         limits.forEach(function (limit, index) {
                             labels.push('<li style="color: lightgray; text-align: center; background-color: ' + colors[index] + '">' + limits[index] + '</li>')
                         })
-                        console.log('labels', labels);
+                        //console.log('labels', labels);
                         div.innerHTML += '<ul>' + labels.join('') + '</ul><small><center><span class="titulo">' + tif_url[lay][1] + '</span></center>Gen: ' + Date().substring(4, 21) + '</small>'; // <a href="#" onClick="downloadDataPage()">🔽</a>';
                         return div
                     }
@@ -251,7 +251,7 @@
                         message.lat = curlat;
                         message.lon = curlon;
                         message.val = geoblaze.identify(georaster, [curlon, curlat]);
-                        console.log('Llamando a postMessage',message);
+                        //console.log('Llamando a postMessage',message);
                         parent.postMessage(message, location.origin);
 
                     } //pin
@@ -266,7 +266,7 @@
 
                     map.on('click', function (evt) {
                         var valor = geoblaze.identify(georaster, [evt.latlng.lng, evt.latlng.lat]);
-                        console.log('click', valor, evt.latlng.lat, ',', evt.latlng.lng);
+                        //console.log('click', valor, evt.latlng.lat, ',', evt.latlng.lng);
                     }); //mousemove
 
                 });

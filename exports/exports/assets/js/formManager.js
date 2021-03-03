@@ -14,7 +14,7 @@ $('#confirmCancelBtn').click(function(){
 
 // build form
 function buildForm(){
-    ////console.log('building form');
+    //console.log('building form');
     getLoanP();
     getLoanS();
     getSections();
@@ -310,7 +310,7 @@ $('.viewSaveBtn').click(function(){
 
 function buildView(payload){
     return new Promise(function(resolve, reject) { 
-        console.log(payload);
+        // console.log(payload);
         // var sample = payload.answers[0];
         var assessment = payload.assessment[0];
         var answers = payload.answers;
@@ -416,7 +416,7 @@ function buildView(payload){
 
                     case "9":
 
-                        console.log('CLIMATECARD');
+                        // console.log('CLIMATECARD');
                         buildCardView(assessment.lat, assessment.lon, assessment.address, element);
                         
                         break;

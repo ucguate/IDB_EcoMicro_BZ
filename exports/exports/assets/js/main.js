@@ -12,7 +12,7 @@ $('#backBtn').click(function() {
 
 $('#mainCarousel').on('slid.bs.carousel', function () {
     let currentIndex = $('.carousel-item.active').index() + 1;
-    console.log('Current index: '+currentIndex);
+    // console.log('Current index: '+currentIndex);
     if(currentIndex == 9){
        
         $('.lastSlideBtn').show();

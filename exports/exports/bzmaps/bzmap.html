@@ -101,11 +101,11 @@ document.getElementById("okButton").addEventListener("click", function(){
 
 
 function setUbica() {
-    console.log('setUbica');
+    //console.log('setUbica');
     if  (selectedLat == undefined) {
       alert('Please select a point or location in map !!! '); return;    
     }    
-console.log (selectedLat+','+selectedLon,selectedAddress);
+//console.log (selectedLat+','+selectedLon,selectedAddress);
 alert ( 'Call opener: ' +selectedLat+','+selectedLon,selectedAddress);
 
    //window.opener.setUbica(selectedLat,selectedLon,selectedAddress,punto);
@@ -133,7 +133,7 @@ function getParameterByName(name) {
         var params = new URLSearchParams(location.search);
         var geocoderString = params.get('geocoder');
         if (geocoderString && L.Control.Geocoder[geocoderString]) {
-          console.log('Using geocoder', geocoderString);
+          //console.log('Using geocoder', geocoderString);
           geocoder = L.Control.Geocoder[geocoderString]();
         } else if (geocoderString) {
           console.warn('Unsupported geocoder', geocoderString);
@@ -147,7 +147,7 @@ function getParameterByName(name) {
         geocoder: geocoder
       }).
       on('markgeocode', function(e) {
-          console.log('on markergeocode',e);
+          //console.log('on markergeocode',e);
           selectedLat = e.geocode.center.lat; selectedLon = e.geocode.center.lng; selectedAddress = e.geocode.name;
           
       }).addTo(map);
@@ -163,9 +163,9 @@ function getParameterByName(name) {
 
 
 function onLocationFound(e) {
-  console.log('on location found',e);
+  //console.log('on location found',e);
   geocoder.reverse(e.latlng, map.options.crs.scale(map.getZoom()), function(results) {
-          console.log('results',results);
+          //console.log('results',results);
           var r = results[0];
           if (r) {
             if (marker) {
@@ -232,7 +232,7 @@ OSM2.addTo(map);
 
       map.on('click', function(e) {
         geocoder.reverse(e.latlng, map.options.crs.scale(map.getZoom()), function(results) {
-          console.log('results',results);
+          //console.log('results',results);
           var r = results[0];
           if (r) {
             if (marker) {

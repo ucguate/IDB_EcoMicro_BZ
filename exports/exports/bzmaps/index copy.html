@@ -93,8 +93,8 @@ document.getElementById("okButton").addEventListener("click", function(){
 	});
 
 function setUbica() {
-    console.log('setUbica');
-    console.log (selectedLat+','+selectedLon,selectedAddress);
+    //console.log('setUbica');
+    //console.log (selectedLat+','+selectedLon,selectedAddress);
    window.opener.setUbica(selectedLat,selectedLon,selectedAddress,punto);
   
   }
@@ -120,7 +120,7 @@ function getParameterByName(name) {
         var params = new URLSearchParams(location.search);
         var geocoderString = params.get('geocoder');
         if (geocoderString && L.Control.Geocoder[geocoderString]) {
-          console.log('Using geocoder', geocoderString);
+          //console.log('Using geocoder', geocoderString);
           geocoder = L.Control.Geocoder[geocoderString]();
         } else if (geocoderString) {
           console.warn('Unsupported geocoder', geocoderString);
@@ -134,7 +134,7 @@ function getParameterByName(name) {
         geocoder: geocoder
       }).
       on('markgeocode', function(e) {
-          console.log('on markergeocode',e);
+          //console.log('on markergeocode',e);
           selectedLat = e.geocode.center.lat; selectedLon = e.geocode.center.lng; selectedAddress = e.geocode.name;
           
       }).addTo(map);
@@ -179,7 +179,7 @@ OSM1.addTo(map);
 
       map.on('click', function(e) {
         geocoder.reverse(e.latlng, map.options.crs.scale(map.getZoom()), function(results) {
-          console.log('results',results);
+          //console.log('results',results);
           var r = results[0];
           if (r) {
             if (marker) {

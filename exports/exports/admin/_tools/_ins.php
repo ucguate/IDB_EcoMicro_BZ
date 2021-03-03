@@ -10,8 +10,8 @@ if ($metodo !='POST') { echo 'Bad Request. Post Expected...UCG '.date('c'); die(
 
 //dbconnection
 $servername = "localhost";
-$username = "ecom";
-$password = "T@rp$2020";
+$username = "tarp_admin";
+$password = "tarp_pass";
 $dbname = "tarp_db";
 
 // Create connection

@@ -6,15 +6,11 @@ header('Content-Type: application/json');
 $id = $_GET['id'];
 
 
+//dbconnection
 $servername = "localhost";
-$username = "ecom";
-$password = "T@rp$2020";
+$username = "tarp_admin";
+$password = "tarp_pass";
 $dbname = "tarp_db";
-
-// $servername = "localhost";
-// $username = "root";
-// $password = "mysql";
-// $dbname = "tarp_db";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

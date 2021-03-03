@@ -2,7 +2,7 @@ var sectionsContainer = [], questionsContainer = [], categoriesContainer, typesC
 
 // loan purposes
 function getLoanP(){    
-    console.log('Loan Purposes');
+    //console.log('Loan Purposes');
     var settings = {
         "url": apiURL+"?action=list&object=loan_purposes",
         "method": "GET",
@@ -26,8 +26,8 @@ function getLoanP(){
 }
 
 function buildLoanPurposesDropDowns(array){
-    console.log('BUILD LOAN PUR');
-    console.log(array);
+    // console.log('BUILD LOAN PUR');
+    // console.log(array);
     let objContainer = [];
         
     array.forEach((element, key, arr) => {
@@ -309,7 +309,7 @@ function buildBI(){
                     document.querySelectorAll('input[name="'+element.related+'"]').forEach((elem) => {
                         elem.addEventListener("change", function(event) {
                           var item = event.target;
-                          console.log('element',element,' item',item);
+                        //   console.log('element',element,' item',item);
                           x = document.getElementById('related'+element.related);
                           if (x.style.display === "none" && item.parentElement.innerText === element.trigger_related_val ) {
                             x.style.display = "block";
@@ -387,15 +387,15 @@ function buildCards(){
     $('#CCContentDiv').empty();
     CCGenQuestions.forEach(element => {
         if(element.active == 1){
-            console.log('CARD:');
-            console.log(element);
+            // console.log('CARD:');
+            // console.log(element);
             buildCard(element);
         }
     });
 }
 
 function buildCard(question){
-    console.log('BUILD CARD', question);
+    // console.log('BUILD CARD', question);
     let curAddress = $('#customerLocationAddress').val(),
     curLat = $('#customerLocationLat').val(),
     curLon = $('#customerLocationLon').val();
@@ -416,7 +416,7 @@ function buildCard(question){
         curLayer = 'drought';
         curColor = 'Set1';
     }
-    console.log('CURLAYER', curLayer);
+    // console.log('CURLAYER', curLayer);
 
     let pt = `<div class="shadow m-2" style="border-radius: 10px; display: none;" id="${question.title.replace(/\s/g, '')+'_container'}">
                     <div class="row">
@@ -468,8 +468,8 @@ function assignScore(type, value) {
     var score;
     
     CCGenQuestions.forEach(element => {
-        console.log('ASSIGN SCORE', type, value);
-        console.log(element);
+        // console.log('ASSIGN SCORE', type, value);
+        // console.log(element);
 
         let riskValue = parseInt(value);
         let cleanValues = element.questions.replace(/\s/g, '');
@@ -560,7 +560,7 @@ function buildCardView(lat, lon, address, question){
 }
 
 function showCard(id){
-    console.log(id);
+    // console.log(id);
     if(id == 'card_19'){
         document.getElementById("Flooding_container").style.display = 'block';
         // 
@@ -620,8 +620,8 @@ function buildCP(viewType, sectorId){
         });
 
         
-        console.log('CPQUESTION');
-        console.log(CPQuestions);
+        // console.log('CPQUESTION');
+        // console.log(CPQuestions);
         
 
         var CP_HTML = [];
@@ -861,7 +861,7 @@ function radioGroup(question) {
 }
 
 function checkBox(question) {
-    console.log('CHECKBOX',question);
+    //console.log('CHECKBOX',question);
     let inner = '';
     let pt1 = `<div class="col" id="${question.related ? 'related'+question.related : 'notRelated'+question.id}" style="${question.related ? 'display: none' : ''}">
                 <p class="input-label mb-2" >

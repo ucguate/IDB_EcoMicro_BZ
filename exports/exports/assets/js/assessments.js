@@ -125,10 +125,10 @@ function getAssessmentQuestionsAnswers(assessment_id){
     },
   };
 
-  //   ////console.log(settings);
+  // console.log(settings);
     
   $.ajax(settings).done(function (response) {
-    ////console.log(response);
+    //console.log(response);
     
     if(response){
       
@@ -136,7 +136,7 @@ function getAssessmentQuestionsAnswers(assessment_id){
         $('.viewAssessmentTabs').show();
         $('#viewCarousel').carousel(5);
         buildCP('view', response.assessment[0].loan_section).then(r =>{
-          ////console.log('Llego')
+          //console.log('Llego')
           buildView(response).then(r =>{
             buildReport(assessment_id, 'view');
           }).catch((e) => {
@@ -215,7 +215,7 @@ function buildReport(assessment_id, type){
     
   $.ajax(settings).done(function (response) {
 
-    console.log(response);
+    //console.log(response);
     
     if(response){
       // SCORE
@@ -227,7 +227,7 @@ function buildReport(assessment_id, type){
       // high > 66
       // medium > 33
       // low < 33
-      console.log('grade',Ggrade);
+      //console.log('grade',Ggrade);
       let GgradeTxt = Ggrade >= 0.66 ? 'High' :  0.66 > Ggrade >= 0.33 ? 'Medium' : 0.33 > Ggrade ? 'Low' : 'Nan';
       let GgradeColor = Ggrade >= 0.66 ? 'danger' :  0.66 > Ggrade >= 0.33 ? 'warning' : 0.33 > Ggrade ? 'success' : 'Nan';
       $('#'+SContainer).text(GgradeTxt);
@@ -279,7 +279,7 @@ function buildReport(assessment_id, type){
         // high > 66
         // medium > 33
         // low < 33
-        console.log('grade',grade);
+        //console.log('grade',grade);
         let gradeTxt = grade >= 0.66 ? 'High' :  0.66 > grade >= 0.33 ? 'Medium' : 0.33 > grade ? 'Low' : 'Nan';
         let gradeColor = grade >= 0.66 ? 'danger' :  0.66 > grade >= 0.33 ? 'warning' : 0.33 > grade ? 'success' : 'Nan';
 
@@ -309,6 +309,9 @@ function buildReport(assessment_id, type){
 
       // CUSTOMER DATA
       $('#'+customerName).text(response.assessment[0].customer_first_name);
+      // setting page title 
+      document.title = response.assessment[0].customer_first_name.replace(/ /g,"_")+'-'+assessment_id;
+
       if(response.assessment[0].customer_id.lenght > 3){
         $('#'+customerID).text(response.assessment[0].customer_id);
         $('#'+customerIDCol).show();
@@ -386,7 +389,7 @@ function buildReport(assessment_id, type){
 }
 
 function reportRisk(data, type){
-  console.log('RISK REPORT');
+  //console.log('RISK REPORT');
   var scoreContainerID = type+'RiskScore_'+data.lay,
   containerID = type+'RiskContainer_'+data.lay,
   scoreTxt = '', scoreColor = '';

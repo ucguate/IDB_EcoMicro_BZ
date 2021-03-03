@@ -26,11 +26,11 @@ var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
 
 // Listen to message from child window
 eventer(messageEvent,function(e) {
-  console.log('>>parent received message<< :  ',e.data);
+  //console.log('>>parent received message<< :  ',e.data);
 
     // if onclick event on map 
     if( typeof e.data[0] !== "undefined"){
-        console.log('es on click');
+        //console.log('es on click');
         $('#customerLocationAddress').val(e.data[0].name);
         $('#customerLocationLat').val(e.data[0].center.lat);
         $('#customerLocationLon').val(e.data[0].center.lng);
@@ -39,7 +39,7 @@ eventer(messageEvent,function(e) {
         }, 500);
         
     } else if (e.data.selectedAddress){
-        console.log('es direccion');
+        //console.log('es direccion');
         $('#customerLocationAddress').val(e.data.selectedAddress);
         $('#customerLocationLat').val(e.data.selectedLat);
         $('#customerLocationLon').val(e.data.selectedLon);
@@ -49,30 +49,30 @@ eventer(messageEvent,function(e) {
         }, 500);
         
     } else if (e.data.type == 'riskmap'){
-        console.log('>Riskmap<');
+        //console.log('>Riskmap<');
         if(e.data.lay == 'drought'){
-            console.log('getting '+e.data.lay);
+            //console.log('getting '+e.data.lay);
             reportRisk(e.data, 'new');
             document.getElementById("DroughtCardInput").value = e.data.val[0];
             assignScore('drought', e.data.val[0]);
             //document.getElementById("DroughtCardVal").innerHTML = e.data.val[0];
             
         } else if (e.data.lay == 'fire') {
-            console.log('getting '+e.data.lay);
+            //console.log('getting '+e.data.lay);
             reportRisk(e.data, 'new');
             document.getElementById("WildfiresCardInput").value = e.data.val[0];
             assignScore('fire', e.data.val[0]);
             //document.getElementById("WildfiresCardVal").innerHTML = e.data.val[0];
             
         } else if (e.data.lay == 'flood'){
-            console.log('getting '+e.data.lay);
+            //console.log('getting '+e.data.lay);
             reportRisk(e.data, 'new');
             document.getElementById("FloodingCardInput").value = e.data.val[0];
             assignScore('flood', e.data.val[0]);
             //document.getElementById("FloodingCardVal").innerHTML = e.data.val[0];
             
         } else if (e.data.lay == 'costal'){
-            console.log('getting '+e.data.lay);
+            //console.log('getting '+e.data.lay);
             document.getElementById("CoastalFloodingCardInput").value = e.data.val[0];
            assignScore('costal', e.data.val[0]); //document.getElementById("CoastalFloodingCardVal").innerHTML = e.data.val[0];
         }

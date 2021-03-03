@@ -154,11 +154,11 @@ var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
 
 // Listen to message from child window
 eventer(messageEvent,function(e) {
-  console.log('parent received message:  ',e.data);
+  //console.log('parent received message:  ',e.data);
 
     // if onclick event on map 
     if(e.data[0]){
-        console.log('es on click');
+        //console.log('es on click');
         $('#customerLocationAddress').val(e.data[0].name);
         $('#customerLocationLat').val(e.data[0].center.lat);
         $('#customerLocationLon').val(e.data[0].center.lng);
@@ -167,7 +167,7 @@ eventer(messageEvent,function(e) {
         }, 500);
         
     } else {
-        console.log('es direccion');
+        //console.log('es direccion');
         $('#customerLocationAddress').val(e.data.selectedAddress);
         $('#customerLocationLat').val(e.data.selectedLat);
         $('#customerLocationLon').val(e.data.selectedLon);

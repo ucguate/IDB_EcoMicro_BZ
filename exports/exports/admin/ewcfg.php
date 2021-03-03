@@ -217,11 +217,13 @@ $CONFIG = [
 	],
 
 	// Database connection info
+	//dbconnection
 	"CONNECTION_INFO" => [
-		"DB" => ["id" => "DB", "type" => "MYSQL", "qs" => "`", "qe" => "`", "host" => "localhost", "port" => "3306", "user" => "ecom", "pass" => "T@rp$2020", "db" => "tarp_db"]
+		"DB" => ["id" => "DB", "type" => "MYSQL", "qs" => "`", "qe" => "`", "host" => "localhost", "port" => "3306", "user" => "tarp_admin", "pass" => "tarp_pass", "db" => "tarp_db"]
 	],
+	//dbconnection
 	"PRODUCTION_CONNECTION_INFO" => [
-		"DB" => ["id" => "DB", "type" => "MYSQL", "qs" => "`", "qe" => "`", "host" => "localhost", "port" => "3306", "user" => "ecom", "pass" => "T@rp$2020", "db" => "tarp_db"]
+		"DB" => ["id" => "DB", "type" => "MYSQL", "qs" => "`", "qe" => "`", "host" => "localhost", "port" => "3306", "user" => "tarp_admin", "pass" => "tarp_pass", "db" => "tarp_db"]
 	],
 
 	// Database error function
