@@ -614,8 +614,9 @@ class users_delete extends users
 		$this->createToken();
 
 		// Set up lookup cache
-		// Check permission
+		$this->setupLookupOptions($this->user_level);
 
+		// Check permission
 		if (!$Security->canDelete()) {
 			$this->setFailureMessage(DeniedMessage()); // No permission
 			$this->terminate("userslist.php");
@@ -830,8 +831,22 @@ class users_delete extends users
 
 			// user_level
 			if ($Security->canAdmin()) { // System admin
-				if (strval($this->user_level->CurrentValue) != "") {
-					$this->user_level->ViewValue = $this->user_level->optionCaption($this->user_level->CurrentValue);
+				$curVal = strval($this->user_level->CurrentValue);
+				if ($curVal != "") {
+					$this->user_level->ViewValue = $this->user_level->lookupCacheOption($curVal);
+					if ($this->user_level->ViewValue === NULL) { // Lookup from database
+						$filterWrk = "`userlevelid`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
+						$sqlWrk = $this->user_level->Lookup->getSql(FALSE, $filterWrk, '', $this);
+						$rswrk = Conn()->execute($sqlWrk);
+						if ($rswrk && !$rswrk->EOF) { // Lookup values found
+							$arwrk = [];
+							$arwrk[1] = $rswrk->fields('df');
+							$this->user_level->ViewValue = $this->user_level->displayValue($arwrk);
+							$rswrk->Close();
+						} else {
+							$this->user_level->ViewValue = $this->user_level->CurrentValue;
+						}
+					}
 				} else {
 					$this->user_level->ViewValue = NULL;
 				}
@@ -1037,6 +1052,8 @@ class users_delete extends users
 
 					// Format the field values
 					switch ($fld->FieldVar) {
+						case "x_user_level":
+							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

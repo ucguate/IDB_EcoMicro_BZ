@@ -161,7 +161,7 @@ $CONFIG = [
 
 	// General
 	"UNFORMAT_YEAR" => 50, // Unformat year
-	"RANDOM_KEY" => '22fjh4GaD0yCp9rV', // Random key for encryption
+	"RANDOM_KEY" => 'wpq1IjcFezlpLG2Y', // Random key for encryption
 	"ENCRYPTION_KEY" => '', // Encryption key for data protection
 	"PROJECT_STYLESHEET_FILENAME" => "css/IDB_EcoMicro_BZ.css", // Project stylesheet file name
 	"PROJECT_CHARSET" => "utf-8", // Project charset
@@ -217,13 +217,11 @@ $CONFIG = [
 	],
 
 	// Database connection info
-	//dbconnection
 	"CONNECTION_INFO" => [
-		"DB" => ["id" => "DB", "type" => "MYSQL", "qs" => "`", "qe" => "`", "host" => "localhost", "port" => "3306", "user" => "tarp_admin", "pass" => "tarp_pass", "db" => "tarp_db"]
+		"DB" => ["id" => "DB", "type" => "MYSQL", "qs" => "`", "qe" => "`", "host" => "localhost", "port" => "3306", "user" => "root", "pass" => "mysql", "db" => "form_maker"]
 	],
-	//dbconnection
 	"PRODUCTION_CONNECTION_INFO" => [
-		"DB" => ["id" => "DB", "type" => "MYSQL", "qs" => "`", "qe" => "`", "host" => "localhost", "port" => "3306", "user" => "tarp_admin", "pass" => "tarp_pass", "db" => "tarp_db"]
+		"DB" => ["id" => "DB", "type" => "MYSQL", "qs" => "`", "qe" => "`", "host" => "localhost", "port" => "3306", "user" => "root", "pass" => "mysql", "db" => "form_maker"]
 	],
 
 	// Database error function
@@ -331,6 +329,25 @@ $CONFIG = [
 	"PHPASS_ITERATION_COUNT_LOG2" => [10, 8], // For PasswordHash
 	"PASSWORD_HASH" => FALSE, // Use PHP 5.5+ password hashing functions
 
+	/**
+	 * Dynamic User Level settings
+	 */
+	// User level definition table/field names
+
+	"USER_LEVEL_DBID" => "DB",
+	"USER_LEVEL_TABLE" => "`userlevels`",
+	"USER_LEVEL_ID_FIELD" => "`userlevelid`",
+	"USER_LEVEL_NAME_FIELD" => "`userlevelname`",
+
+	// User Level privileges table/field names
+	"USER_LEVEL_PRIV_DBID" => "DB",
+	"USER_LEVEL_PRIV_TABLE" => "`userlevelpermissions`",
+	"USER_LEVEL_PRIV_TABLE_NAME_FIELD" => "`tablename`",
+	"USER_LEVEL_PRIV_TABLE_NAME_FIELD_2" => "tablename",
+	"USER_LEVEL_PRIV_TABLE_NAME_FIELD_SIZE" => 191, // Max key length 767/4 = 191 bytes
+	"USER_LEVEL_PRIV_USER_LEVEL_ID_FIELD" => "`userlevelid`",
+	"USER_LEVEL_PRIV_PRIV_FIELD" => "`permission`",
+
 	// Hierarchical User ID
 	"USER_ID_IS_HIERARCHICAL" => TRUE, // Change to FALSE to show one level only
 
@@ -349,14 +366,14 @@ $CONFIG = [
 	"USER_LEVEL_FIELD_NAME" => "user_level",
 	"USER_PROFILE_FIELD_NAME" => "",
 	"REGISTER_ACTIVATE_FIELD_NAME" => "",
-	"USER_EMAIL_FIELD_NAME" => "user_level",
+	"USER_EMAIL_FIELD_NAME" => "email",
 
 	// User table filters
 	"USER_TABLE_DBID" => "DB",
 	"USER_TABLE" => "`users`",
 	"USER_NAME_FILTER" => "(`email` = '%u')",
 	"USER_ID_FILTER" => "(`id` = %u)",
-	"USER_EMAIL_FILTER" => "(`user_level` = %e)",
+	"USER_EMAIL_FILTER" => "(`email` = '%e')",
 	"USER_ACTIVATE_FILTER" => "",
 
 	// User Profile Constants

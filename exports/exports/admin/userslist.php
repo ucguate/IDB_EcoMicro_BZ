@@ -50,29 +50,6 @@ loadjs.ready("head", function() {
 	// Form object for search
 	fuserslistsrch = currentSearchForm = new ew.Form("fuserslistsrch");
 
-	// Validate function for search
-	fuserslistsrch.validate = function(fobj) {
-		if (!this.validateRequired)
-			return true; // Ignore validation
-		fobj = fobj || this._form;
-		var infix = "";
-
-		// Call Form_CustomValidate event
-		if (!this.Form_CustomValidate(fobj))
-			return false;
-		return true;
-	}
-
-	// Form_CustomValidate
-	fuserslistsrch.Form_CustomValidate = function(fobj) { // DO NOT CHANGE THIS LINE!
-
-		// Your custom validation code here, return false if invalid.
-		return true;
-	}
-
-	// Use JavaScript validation or not
-	fuserslistsrch.validateRequired = <?php echo Config("CLIENT_VALIDATE") ? "true" : "false" ?>;
-
 	// Dynamic selection lists
 	// Filters
 
@@ -116,40 +93,6 @@ $users_list->renderOtherOptions();
 <input type="hidden" name="cmd" value="search">
 <input type="hidden" name="t" value="users">
 	<div class="ew-extended-search">
-<?php
-
-// Render search row
-$users->RowType = ROWTYPE_SEARCH;
-$users->resetAttributes();
-$users_list->renderRow();
-?>
-<?php if ($users_list->_email->Visible) { // email ?>
-	<?php
-		$users_list->SearchColumnCount++;
-		if (($users_list->SearchColumnCount - 1) % $users_list->SearchFieldsPerRow == 0) {
-			$users_list->SearchRowCount++;
-	?>
-<div id="xsr_<?php echo $users_list->SearchRowCount ?>" class="ew-row d-sm-flex">
-	<?php
-		}
-	 ?>
-	<div id="xsc__email" class="ew-cell form-group">
-		<label for="x__email" class="ew-search-caption ew-label"><?php echo $users_list->_email->caption() ?></label>
-		<span class="ew-search-operator">
-<?php echo $Language->phrase("LIKE") ?>
-<input type="hidden" name="z__email" id="z__email" value="LIKE">
-</span>
-		<span id="el_users__email" class="ew-search-field">
-<input type="text" data-table="users" data-field="x__email" name="x__email" id="x__email" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($users_list->_email->getPlaceHolder()) ?>" value="<?php echo $users_list->_email->EditValue ?>"<?php echo $users_list->_email->editAttributes() ?>>
-</span>
-	</div>
-	<?php if ($users_list->SearchColumnCount % $users_list->SearchFieldsPerRow == 0) { ?>
-</div>
-	<?php } ?>
-<?php } ?>
-	<?php if ($users_list->SearchColumnCount % $users_list->SearchFieldsPerRow > 0) { ?>
-</div>
-	<?php } ?>
 <div id="xsr_<?php echo $users_list->SearchRowCount + 1 ?>" class="ew-row d-sm-flex">
 	<div class="ew-quick-search input-group">
 		<input type="text" name="<?php echo Config("TABLE_BASIC_SEARCH") ?>" id="<?php echo Config("TABLE_BASIC_SEARCH") ?>" class="form-control" value="<?php echo HtmlEncode($users_list->BasicSearch->getKeyword()) ?>" placeholder="<?php echo HtmlEncode($Language->phrase("Search")) ?>">

@@ -103,7 +103,7 @@ loadjs.ready("head", function() {
 
 	// Dynamic selection lists
 	fregister.lists["x_user_level"] = <?php echo $register->user_level->Lookup->toClientList($register) ?>;
-	fregister.lists["x_user_level"].options = <?php echo JsonEncode($register->user_level->options(FALSE, TRUE)) ?>;
+	fregister.lists["x_user_level"].options = <?php echo JsonEncode($register->user_level->lookupOptions()) ?>;
 	loadjs.done("fregister");
 });
 </script>

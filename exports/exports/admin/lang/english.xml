@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2021/1/25" version="16.0.1" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2021/3/4" version="16.0.1" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!--
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -907,6 +907,15 @@
     <menu id="7">
       <phrase id="menutext" value="User levels" />
     </menu>
+    <menu id="43">
+      <phrase id="menutext" value="Security" />
+    </menu>
+    <menu id="24">
+      <phrase id="menutext" value="User Levels" />
+    </menu>
+    <menu id="23">
+      <phrase id="menutext" value="User Level Permissions" />
+    </menu>
     <table id="answers">
       <phrase id="tblcaption" value="Answers" />
       <field id="id">
@@ -1450,6 +1459,27 @@
       </field>
       <field id="loan_sector_id">
         <phrase id="fldcaption" value="loan sector id" />
+      </field>
+    </table>
+    <table id="userlevelpermissions">
+      <phrase id="tblcaption" value="userlevelpermissions" />
+      <field id="userlevelid">
+        <phrase id="fldcaption" value="Level Id" />
+      </field>
+      <field id="_tablename">
+        <phrase id="fldcaption" value="Table Name" />
+      </field>
+      <field id="permission">
+        <phrase id="fldcaption" value="Permission" />
+      </field>
+    </table>
+    <table id="userlevels">
+      <phrase id="tblcaption" value="userlevels" />
+      <field id="userlevelid">
+        <phrase id="fldcaption" value="Level Id" />
+      </field>
+      <field id="userlevelname">
+        <phrase id="fldcaption" value="Level Name" />
       </field>
     </table>
   </project>

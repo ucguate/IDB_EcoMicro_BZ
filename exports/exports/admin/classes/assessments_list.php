@@ -937,19 +937,13 @@ class assessments_list extends assessments
 
 			// Get default search criteria
 			AddFilter($this->DefaultSearchWhere, $this->basicSearchWhere(TRUE));
-			AddFilter($this->DefaultSearchWhere, $this->advancedSearchWhere(TRUE));
 
 			// Get basic search values
 			$this->loadBasicSearchValues();
 
-			// Get and validate search values for advanced search
-			$this->loadSearchValues(); // Get search values
-
 			// Process filter list
 			if ($this->processFilterList())
 				$this->terminate();
-			if (!$this->validateSearch())
-				$this->setFailureMessage($SearchError);
 
 			// Restore search parms from Session if not searching / reset / export
 			if (($this->isExport() || $this->Command != "search" && $this->Command != "reset" && $this->Command != "resetall") && $this->Command != "json" && $this->checkSearchParms())
@@ -964,10 +958,6 @@ class assessments_list extends assessments
 			// Get basic search criteria
 			if ($SearchError == "")
 				$srchBasic = $this->basicSearchWhere();
-
-			// Get search criteria for advanced search
-			if ($SearchError == "")
-				$srchAdvanced = $this->advancedSearchWhere();
 		}
 
 		// Restore display records
@@ -989,16 +979,7 @@ class assessments_list extends assessments
 			$this->BasicSearch->loadDefault();
 			if ($this->BasicSearch->Keyword != "")
 				$srchBasic = $this->basicSearchWhere();
-
-			// Load advanced search from default
-			if ($this->loadAdvancedSearchDefault()) {
-				$srchAdvanced = $this->advancedSearchWhere();
-			}
 		}
-
-		// Restore search settings from Session
-		if ($SearchError == "")
-			$this->loadAdvancedSearch();
 
 		// Build search criteria
 		AddFilter($this->SearchWhere, $srchAdvanced);
@@ -1416,109 +1397,6 @@ class assessments_list extends assessments
 		$this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
 	}
 
-	// Advanced search WHERE clause based on QueryString
-	protected function advancedSearchWhere($default = FALSE)
-	{
-		global $Security;
-		$where = "";
-		if (!$Security->canSearch())
-			return "";
-		$this->buildSearchSql($where, $this->id, $default, FALSE); // id
-		$this->buildSearchSql($where, $this->user_id, $default, FALSE); // user_id
-		$this->buildSearchSql($where, $this->customer_id, $default, FALSE); // customer_id
-		$this->buildSearchSql($where, $this->customer_first_name, $default, FALSE); // customer_first_name
-		$this->buildSearchSql($where, $this->customer_age, $default, FALSE); // customer_age
-		$this->buildSearchSql($where, $this->sex, $default, FALSE); // sex
-		$this->buildSearchSql($where, $this->address, $default, FALSE); // address
-		$this->buildSearchSql($where, $this->total_score, $default, FALSE); // total_score
-		$this->buildSearchSql($where, $this->status, $default, FALSE); // status
-		$this->buildSearchSql($where, $this->loan_purpose, $default, FALSE); // loan_purpose
-		$this->buildSearchSql($where, $this->loan_section, $default, FALSE); // loan_section
-		$this->buildSearchSql($where, $this->customer_last_name, $default, FALSE); // customer_last_name
-		$this->buildSearchSql($where, $this->lat, $default, FALSE); // lat
-		$this->buildSearchSql($where, $this->lon, $default, FALSE); // lon
-		$this->buildSearchSql($where, $this->created_at, $default, FALSE); // created_at
-		$this->buildSearchSql($where, $this->updated_at, $default, FALSE); // updated_at
-		$this->buildSearchSql($where, $this->personal_id, $default, FALSE); // personal_id
-
-		// Set up search parm
-		if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
-			$this->Command = "search";
-		}
-		if (!$default && $this->Command == "search") {
-			$this->id->AdvancedSearch->save(); // id
-			$this->user_id->AdvancedSearch->save(); // user_id
-			$this->customer_id->AdvancedSearch->save(); // customer_id
-			$this->customer_first_name->AdvancedSearch->save(); // customer_first_name
-			$this->customer_age->AdvancedSearch->save(); // customer_age
-			$this->sex->AdvancedSearch->save(); // sex
-			$this->address->AdvancedSearch->save(); // address
-			$this->total_score->AdvancedSearch->save(); // total_score
-			$this->status->AdvancedSearch->save(); // status
-			$this->loan_purpose->AdvancedSearch->save(); // loan_purpose
-			$this->loan_section->AdvancedSearch->save(); // loan_section
-			$this->customer_last_name->AdvancedSearch->save(); // customer_last_name
-			$this->lat->AdvancedSearch->save(); // lat
-			$this->lon->AdvancedSearch->save(); // lon
-			$this->created_at->AdvancedSearch->save(); // created_at
-			$this->updated_at->AdvancedSearch->save(); // updated_at
-			$this->personal_id->AdvancedSearch->save(); // personal_id
-		}
-		return $where;
-	}
-
-	// Build search SQL
-	protected function buildSearchSql(&$where, &$fld, $default, $multiValue)
-	{
-		$fldParm = $fld->Param;
-		$fldVal = ($default) ? $fld->AdvancedSearch->SearchValueDefault : $fld->AdvancedSearch->SearchValue;
-		$fldOpr = ($default) ? $fld->AdvancedSearch->SearchOperatorDefault : $fld->AdvancedSearch->SearchOperator;
-		$fldCond = ($default) ? $fld->AdvancedSearch->SearchConditionDefault : $fld->AdvancedSearch->SearchCondition;
-		$fldVal2 = ($default) ? $fld->AdvancedSearch->SearchValue2Default : $fld->AdvancedSearch->SearchValue2;
-		$fldOpr2 = ($default) ? $fld->AdvancedSearch->SearchOperator2Default : $fld->AdvancedSearch->SearchOperator2;
-		$wrk = "";
-		if (is_array($fldVal))
-			$fldVal = implode(Config("MULTIPLE_OPTION_SEPARATOR"), $fldVal);
-		if (is_array($fldVal2))
-			$fldVal2 = implode(Config("MULTIPLE_OPTION_SEPARATOR"), $fldVal2);
-		$fldOpr = strtoupper(trim($fldOpr));
-		if ($fldOpr == "")
-			$fldOpr = "=";
-		$fldOpr2 = strtoupper(trim($fldOpr2));
-		if ($fldOpr2 == "")
-			$fldOpr2 = "=";
-		if (Config("SEARCH_MULTI_VALUE_OPTION") == 1 || !IsMultiSearchOperator($fldOpr))
-			$multiValue = FALSE;
-		if ($multiValue) {
-			$wrk1 = ($fldVal != "") ? GetMultiSearchSql($fld, $fldOpr, $fldVal, $this->Dbid) : ""; // Field value 1
-			$wrk2 = ($fldVal2 != "") ? GetMultiSearchSql($fld, $fldOpr2, $fldVal2, $this->Dbid) : ""; // Field value 2
-			$wrk = $wrk1; // Build final SQL
-			if ($wrk2 != "")
-				$wrk = ($wrk != "") ? "($wrk) $fldCond ($wrk2)" : $wrk2;
-		} else {
-			$fldVal = $this->convertSearchValue($fld, $fldVal);
-			$fldVal2 = $this->convertSearchValue($fld, $fldVal2);
-			$wrk = GetSearchSql($fld, $fldVal, $fldOpr, $fldCond, $fldVal2, $fldOpr2, $this->Dbid);
-		}
-		AddFilter($where, $wrk);
-	}
-
-	// Convert search value
-	protected function convertSearchValue(&$fld, $fldVal)
-	{
-		if ($fldVal == Config("NULL_VALUE") || $fldVal == Config("NOT_NULL_VALUE"))
-			return $fldVal;
-		$value = $fldVal;
-		if ($fld->isBoolean()) {
-			if ($fldVal != "")
-				$value = (SameText($fldVal, "1") || SameText($fldVal, "y") || SameText($fldVal, "t")) ? $fld->TrueValue : $fld->FalseValue;
-		} elseif ($fld->DataType == DATATYPE_DATE || $fld->DataType == DATATYPE_TIME) {
-			if ($fldVal != "")
-				$value = UnFormatDateTime($fldVal, $fld->DateTimeFormat);
-		}
-		return $value;
-	}
-
 	// Return basic search SQL
 	protected function basicSearchSql($arKeywords, $type)
 	{
@@ -1649,40 +1527,6 @@ class assessments_list extends assessments
 		// Check basic search
 		if ($this->BasicSearch->issetSession())
 			return TRUE;
-		if ($this->id->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->user_id->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->customer_id->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->customer_first_name->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->customer_age->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->sex->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->address->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->total_score->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->status->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->loan_purpose->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->loan_section->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->customer_last_name->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->lat->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->lon->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->created_at->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->updated_at->AdvancedSearch->issetSession())
-			return TRUE;
-		if ($this->personal_id->AdvancedSearch->issetSession())
-			return TRUE;
 		return FALSE;
 	}
 
@@ -1696,9 +1540,6 @@ class assessments_list extends assessments
 
 		// Clear basic search parameters
 		$this->resetBasicSearchParms();
-
-		// Clear advanced search parameters
-		$this->resetAdvancedSearchParms();
 	}
 
 	// Load advanced search default values
@@ -1713,28 +1554,6 @@ class assessments_list extends assessments
 		$this->BasicSearch->unsetSession();
 	}
 
-	// Clear all advanced search parameters
-	protected function resetAdvancedSearchParms()
-	{
-		$this->id->AdvancedSearch->unsetSession();
-		$this->user_id->AdvancedSearch->unsetSession();
-		$this->customer_id->AdvancedSearch->unsetSession();
-		$this->customer_first_name->AdvancedSearch->unsetSession();
-		$this->customer_age->AdvancedSearch->unsetSession();
-		$this->sex->AdvancedSearch->unsetSession();
-		$this->address->AdvancedSearch->unsetSession();
-		$this->total_score->AdvancedSearch->unsetSession();
-		$this->status->AdvancedSearch->unsetSession();
-		$this->loan_purpose->AdvancedSearch->unsetSession();
-		$this->loan_section->AdvancedSearch->unsetSession();
-		$this->customer_last_name->AdvancedSearch->unsetSession();
-		$this->lat->AdvancedSearch->unsetSession();
-		$this->lon->AdvancedSearch->unsetSession();
-		$this->created_at->AdvancedSearch->unsetSession();
-		$this->updated_at->AdvancedSearch->unsetSession();
-		$this->personal_id->AdvancedSearch->unsetSession();
-	}
-
 	// Restore all search parameters
 	protected function restoreSearchParms()
 	{
@@ -1742,25 +1561,6 @@ class assessments_list extends assessments
 
 		// Restore basic search values
 		$this->BasicSearch->load();
-
-		// Restore advanced search values
-		$this->id->AdvancedSearch->load();
-		$this->user_id->AdvancedSearch->load();
-		$this->customer_id->AdvancedSearch->load();
-		$this->customer_first_name->AdvancedSearch->load();
-		$this->customer_age->AdvancedSearch->load();
-		$this->sex->AdvancedSearch->load();
-		$this->address->AdvancedSearch->load();
-		$this->total_score->AdvancedSearch->load();
-		$this->status->AdvancedSearch->load();
-		$this->loan_purpose->AdvancedSearch->load();
-		$this->loan_section->AdvancedSearch->load();
-		$this->customer_last_name->AdvancedSearch->load();
-		$this->lat->AdvancedSearch->load();
-		$this->lon->AdvancedSearch->load();
-		$this->created_at->AdvancedSearch->load();
-		$this->updated_at->AdvancedSearch->load();
-		$this->personal_id->AdvancedSearch->load();
 	}
 
 	// Set up sort parameters
@@ -2372,134 +2172,6 @@ class assessments_list extends assessments
 		$this->BasicSearch->setType(Get(Config("TABLE_BASIC_SEARCH_TYPE"), ""), FALSE);
 	}
 
-	// Load search values for validation
-	protected function loadSearchValues()
-	{
-
-		// Load search values
-		$got = FALSE;
-
-		// id
-		if (!$this->isAddOrEdit() && $this->id->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->id->AdvancedSearch->SearchValue != "" || $this->id->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// user_id
-		if (!$this->isAddOrEdit() && $this->user_id->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->user_id->AdvancedSearch->SearchValue != "" || $this->user_id->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// customer_id
-		if (!$this->isAddOrEdit() && $this->customer_id->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->customer_id->AdvancedSearch->SearchValue != "" || $this->customer_id->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// customer_first_name
-		if (!$this->isAddOrEdit() && $this->customer_first_name->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->customer_first_name->AdvancedSearch->SearchValue != "" || $this->customer_first_name->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// customer_age
-		if (!$this->isAddOrEdit() && $this->customer_age->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->customer_age->AdvancedSearch->SearchValue != "" || $this->customer_age->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// sex
-		if (!$this->isAddOrEdit() && $this->sex->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->sex->AdvancedSearch->SearchValue != "" || $this->sex->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// address
-		if (!$this->isAddOrEdit() && $this->address->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->address->AdvancedSearch->SearchValue != "" || $this->address->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// total_score
-		if (!$this->isAddOrEdit() && $this->total_score->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->total_score->AdvancedSearch->SearchValue != "" || $this->total_score->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// status
-		if (!$this->isAddOrEdit() && $this->status->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->status->AdvancedSearch->SearchValue != "" || $this->status->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// loan_purpose
-		if (!$this->isAddOrEdit() && $this->loan_purpose->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->loan_purpose->AdvancedSearch->SearchValue != "" || $this->loan_purpose->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// loan_section
-		if (!$this->isAddOrEdit() && $this->loan_section->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->loan_section->AdvancedSearch->SearchValue != "" || $this->loan_section->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// customer_last_name
-		if (!$this->isAddOrEdit() && $this->customer_last_name->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->customer_last_name->AdvancedSearch->SearchValue != "" || $this->customer_last_name->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// lat
-		if (!$this->isAddOrEdit() && $this->lat->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->lat->AdvancedSearch->SearchValue != "" || $this->lat->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// lon
-		if (!$this->isAddOrEdit() && $this->lon->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->lon->AdvancedSearch->SearchValue != "" || $this->lon->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// created_at
-		if (!$this->isAddOrEdit() && $this->created_at->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->created_at->AdvancedSearch->SearchValue != "" || $this->created_at->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// updated_at
-		if (!$this->isAddOrEdit() && $this->updated_at->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->updated_at->AdvancedSearch->SearchValue != "" || $this->updated_at->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-
-		// personal_id
-		if (!$this->isAddOrEdit() && $this->personal_id->AdvancedSearch->get()) {
-			$got = TRUE;
-			if (($this->personal_id->AdvancedSearch->SearchValue != "" || $this->personal_id->AdvancedSearch->SearchValue2 != "") && $this->Command == "")
-				$this->Command = "search";
-		}
-		return $got;
-	}
-
 	// Load recordset
 	public function loadRecordset($offset = -1, $rowcnt = -1)
 	{
@@ -2904,184 +2576,11 @@ class assessments_list extends assessments
 			$this->updated_at->LinkCustomAttributes = "";
 			$this->updated_at->HrefValue = "";
 			$this->updated_at->TooltipValue = "";
-		} elseif ($this->RowType == ROWTYPE_SEARCH) { // Search row
-
-			// id
-			$this->id->EditAttrs["class"] = "form-control";
-			$this->id->EditCustomAttributes = "";
-			$this->id->EditValue = HtmlEncode($this->id->AdvancedSearch->SearchValue);
-			$this->id->PlaceHolder = RemoveHtml($this->id->caption());
-
-			// user_id
-			$this->user_id->EditAttrs["class"] = "form-control";
-			$this->user_id->EditCustomAttributes = "";
-			$this->user_id->EditValue = HtmlEncode($this->user_id->AdvancedSearch->SearchValue);
-			$curVal = strval($this->user_id->AdvancedSearch->SearchValue);
-			if ($curVal != "") {
-				$this->user_id->EditValue = $this->user_id->lookupCacheOption($curVal);
-				if ($this->user_id->EditValue === NULL) { // Lookup from database
-					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
-					$sqlWrk = $this->user_id->Lookup->getSql(FALSE, $filterWrk, '', $this);
-					$rswrk = Conn()->execute($sqlWrk);
-					if ($rswrk && !$rswrk->EOF) { // Lookup values found
-						$arwrk = [];
-						$arwrk[1] = HtmlEncode(FormatNumber($rswrk->fields('df'), 0, -2, -2, -2));
-						$arwrk[2] = HtmlEncode($rswrk->fields('df2'));
-						$arwrk[3] = HtmlEncode($rswrk->fields('df3'));
-						$this->user_id->EditValue = $this->user_id->displayValue($arwrk);
-						$rswrk->Close();
-					} else {
-						$this->user_id->EditValue = HtmlEncode($this->user_id->AdvancedSearch->SearchValue);
-					}
-				}
-			} else {
-				$this->user_id->EditValue = NULL;
-			}
-			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
-
-			// customer_id
-			$this->customer_id->EditAttrs["class"] = "form-control";
-			$this->customer_id->EditCustomAttributes = "";
-			if (!$this->customer_id->Raw)
-				$this->customer_id->AdvancedSearch->SearchValue = HtmlDecode($this->customer_id->AdvancedSearch->SearchValue);
-			$this->customer_id->EditValue = HtmlEncode($this->customer_id->AdvancedSearch->SearchValue);
-			$this->customer_id->PlaceHolder = RemoveHtml($this->customer_id->caption());
-
-			// customer_first_name
-			$this->customer_first_name->EditAttrs["class"] = "form-control";
-			$this->customer_first_name->EditCustomAttributes = "";
-			if (!$this->customer_first_name->Raw)
-				$this->customer_first_name->AdvancedSearch->SearchValue = HtmlDecode($this->customer_first_name->AdvancedSearch->SearchValue);
-			$this->customer_first_name->EditValue = HtmlEncode($this->customer_first_name->AdvancedSearch->SearchValue);
-			$this->customer_first_name->PlaceHolder = RemoveHtml($this->customer_first_name->caption());
-
-			// customer_age
-			$this->customer_age->EditAttrs["class"] = "form-control";
-			$this->customer_age->EditCustomAttributes = "";
-			$this->customer_age->EditValue = HtmlEncode($this->customer_age->AdvancedSearch->SearchValue);
-			$this->customer_age->PlaceHolder = RemoveHtml($this->customer_age->caption());
-
-			// sex
-			$this->sex->EditAttrs["class"] = "form-control";
-			$this->sex->EditCustomAttributes = "";
-			if (!$this->sex->Raw)
-				$this->sex->AdvancedSearch->SearchValue = HtmlDecode($this->sex->AdvancedSearch->SearchValue);
-			$this->sex->EditValue = HtmlEncode($this->sex->AdvancedSearch->SearchValue);
-			$this->sex->PlaceHolder = RemoveHtml($this->sex->caption());
-
-			// address
-			$this->address->EditAttrs["class"] = "form-control";
-			$this->address->EditCustomAttributes = "";
-			if (!$this->address->Raw)
-				$this->address->AdvancedSearch->SearchValue = HtmlDecode($this->address->AdvancedSearch->SearchValue);
-			$this->address->EditValue = HtmlEncode($this->address->AdvancedSearch->SearchValue);
-			$this->address->PlaceHolder = RemoveHtml($this->address->caption());
-
-			// total_score
-			$this->total_score->EditAttrs["class"] = "form-control";
-			$this->total_score->EditCustomAttributes = "";
-			$this->total_score->EditValue = HtmlEncode($this->total_score->AdvancedSearch->SearchValue);
-			$this->total_score->PlaceHolder = RemoveHtml($this->total_score->caption());
-
-			// status
-			$this->status->EditAttrs["class"] = "form-control";
-			$this->status->EditCustomAttributes = "";
-			$this->status->EditValue = $this->status->options(TRUE);
-
-			// loan_purpose
-			$this->loan_purpose->EditAttrs["class"] = "form-control";
-			$this->loan_purpose->EditCustomAttributes = "";
-			$this->loan_purpose->EditValue = HtmlEncode($this->loan_purpose->AdvancedSearch->SearchValue);
-			$this->loan_purpose->PlaceHolder = RemoveHtml($this->loan_purpose->caption());
-
-			// loan_section
-			$this->loan_section->EditAttrs["class"] = "form-control";
-			$this->loan_section->EditCustomAttributes = "";
-			$this->loan_section->EditValue = HtmlEncode($this->loan_section->AdvancedSearch->SearchValue);
-			$this->loan_section->PlaceHolder = RemoveHtml($this->loan_section->caption());
-
-			// lat
-			$this->lat->EditAttrs["class"] = "form-control";
-			$this->lat->EditCustomAttributes = "";
-			$this->lat->EditValue = HtmlEncode($this->lat->AdvancedSearch->SearchValue);
-			$this->lat->PlaceHolder = RemoveHtml($this->lat->caption());
-
-			// lon
-			$this->lon->EditAttrs["class"] = "form-control";
-			$this->lon->EditCustomAttributes = "";
-			$this->lon->EditValue = HtmlEncode($this->lon->AdvancedSearch->SearchValue);
-			$this->lon->PlaceHolder = RemoveHtml($this->lon->caption());
-
-			// created_at
-			$this->created_at->EditAttrs["class"] = "form-control";
-			$this->created_at->EditCustomAttributes = "";
-			$this->created_at->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->created_at->AdvancedSearch->SearchValue, 0), 8));
-			$this->created_at->PlaceHolder = RemoveHtml($this->created_at->caption());
-
-			// updated_at
-			$this->updated_at->EditAttrs["class"] = "form-control";
-			$this->updated_at->EditCustomAttributes = "";
-			$this->updated_at->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->updated_at->AdvancedSearch->SearchValue, 0), 8));
-			$this->updated_at->PlaceHolder = RemoveHtml($this->updated_at->caption());
 		}
-		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
-			$this->setupFieldTitles();
 
 		// Call Row Rendered event
 		if ($this->RowType != ROWTYPE_AGGREGATEINIT)
 			$this->Row_Rendered();
-	}
-
-	// Validate search
-	protected function validateSearch()
-	{
-		global $SearchError;
-
-		// Initialize
-		$SearchError = "";
-
-		// Check if validation required
-		if (!Config("SERVER_VALIDATE"))
-			return TRUE;
-		if (!CheckInteger($this->user_id->AdvancedSearch->SearchValue)) {
-			AddMessage($SearchError, $this->user_id->errorMessage());
-		}
-		if (!CheckNumber($this->total_score->AdvancedSearch->SearchValue)) {
-			AddMessage($SearchError, $this->total_score->errorMessage());
-		}
-
-		// Return validate result
-		$validateSearch = ($SearchError == "");
-
-		// Call Form_CustomValidate event
-		$formCustomError = "";
-		$validateSearch = $validateSearch && $this->Form_CustomValidate($formCustomError);
-		if ($formCustomError != "") {
-			AddMessage($SearchError, $formCustomError);
-		}
-		return $validateSearch;
-	}
-
-	// Load advanced search
-	public function loadAdvancedSearch()
-	{
-		$this->id->AdvancedSearch->load();
-		$this->user_id->AdvancedSearch->load();
-		$this->customer_id->AdvancedSearch->load();
-		$this->customer_first_name->AdvancedSearch->load();
-		$this->customer_age->AdvancedSearch->load();
-		$this->sex->AdvancedSearch->load();
-		$this->address->AdvancedSearch->load();
-		$this->total_score->AdvancedSearch->load();
-		$this->status->AdvancedSearch->load();
-		$this->loan_purpose->AdvancedSearch->load();
-		$this->loan_section->AdvancedSearch->load();
-		$this->customer_last_name->AdvancedSearch->load();
-		$this->lat->AdvancedSearch->load();
-		$this->lon->AdvancedSearch->load();
-		$this->created_at->AdvancedSearch->load();
-		$this->updated_at->AdvancedSearch->load();
-		$this->personal_id->AdvancedSearch->load();
 	}
 
 	// Get export HTML tag

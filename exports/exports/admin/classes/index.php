@@ -311,6 +311,10 @@ class index
 			$this->terminate("view1list.php");
 		if ($Security->allowList(CurrentProjectID() . 'questions-answers'))
 			$this->terminate("questions_answerslist.php");
+		if ($Security->allowList(CurrentProjectID() . 'userlevelpermissions'))
+			$this->terminate("userlevelpermissionslist.php");
+		if ($Security->allowList(CurrentProjectID() . 'userlevels'))
+			$this->terminate("userlevelslist.php");
 		if ($Security->isLoggedIn()) {
 			$this->setFailureMessage(DeniedMessage() . "<br><br><a href=\"logout.php\">" . $Language->phrase("BackToLogin") . "</a>");
 		} else {

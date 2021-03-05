@@ -110,7 +110,7 @@ loadjs.ready("head", function() {
 
 	// Dynamic selection lists
 	fusersadd.lists["x_user_level"] = <?php echo $users_add->user_level->Lookup->toClientList($users_add) ?>;
-	fusersadd.lists["x_user_level"].options = <?php echo JsonEncode($users_add->user_level->options(FALSE, TRUE)) ?>;
+	fusersadd.lists["x_user_level"].options = <?php echo JsonEncode($users_add->user_level->lookupOptions()) ?>;
 	loadjs.done("fusersadd");
 });
 </script>
@@ -189,6 +189,7 @@ $users_add->showMessage();
 			<?php echo $users_add->user_level->selectOptionListHtml("x_user_level") ?>
 		</select>
 </div>
+<?php echo $users_add->user_level->Lookup->getParamTag($users_add, "p_x_user_level") ?>
 </span>
 <?php } ?>
 <?php echo $users_add->user_level->CustomMsg ?></div></div>

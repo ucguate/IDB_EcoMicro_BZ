@@ -29,5 +29,8 @@ $sideMenu->addMenuItem(12, "mi_loan_section", $MenuLanguage->MenuPhrase("12", "M
 $sideMenu->addMenuItem(9, "mci_Users_Administration", $MenuLanguage->MenuPhrase("9", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE, "", "", FALSE);
 $sideMenu->addMenuItem(8, "mi_users", $MenuLanguage->MenuPhrase("8", "MenuText"), $MenuRelativePath . "userslist.php", 9, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}users'), FALSE, FALSE, "", "", FALSE);
 $sideMenu->addMenuItem(7, "mi__user_levels", $MenuLanguage->MenuPhrase("7", "MenuText"), $MenuRelativePath . "_user_levelslist.php", 9, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}user_levels'), FALSE, FALSE, "", "", FALSE);
+$sideMenu->addMenuItem(43, "mci_Security", $MenuLanguage->MenuPhrase("43", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE, "", "", FALSE);
+$sideMenu->addMenuItem(24, "mi_userlevels", $MenuLanguage->MenuPhrase("24", "MenuText"), $MenuRelativePath . "userlevelslist.php", 43, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}userlevels'), FALSE, FALSE, "", "", FALSE);
+$sideMenu->addMenuItem(23, "mi_userlevelpermissions", $MenuLanguage->MenuPhrase("23", "MenuText"), $MenuRelativePath . "userlevelpermissionslist.php", 43, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}userlevelpermissions'), FALSE, FALSE, "", "", FALSE);
 echo $sideMenu->toScript();
 ?>

@@ -153,8 +153,8 @@ $question_types_add->showMessage();
 $selwrk = ConvertToBool($question_types_add->active->CurrentValue) ? " checked" : "";
 ?>
 <div class="custom-control custom-checkbox d-inline-block">
-	<input type="checkbox" class="custom-control-input" data-table="question_types" data-field="x_active" name="x_active[]" id="x_active[]_393907" value="1"<?php echo $selwrk ?><?php echo $question_types_add->active->editAttributes() ?>>
-	<label class="custom-control-label" for="x_active[]_393907"></label>
+	<input type="checkbox" class="custom-control-input" data-table="question_types" data-field="x_active" name="x_active[]" id="x_active[]_819281" value="1"<?php echo $selwrk ?><?php echo $question_types_add->active->editAttributes() ?>>
+	<label class="custom-control-label" for="x_active[]_819281"></label>
 </div>
 </span>
 <?php echo $question_types_add->active->CustomMsg ?></div></div>

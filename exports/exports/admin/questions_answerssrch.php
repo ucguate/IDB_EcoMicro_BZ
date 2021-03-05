@@ -251,8 +251,8 @@ $questions_answers_search->showMessage();
 $selwrk = ConvertToBool($questions_answers_search->question_active->AdvancedSearch->SearchValue) ? " checked" : "";
 ?>
 <div class="custom-control custom-checkbox d-inline-block">
-	<input type="checkbox" class="custom-control-input" data-table="questions_answers" data-field="x_question_active" name="x_question_active[]" id="x_question_active[]_524497" value="1"<?php echo $selwrk ?><?php echo $questions_answers_search->question_active->editAttributes() ?>>
-	<label class="custom-control-label" for="x_question_active[]_524497"></label>
+	<input type="checkbox" class="custom-control-input" data-table="questions_answers" data-field="x_question_active" name="x_question_active[]" id="x_question_active[]_394999" value="1"<?php echo $selwrk ?><?php echo $questions_answers_search->question_active->editAttributes() ?>>
+	<label class="custom-control-label" for="x_question_active[]_394999"></label>
 </div>
 </span>
 		</div></div>

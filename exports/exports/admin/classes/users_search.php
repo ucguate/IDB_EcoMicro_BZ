@@ -702,8 +702,9 @@ class users_search extends users
 		$this->createToken();
 
 		// Set up lookup cache
-		// Set up Breadcrumb
+		$this->setupLookupOptions($this->user_level);
 
+		// Set up Breadcrumb
 		$this->setupBreadcrumb();
 
 		// Check modal
@@ -890,8 +891,22 @@ class users_search extends users
 
 			// user_level
 			if ($Security->canAdmin()) { // System admin
-				if (strval($this->user_level->CurrentValue) != "") {
-					$this->user_level->ViewValue = $this->user_level->optionCaption($this->user_level->CurrentValue);
+				$curVal = strval($this->user_level->CurrentValue);
+				if ($curVal != "") {
+					$this->user_level->ViewValue = $this->user_level->lookupCacheOption($curVal);
+					if ($this->user_level->ViewValue === NULL) { // Lookup from database
+						$filterWrk = "`userlevelid`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
+						$sqlWrk = $this->user_level->Lookup->getSql(FALSE, $filterWrk, '', $this);
+						$rswrk = Conn()->execute($sqlWrk);
+						if ($rswrk && !$rswrk->EOF) { // Lookup values found
+							$arwrk = [];
+							$arwrk[1] = $rswrk->fields('df');
+							$this->user_level->ViewValue = $this->user_level->displayValue($arwrk);
+							$rswrk->Close();
+						} else {
+							$this->user_level->ViewValue = $this->user_level->CurrentValue;
+						}
+					}
 				} else {
 					$this->user_level->ViewValue = NULL;
 				}
@@ -1000,7 +1015,26 @@ class users_search extends users
 			if (!$Security->canAdmin()) { // System admin
 				$this->user_level->EditValue = $Language->phrase("PasswordMask");
 			} else {
-				$this->user_level->EditValue = $this->user_level->options(TRUE);
+				$curVal = trim(strval($this->user_level->AdvancedSearch->SearchValue));
+				if ($curVal != "")
+					$this->user_level->AdvancedSearch->ViewValue = $this->user_level->lookupCacheOption($curVal);
+				else
+					$this->user_level->AdvancedSearch->ViewValue = $this->user_level->Lookup !== NULL && is_array($this->user_level->Lookup->Options) ? $curVal : NULL;
+				if ($this->user_level->AdvancedSearch->ViewValue !== NULL) { // Load from cache
+					$this->user_level->EditValue = array_values($this->user_level->Lookup->Options);
+				} else { // Lookup from database
+					if ($curVal == "") {
+						$filterWrk = "0=1";
+					} else {
+						$filterWrk = "`userlevelid`" . SearchString("=", $this->user_level->AdvancedSearch->SearchValue, DATATYPE_NUMBER, "");
+					}
+					$sqlWrk = $this->user_level->Lookup->getSql(TRUE, $filterWrk, '', $this);
+					$rswrk = Conn()->execute($sqlWrk);
+					$arwrk = $rswrk ? $rswrk->getRows() : [];
+					if ($rswrk)
+						$rswrk->close();
+					$this->user_level->EditValue = $arwrk;
+				}
 			}
 
 			// created_at
@@ -1116,6 +1150,8 @@ class users_search extends users
 
 					// Format the field values
 					switch ($fld->FieldVar) {
+						case "x_user_level":
+							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

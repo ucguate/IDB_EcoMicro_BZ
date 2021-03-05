@@ -102,8 +102,7 @@ class users extends DbTable
 		$this->user_level->Sortable = TRUE; // Allow sort
 		$this->user_level->UsePleaseSelect = TRUE; // Use PleaseSelect by default
 		$this->user_level->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
-		$this->user_level->Lookup = new Lookup('user_level', 'users', FALSE, '', ["","","",""], [], [], [], [], [], [], '', '');
-		$this->user_level->OptionCount = 3;
+		$this->user_level->Lookup = new Lookup('user_level', 'userlevels', FALSE, 'userlevelid', ["userlevelname","","",""], [], [], [], [], [], [], '', '');
 		$this->user_level->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
 		$this->fields['user_level'] = &$this->user_level;
 
@@ -863,8 +862,22 @@ class users extends DbTable
 
 		// user_level
 		if ($Security->canAdmin()) { // System admin
-			if (strval($this->user_level->CurrentValue) != "") {
-				$this->user_level->ViewValue = $this->user_level->optionCaption($this->user_level->CurrentValue);
+			$curVal = strval($this->user_level->CurrentValue);
+			if ($curVal != "") {
+				$this->user_level->ViewValue = $this->user_level->lookupCacheOption($curVal);
+				if ($this->user_level->ViewValue === NULL) { // Lookup from database
+					$filterWrk = "`userlevelid`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
+					$sqlWrk = $this->user_level->Lookup->getSql(FALSE, $filterWrk, '', $this);
+					$rswrk = Conn()->execute($sqlWrk);
+					if ($rswrk && !$rswrk->EOF) { // Lookup values found
+						$arwrk = [];
+						$arwrk[1] = $rswrk->fields('df');
+						$this->user_level->ViewValue = $this->user_level->displayValue($arwrk);
+						$rswrk->Close();
+					} else {
+						$this->user_level->ViewValue = $this->user_level->CurrentValue;
+					}
+				}
 			} else {
 				$this->user_level->ViewValue = NULL;
 			}
@@ -981,7 +994,6 @@ class users extends DbTable
 		if (!$Security->canAdmin()) { // System admin
 			$this->user_level->EditValue = $Language->phrase("PasswordMask");
 		} else {
-			$this->user_level->EditValue = $this->user_level->options(TRUE);
 		}
 
 		// created_at

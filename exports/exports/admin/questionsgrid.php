@@ -782,8 +782,8 @@ loadjs.ready(["fquestionsgrid"], function() {
 $selwrk = ConvertToBool($questions_grid->active->CurrentValue) ? " checked" : "";
 ?>
 <div class="custom-control custom-checkbox d-inline-block">
-	<input type="checkbox" class="custom-control-input" data-table="questions" data-field="x_active" name="x<?php echo $questions_grid->RowIndex ?>_active[]" id="x<?php echo $questions_grid->RowIndex ?>_active[]_458390" value="1"<?php echo $selwrk ?><?php echo $questions_grid->active->editAttributes() ?>>
-	<label class="custom-control-label" for="x<?php echo $questions_grid->RowIndex ?>_active[]_458390"></label>
+	<input type="checkbox" class="custom-control-input" data-table="questions" data-field="x_active" name="x<?php echo $questions_grid->RowIndex ?>_active[]" id="x<?php echo $questions_grid->RowIndex ?>_active[]_970993" value="1"<?php echo $selwrk ?><?php echo $questions_grid->active->editAttributes() ?>>
+	<label class="custom-control-label" for="x<?php echo $questions_grid->RowIndex ?>_active[]_970993"></label>
 </div>
 </span>
 <input type="hidden" data-table="questions" data-field="x_active" name="o<?php echo $questions_grid->RowIndex ?>_active[]" id="o<?php echo $questions_grid->RowIndex ?>_active[]" value="<?php echo HtmlEncode($questions_grid->active->OldValue) ?>">
@@ -794,8 +794,8 @@ $selwrk = ConvertToBool($questions_grid->active->CurrentValue) ? " checked" : ""
 $selwrk = ConvertToBool($questions_grid->active->CurrentValue) ? " checked" : "";
 ?>
 <div class="custom-control custom-checkbox d-inline-block">
-	<input type="checkbox" class="custom-control-input" data-table="questions" data-field="x_active" name="x<?php echo $questions_grid->RowIndex ?>_active[]" id="x<?php echo $questions_grid->RowIndex ?>_active[]_785670" value="1"<?php echo $selwrk ?><?php echo $questions_grid->active->editAttributes() ?>>
-	<label class="custom-control-label" for="x<?php echo $questions_grid->RowIndex ?>_active[]_785670"></label>
+	<input type="checkbox" class="custom-control-input" data-table="questions" data-field="x_active" name="x<?php echo $questions_grid->RowIndex ?>_active[]" id="x<?php echo $questions_grid->RowIndex ?>_active[]_152609" value="1"<?php echo $selwrk ?><?php echo $questions_grid->active->editAttributes() ?>>
+	<label class="custom-control-label" for="x<?php echo $questions_grid->RowIndex ?>_active[]_152609"></label>
 </div>
 </span>
 <?php } ?>
@@ -1310,8 +1310,8 @@ loadjs.ready(["fquestionsgrid"], function() {
 $selwrk = ConvertToBool($questions_grid->active->CurrentValue) ? " checked" : "";
 ?>
 <div class="custom-control custom-checkbox d-inline-block">
-	<input type="checkbox" class="custom-control-input" data-table="questions" data-field="x_active" name="x<?php echo $questions_grid->RowIndex ?>_active[]" id="x<?php echo $questions_grid->RowIndex ?>_active[]_642335" value="1"<?php echo $selwrk ?><?php echo $questions_grid->active->editAttributes() ?>>
-	<label class="custom-control-label" for="x<?php echo $questions_grid->RowIndex ?>_active[]_642335"></label>
+	<input type="checkbox" class="custom-control-input" data-table="questions" data-field="x_active" name="x<?php echo $questions_grid->RowIndex ?>_active[]" id="x<?php echo $questions_grid->RowIndex ?>_active[]_411540" value="1"<?php echo $selwrk ?><?php echo $questions_grid->active->editAttributes() ?>>
+	<label class="custom-control-label" for="x<?php echo $questions_grid->RowIndex ?>_active[]_411540"></label>
 </div>
 </span>
 <?php } else { ?>

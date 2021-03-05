@@ -50,41 +50,9 @@ loadjs.ready("head", function() {
 	// Form object for search
 	fassessmentslistsrch = currentSearchForm = new ew.Form("fassessmentslistsrch");
 
-	// Validate function for search
-	fassessmentslistsrch.validate = function(fobj) {
-		if (!this.validateRequired)
-			return true; // Ignore validation
-		fobj = fobj || this._form;
-		var infix = "";
-		elm = this.getElements("x" + infix + "_user_id");
-		if (elm && !ew.checkInteger(elm.value))
-			return this.onError(elm, "<?php echo JsEncode($assessments_list->user_id->errorMessage()) ?>");
-		elm = this.getElements("x" + infix + "_total_score");
-		if (elm && !ew.checkNumber(elm.value))
-			return this.onError(elm, "<?php echo JsEncode($assessments_list->total_score->errorMessage()) ?>");
-
-		// Call Form_CustomValidate event
-		if (!this.Form_CustomValidate(fobj))
-			return false;
-		return true;
-	}
-
-	// Form_CustomValidate
-	fassessmentslistsrch.Form_CustomValidate = function(fobj) { // DO NOT CHANGE THIS LINE!
-
-		// Your custom validation code here, return false if invalid.
-		return true;
-	}
-
-	// Use JavaScript validation or not
-	fassessmentslistsrch.validateRequired = <?php echo Config("CLIENT_VALIDATE") ? "true" : "false" ?>;
-
 	// Dynamic selection lists
-	fassessmentslistsrch.lists["x_user_id"] = <?php echo $assessments_list->user_id->Lookup->toClientList($assessments_list) ?>;
-	fassessmentslistsrch.lists["x_user_id"].options = <?php echo JsonEncode($assessments_list->user_id->lookupOptions()) ?>;
-	fassessmentslistsrch.autoSuggests["x_user_id"] = <?php echo json_encode(["data" => "ajax=autosuggest"]) ?>;
-
 	// Filters
+
 	fassessmentslistsrch.filterList = <?php echo $assessments_list->getFilterList() ?>;
 	loadjs.done("fassessmentslistsrch");
 });
@@ -148,126 +116,6 @@ $assessments_list->renderOtherOptions();
 <input type="hidden" name="cmd" value="search">
 <input type="hidden" name="t" value="assessments">
 	<div class="ew-extended-search">
-<?php
-
-// Render search row
-$assessments->RowType = ROWTYPE_SEARCH;
-$assessments->resetAttributes();
-$assessments_list->renderRow();
-?>
-<?php if ($assessments_list->user_id->Visible) { // user_id ?>
-	<?php
-		$assessments_list->SearchColumnCount++;
-		if (($assessments_list->SearchColumnCount - 1) % $assessments_list->SearchFieldsPerRow == 0) {
-			$assessments_list->SearchRowCount++;
-	?>
-<div id="xsr_<?php echo $assessments_list->SearchRowCount ?>" class="ew-row d-sm-flex">
-	<?php
-		}
-	 ?>
-	<div id="xsc_user_id" class="ew-cell form-group">
-		<label class="ew-search-caption ew-label"><?php echo $assessments_list->user_id->caption() ?></label>
-		<span class="ew-search-operator">
-<?php echo $Language->phrase("=") ?>
-<input type="hidden" name="z_user_id" id="z_user_id" value="=">
-</span>
-		<span id="el_assessments_user_id" class="ew-search-field">
-<?php
-$onchange = $assessments_list->user_id->EditAttrs->prepend("onchange", "");
-$onchange = ($onchange) ? ' onchange="' . JsEncode($onchange) . '"' : '';
-$assessments_list->user_id->EditAttrs["onchange"] = "";
-?>
-<span id="as_x_user_id">
-	<input type="text" class="form-control" name="sv_x_user_id" id="sv_x_user_id" value="<?php echo RemoveHtml($assessments_list->user_id->EditValue) ?>" size="30" maxlength="11" placeholder="<?php echo HtmlEncode($assessments_list->user_id->getPlaceHolder()) ?>" data-placeholder="<?php echo HtmlEncode($assessments_list->user_id->getPlaceHolder()) ?>"<?php echo $assessments_list->user_id->editAttributes() ?>>
-</span>
-<input type="hidden" data-table="assessments" data-field="x_user_id" data-value-separator="<?php echo $assessments_list->user_id->displayValueSeparatorAttribute() ?>" name="x_user_id" id="x_user_id" value="<?php echo HtmlEncode($assessments_list->user_id->AdvancedSearch->SearchValue) ?>"<?php echo $onchange ?>>
-<script>
-loadjs.ready(["fassessmentslistsrch"], function() {
-	fassessmentslistsrch.createAutoSuggest({"id":"x_user_id","forceSelect":false});
-});
-</script>
-<?php echo $assessments_list->user_id->Lookup->getParamTag($assessments_list, "p_x_user_id") ?>
-</span>
-	</div>
-	<?php if ($assessments_list->SearchColumnCount % $assessments_list->SearchFieldsPerRow == 0) { ?>
-</div>
-	<?php } ?>
-<?php } ?>
-<?php if ($assessments_list->customer_id->Visible) { // customer_id ?>
-	<?php
-		$assessments_list->SearchColumnCount++;
-		if (($assessments_list->SearchColumnCount - 1) % $assessments_list->SearchFieldsPerRow == 0) {
-			$assessments_list->SearchRowCount++;
-	?>
-<div id="xsr_<?php echo $assessments_list->SearchRowCount ?>" class="ew-row d-sm-flex">
-	<?php
-		}
-	 ?>
-	<div id="xsc_customer_id" class="ew-cell form-group">
-		<label for="x_customer_id" class="ew-search-caption ew-label"><?php echo $assessments_list->customer_id->caption() ?></label>
-		<span class="ew-search-operator">
-<?php echo $Language->phrase("LIKE") ?>
-<input type="hidden" name="z_customer_id" id="z_customer_id" value="LIKE">
-</span>
-		<span id="el_assessments_customer_id" class="ew-search-field">
-<input type="text" data-table="assessments" data-field="x_customer_id" name="x_customer_id" id="x_customer_id" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($assessments_list->customer_id->getPlaceHolder()) ?>" value="<?php echo $assessments_list->customer_id->EditValue ?>"<?php echo $assessments_list->customer_id->editAttributes() ?>>
-</span>
-	</div>
-	<?php if ($assessments_list->SearchColumnCount % $assessments_list->SearchFieldsPerRow == 0) { ?>
-</div>
-	<?php } ?>
-<?php } ?>
-<?php if ($assessments_list->customer_first_name->Visible) { // customer_first_name ?>
-	<?php
-		$assessments_list->SearchColumnCount++;
-		if (($assessments_list->SearchColumnCount - 1) % $assessments_list->SearchFieldsPerRow == 0) {
-			$assessments_list->SearchRowCount++;
-	?>
-<div id="xsr_<?php echo $assessments_list->SearchRowCount ?>" class="ew-row d-sm-flex">
-	<?php
-		}
-	 ?>
-	<div id="xsc_customer_first_name" class="ew-cell form-group">
-		<label for="x_customer_first_name" class="ew-search-caption ew-label"><?php echo $assessments_list->customer_first_name->caption() ?></label>
-		<span class="ew-search-operator">
-<?php echo $Language->phrase("LIKE") ?>
-<input type="hidden" name="z_customer_first_name" id="z_customer_first_name" value="LIKE">
-</span>
-		<span id="el_assessments_customer_first_name" class="ew-search-field">
-<input type="text" data-table="assessments" data-field="x_customer_first_name" name="x_customer_first_name" id="x_customer_first_name" size="30" maxlength="255" placeholder="<?php echo HtmlEncode($assessments_list->customer_first_name->getPlaceHolder()) ?>" value="<?php echo $assessments_list->customer_first_name->EditValue ?>"<?php echo $assessments_list->customer_first_name->editAttributes() ?>>
-</span>
-	</div>
-	<?php if ($assessments_list->SearchColumnCount % $assessments_list->SearchFieldsPerRow == 0) { ?>
-</div>
-	<?php } ?>
-<?php } ?>
-<?php if ($assessments_list->total_score->Visible) { // total_score ?>
-	<?php
-		$assessments_list->SearchColumnCount++;
-		if (($assessments_list->SearchColumnCount - 1) % $assessments_list->SearchFieldsPerRow == 0) {
-			$assessments_list->SearchRowCount++;
-	?>
-<div id="xsr_<?php echo $assessments_list->SearchRowCount ?>" class="ew-row d-sm-flex">
-	<?php
-		}
-	 ?>
-	<div id="xsc_total_score" class="ew-cell form-group">
-		<label for="x_total_score" class="ew-search-caption ew-label"><?php echo $assessments_list->total_score->caption() ?></label>
-		<span class="ew-search-operator">
-<?php echo $Language->phrase("=") ?>
-<input type="hidden" name="z_total_score" id="z_total_score" value="=">
-</span>
-		<span id="el_assessments_total_score" class="ew-search-field">
-<input type="text" data-table="assessments" data-field="x_total_score" name="x_total_score" id="x_total_score" size="30" maxlength="10" placeholder="<?php echo HtmlEncode($assessments_list->total_score->getPlaceHolder()) ?>" value="<?php echo $assessments_list->total_score->EditValue ?>"<?php echo $assessments_list->total_score->editAttributes() ?>>
-</span>
-	</div>
-	<?php if ($assessments_list->SearchColumnCount % $assessments_list->SearchFieldsPerRow == 0) { ?>
-</div>
-	<?php } ?>
-<?php } ?>
-	<?php if ($assessments_list->SearchColumnCount % $assessments_list->SearchFieldsPerRow > 0) { ?>
-</div>
-	<?php } ?>
 <div id="xsr_<?php echo $assessments_list->SearchRowCount + 1 ?>" class="ew-row d-sm-flex">
 	<div class="ew-quick-search input-group">
 		<input type="text" name="<?php echo Config("TABLE_BASIC_SEARCH") ?>" id="<?php echo Config("TABLE_BASIC_SEARCH") ?>" class="form-control" value="<?php echo HtmlEncode($assessments_list->BasicSearch->getKeyword()) ?>" placeholder="<?php echo HtmlEncode($Language->phrase("Search")) ?>">

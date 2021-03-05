@@ -865,8 +865,9 @@ class users_list extends users
 		}
 
 		// Set up lookup cache
-		// Search filters
+		$this->setupLookupOptions($this->user_level);
 
+		// Search filters
 		$srchAdvanced = ""; // Advanced search filter
 		$srchBasic = ""; // Basic search filter
 		$filter = "";
@@ -2292,8 +2293,22 @@ class users_list extends users
 
 			// user_level
 			if ($Security->canAdmin()) { // System admin
-				if (strval($this->user_level->CurrentValue) != "") {
-					$this->user_level->ViewValue = $this->user_level->optionCaption($this->user_level->CurrentValue);
+				$curVal = strval($this->user_level->CurrentValue);
+				if ($curVal != "") {
+					$this->user_level->ViewValue = $this->user_level->lookupCacheOption($curVal);
+					if ($this->user_level->ViewValue === NULL) { // Lookup from database
+						$filterWrk = "`userlevelid`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
+						$sqlWrk = $this->user_level->Lookup->getSql(FALSE, $filterWrk, '', $this);
+						$rswrk = Conn()->execute($sqlWrk);
+						if ($rswrk && !$rswrk->EOF) { // Lookup values found
+							$arwrk = [];
+							$arwrk[1] = $rswrk->fields('df');
+							$this->user_level->ViewValue = $this->user_level->displayValue($arwrk);
+							$rswrk->Close();
+						} else {
+							$this->user_level->ViewValue = $this->user_level->CurrentValue;
+						}
+					}
 				} else {
 					$this->user_level->ViewValue = NULL;
 				}
@@ -2346,68 +2361,7 @@ class users_list extends users
 			$this->updated_at->LinkCustomAttributes = "";
 			$this->updated_at->HrefValue = "";
 			$this->updated_at->TooltipValue = "";
-		} elseif ($this->RowType == ROWTYPE_SEARCH) { // Search row
-
-			// id
-			$this->id->EditAttrs["class"] = "form-control";
-			$this->id->EditCustomAttributes = "";
-			if (!$Security->isAdmin() && $Security->isLoggedIn() && !$this->userIDAllow($this->CurrentAction)) { // Non system admin
-				$this->id->AdvancedSearch->SearchValue = CurrentUserID();
-				$this->id->EditValue = $this->id->AdvancedSearch->SearchValue;
-				$this->id->EditValue = FormatNumber($this->id->EditValue, 0, -2, -2, -2);
-				$this->id->ViewCustomAttributes = "";
-			} else {
-				$this->id->EditValue = HtmlEncode($this->id->AdvancedSearch->SearchValue);
-				$this->id->PlaceHolder = RemoveHtml($this->id->caption());
-			}
-
-			// first_names
-			$this->first_names->EditAttrs["class"] = "form-control";
-			$this->first_names->EditCustomAttributes = "";
-			if (!$this->first_names->Raw)
-				$this->first_names->AdvancedSearch->SearchValue = HtmlDecode($this->first_names->AdvancedSearch->SearchValue);
-			$this->first_names->EditValue = HtmlEncode($this->first_names->AdvancedSearch->SearchValue);
-			$this->first_names->PlaceHolder = RemoveHtml($this->first_names->caption());
-
-			// last_names
-			$this->last_names->EditAttrs["class"] = "form-control";
-			$this->last_names->EditCustomAttributes = "";
-			if (!$this->last_names->Raw)
-				$this->last_names->AdvancedSearch->SearchValue = HtmlDecode($this->last_names->AdvancedSearch->SearchValue);
-			$this->last_names->EditValue = HtmlEncode($this->last_names->AdvancedSearch->SearchValue);
-			$this->last_names->PlaceHolder = RemoveHtml($this->last_names->caption());
-
-			// email
-			$this->_email->EditAttrs["class"] = "form-control";
-			$this->_email->EditCustomAttributes = "";
-			if (!$this->_email->Raw)
-				$this->_email->AdvancedSearch->SearchValue = HtmlDecode($this->_email->AdvancedSearch->SearchValue);
-			$this->_email->EditValue = HtmlEncode($this->_email->AdvancedSearch->SearchValue);
-			$this->_email->PlaceHolder = RemoveHtml($this->_email->caption());
-
-			// user_level
-			$this->user_level->EditAttrs["class"] = "form-control";
-			$this->user_level->EditCustomAttributes = "";
-			if (!$Security->canAdmin()) { // System admin
-				$this->user_level->EditValue = $Language->phrase("PasswordMask");
-			} else {
-				$this->user_level->EditValue = $this->user_level->options(TRUE);
-			}
-
-			// created_at
-			$this->created_at->EditAttrs["class"] = "form-control";
-			$this->created_at->EditCustomAttributes = "";
-			$this->created_at->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->created_at->AdvancedSearch->SearchValue, 0), 8));
-			$this->created_at->PlaceHolder = RemoveHtml($this->created_at->caption());
-
-			// updated_at
-			$this->updated_at->EditAttrs["class"] = "form-control";
-			$this->updated_at->EditCustomAttributes = "";
-			$this->updated_at->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->updated_at->AdvancedSearch->SearchValue, 0), 8));
-			$this->updated_at->PlaceHolder = RemoveHtml($this->updated_at->caption());
 		}
-		if ($this->RowType == ROWTYPE_ADD || $this->RowType == ROWTYPE_EDIT || $this->RowType == ROWTYPE_SEARCH) // Add/Edit/Search row
-			$this->setupFieldTitles();
 
 		// Call Row Rendered event
 		if ($this->RowType != ROWTYPE_AGGREGATEINIT)
@@ -2743,6 +2697,8 @@ class users_list extends users
 
 					// Format the field values
 					switch ($fld->FieldVar) {
+						case "x_user_level":
+							break;
 					}
 					$ar[strval($row[0])] = $row;
 					$rs->moveNext();

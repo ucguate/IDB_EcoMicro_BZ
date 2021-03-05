@@ -123,6 +123,7 @@ var jqueryjs = [
 ];
 jqueryjs.push("<?php echo $RELATIVE_PATH ?>colorbox/jquery.colorbox-min.js");
 jqueryjs.push("<?php echo $RELATIVE_PATH ?>js/pdfobject.min.js");
+jqueryjs.push("<?php echo $RELATIVE_PATH ?>jquery/jquery.ewjtable.min.js");
 ew.ready(["jquery", "widget", "scrollbars", "moment", "others"], [jqueryjs, "<?php echo $RELATIVE_PATH ?>js/ew.js"], "makerjs");
 ew.ready("makerjs", [cssjs, "<?php echo $RELATIVE_PATH ?>js/userfn.js"], "head");
 </script>
