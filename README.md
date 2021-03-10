@@ -71,6 +71,21 @@ project
 │   README.md 
 │
 ```
+# Improvements derived from the workshop 
+- Security enhancements:
+- - User level and user Level permissions: Each user level has table specific permissions that can be customized from the administrator side. This allows administrators to assign permissions to users and protect data from being editted / deleted by non administrative users. 
+- - Administrator: this user level has administrative control over the platform. Being able to add, edit, delete, and view every record on all tables. 
+- - Consultant: This user can create assessments on the Risk Assessment tool but does not have administrator access to tables such as: deleting and editing records. Consultants cannot see other user's profile nor manage user's permissions. 
+- Audit Log
+- - Audit log functionality was added in order to allow administrative users to control what other users do on the platform. This audit log allows to record the following details:
+- - - datetime: Date and time of the event's log
+- - - script: script/method thar executed the action
+- - - user: User that executed the action. 
+- - - action: Executed Action: EDIT, ADD, DELETE
+- - - table: User that executed the action.  
+- - - field: column / field changed
+- - - old_value: original value
+- - - new_value: new value. 
 
 # Instalation procedure
   1. Clone this repo
@@ -92,10 +107,6 @@ project
   5. grant permissions on: "/admin/_tools/posts"
       1. chmod 777 posts/
   6. install PHP XML parser
-  1. sudo apt-get install php7.4-xml
-  2. sudo service apache2 restart
-     
-
-
-
+  7. sudo apt-get install php7.4-xml
+  8. sudo service apache2 restart
 
