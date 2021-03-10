@@ -59,6 +59,14 @@ class questions_list extends questions
 	public $MultiDeleteUrl;
 	public $MultiUpdateUrl;
 
+	// Audit Trail
+	public $AuditTrailOnAdd = TRUE;
+	public $AuditTrailOnEdit = TRUE;
+	public $AuditTrailOnDelete = TRUE;
+	public $AuditTrailOnView = FALSE;
+	public $AuditTrailOnViewData = FALSE;
+	public $AuditTrailOnSearch = FALSE;
+
 	// Page headings
 	public $Heading = "";
 	public $Subheading = "";
@@ -1124,6 +1132,13 @@ class questions_list extends questions
 					$this->setWarningMessage($Language->phrase("EnterSearchCriteria"));
 				else
 					$this->setWarningMessage($Language->phrase("NoRecord"));
+			}
+
+			// Audit trail on search
+			if ($this->AuditTrailOnSearch && $this->Command == "search" && !$this->RestoreSearch) {
+				$searchParm = ServerVar("QUERY_STRING");
+				$searchSql = $this->getSessionWhere();
+				$this->writeAuditTrailOnSearch($searchParm, $searchSql);
 			}
 		}
 

@@ -266,6 +266,13 @@ class results extends DbTable
 	// Apply User ID filters
 	public function applyUserIDFilters($filter, $id = "")
 	{
+		global $Security;
+
+		// Add User ID filter
+		if ($Security->currentUserID() != "" && !$Security->isAdmin()) { // Non system admin
+			if ($this->getCurrentMasterTable() == "assessments" || $this->getCurrentMasterTable() == "")
+				$filter = $this->addDetailUserIDFilter($filter, "assessments"); // Add detail User ID filter
+		}
 		return $filter;
 	}
 
@@ -995,6 +1002,30 @@ class results extends DbTable
 		if (!$doc->ExportCustom) {
 			$doc->exportTableFooter();
 		}
+	}
+
+	// Add master User ID filter
+	public function addMasterUserIDFilter($filter, $currentMasterTable)
+	{
+		$filterWrk = $filter;
+		if ($currentMasterTable == "assessments") {
+			$filterWrk = $GLOBALS["assessments"]->addUserIDFilter($filterWrk);
+		}
+		return $filterWrk;
+	}
+
+	// Add detail User ID filter
+	public function addDetailUserIDFilter($filter, $currentMasterTable)
+	{
+		$filterWrk = $filter;
+		if ($currentMasterTable == "assessments") {
+			$mastertable = $GLOBALS["assessments"];
+			if (!$mastertable->userIDAllow()) {
+				$subqueryWrk = $mastertable->getUserIDSubquery($this->assessment_id, $mastertable->id);
+				AddFilter($filterWrk, $subqueryWrk);
+			}
+		}
+		return $filterWrk;
 	}
 
 	// Get file data

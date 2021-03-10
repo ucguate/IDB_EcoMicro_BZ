@@ -28,9 +28,9 @@ $sideMenu->addMenuItem(11, "mi_loan_purposes", $MenuLanguage->MenuPhrase("11", "
 $sideMenu->addMenuItem(12, "mi_loan_section", $MenuLanguage->MenuPhrase("12", "MenuText"), $MenuRelativePath . "loan_sectionlist.php", 20, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}loan_section'), FALSE, FALSE, "", "", FALSE);
 $sideMenu->addMenuItem(9, "mci_Users_Administration", $MenuLanguage->MenuPhrase("9", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE, "", "", FALSE);
 $sideMenu->addMenuItem(8, "mi_users", $MenuLanguage->MenuPhrase("8", "MenuText"), $MenuRelativePath . "userslist.php", 9, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}users'), FALSE, FALSE, "", "", FALSE);
-$sideMenu->addMenuItem(7, "mi__user_levels", $MenuLanguage->MenuPhrase("7", "MenuText"), $MenuRelativePath . "_user_levelslist.php", 9, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}user_levels'), FALSE, FALSE, "", "", FALSE);
+$sideMenu->addMenuItem(24, "mi_userlevels", $MenuLanguage->MenuPhrase("24", "MenuText"), $MenuRelativePath . "userlevelslist.php", 9, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}userlevels'), FALSE, FALSE, "", "", FALSE);
 $sideMenu->addMenuItem(43, "mci_Security", $MenuLanguage->MenuPhrase("43", "MenuText"), "", -1, "", IsLoggedIn(), FALSE, TRUE, "", "", FALSE);
-$sideMenu->addMenuItem(24, "mi_userlevels", $MenuLanguage->MenuPhrase("24", "MenuText"), $MenuRelativePath . "userlevelslist.php", 43, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}userlevels'), FALSE, FALSE, "", "", FALSE);
 $sideMenu->addMenuItem(23, "mi_userlevelpermissions", $MenuLanguage->MenuPhrase("23", "MenuText"), $MenuRelativePath . "userlevelpermissionslist.php", 43, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}userlevelpermissions'), FALSE, FALSE, "", "", FALSE);
+$sideMenu->addMenuItem(45, "mi_audittrail", $MenuLanguage->MenuPhrase("45", "MenuText"), $MenuRelativePath . "audittraillist.php", 43, "", AllowListMenu('{98C27E89-2937-4D47-9B89-35CA334C4E82}audittrail'), FALSE, FALSE, "", "", FALSE);
 echo $sideMenu->toScript();
 ?>

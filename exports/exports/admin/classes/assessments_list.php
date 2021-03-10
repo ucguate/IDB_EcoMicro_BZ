@@ -59,6 +59,14 @@ class assessments_list extends assessments
 	public $MultiDeleteUrl;
 	public $MultiUpdateUrl;
 
+	// Audit Trail
+	public $AuditTrailOnAdd = TRUE;
+	public $AuditTrailOnEdit = TRUE;
+	public $AuditTrailOnDelete = TRUE;
+	public $AuditTrailOnView = FALSE;
+	public $AuditTrailOnViewData = FALSE;
+	public $AuditTrailOnSearch = FALSE;
+
 	// Page headings
 	public $Heading = "";
 	public $Subheading = "";
@@ -783,6 +791,11 @@ class assessments_list extends assessments
 				$Security->UserID_Loading();
 				$Security->loadUserID();
 				$Security->UserID_Loaded();
+				if (strval($Security->currentUserID()) == "") {
+					$this->setFailureMessage(DeniedMessage()); // Set no permission
+					$this->terminate();
+					return;
+				}
 			}
 		}
 
@@ -1110,6 +1123,13 @@ class assessments_list extends assessments
 					$this->setWarningMessage($Language->phrase("EnterSearchCriteria"));
 				else
 					$this->setWarningMessage($Language->phrase("NoRecord"));
+			}
+
+			// Audit trail on search
+			if ($this->AuditTrailOnSearch && $this->Command == "search" && !$this->RestoreSearch) {
+				$searchParm = ServerVar("QUERY_STRING");
+				$searchSql = $this->getSessionWhere();
+				$this->writeAuditTrailOnSearch($searchParm, $searchSql);
 			}
 		}
 
@@ -1767,7 +1787,7 @@ class assessments_list extends assessments
 		// "view"
 		$opt = $this->ListOptions["view"];
 		$viewcaption = HtmlTitle($Language->phrase("ViewLink"));
-		if ($Security->canView()) {
+		if ($Security->canView() && $this->showOptionLink('view')) {
 			if (IsMobile())
 				$opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-caption=\"" . $viewcaption . "\" href=\"" . HtmlEncode($this->ViewUrl) . "\">" . $Language->phrase("ViewLink") . "</a>";
 			else
@@ -1779,7 +1799,7 @@ class assessments_list extends assessments
 		// "edit"
 		$opt = $this->ListOptions["edit"];
 		$editcaption = HtmlTitle($Language->phrase("EditLink"));
-		if ($Security->canEdit()) {
+		if ($Security->canEdit() && $this->showOptionLink('edit')) {
 			if (IsMobile())
 				$opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode($this->EditUrl) . "\">" . $Language->phrase("EditLink") . "</a>";
 			else
@@ -1791,7 +1811,7 @@ class assessments_list extends assessments
 		// "copy"
 		$opt = $this->ListOptions["copy"];
 		$copycaption = HtmlTitle($Language->phrase("CopyLink"));
-		if ($Security->canAdd()) {
+		if ($Security->canAdd() && $this->showOptionLink('add')) {
 			if (IsMobile())
 				$opt->Body = "<a class=\"ew-row-link ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"" . HtmlEncode($this->CopyUrl) . "\">" . $Language->phrase("CopyLink") . "</a>";
 			else
@@ -1802,7 +1822,7 @@ class assessments_list extends assessments
 
 		// "delete"
 		$opt = $this->ListOptions["delete"];
-		if ($Security->canDelete())
+		if ($Security->canDelete() && $this->showOptionLink('delete'))
 			$opt->Body = "<a class=\"ew-row-link ew-delete\"" . " onclick=\"return ew.confirmDelete(this);\"" . " title=\"" . HtmlTitle($Language->phrase("DeleteLink")) . "\" data-caption=\"" . HtmlTitle($Language->phrase("DeleteLink")) . "\" href=\"" . HtmlEncode($this->DeleteUrl) . "\">" . $Language->phrase("DeleteLink") . "</a>";
 		else
 			$opt->Body = "";
@@ -1841,12 +1861,12 @@ class assessments_list extends assessments
 
 		// "detail_results"
 		$opt = $this->ListOptions["detail_results"];
-		if ($Security->allowList(CurrentProjectID() . 'results')) {
+		if ($Security->allowList(CurrentProjectID() . 'results') && $this->showOptionLink()) {
 			$body = $Language->phrase("DetailLink") . $Language->TablePhrase("results", "TblCaption");
 			$body .= "&nbsp;" . str_replace("%c", $this->results_Count, $Language->phrase("DetailCount"));
 			$body = "<a class=\"btn btn-default ew-row-link ew-detail\" data-action=\"list\" href=\"" . HtmlEncode("resultslist.php?" . Config("TABLE_SHOW_MASTER") . "=assessments&fk_id=" . urlencode(strval($this->id->CurrentValue)) . "") . "\">" . $body . "</a>";
 			$links = "";
-			if ($GLOBALS["results_grid"]->DetailView && $Security->canView() && $Security->allowView(CurrentProjectID() . 'assessments')) {
+			if ($GLOBALS["results_grid"]->DetailView && $Security->canView() && $this->showOptionLink('view') && $Security->allowView(CurrentProjectID() . 'assessments')) {
 				$caption = $Language->phrase("MasterDetailViewLink");
 				$url = $this->getViewUrl(Config("TABLE_SHOW_DETAIL") . "=results");
 				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
@@ -1854,7 +1874,7 @@ class assessments_list extends assessments
 					$detailViewTblVar .= ",";
 				$detailViewTblVar .= "results";
 			}
-			if ($GLOBALS["results_grid"]->DetailEdit && $Security->canEdit() && $Security->allowEdit(CurrentProjectID() . 'assessments')) {
+			if ($GLOBALS["results_grid"]->DetailEdit && $Security->canEdit() && $this->showOptionLink('edit') && $Security->allowEdit(CurrentProjectID() . 'assessments')) {
 				$caption = $Language->phrase("MasterDetailEditLink");
 				$url = $this->getEditUrl(Config("TABLE_SHOW_DETAIL") . "=results");
 				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
@@ -1862,7 +1882,7 @@ class assessments_list extends assessments
 					$detailEditTblVar .= ",";
 				$detailEditTblVar .= "results";
 			}
-			if ($GLOBALS["results_grid"]->DetailAdd && $Security->canAdd() && $Security->allowAdd(CurrentProjectID() . 'assessments')) {
+			if ($GLOBALS["results_grid"]->DetailAdd && $Security->canAdd() && $this->showOptionLink('add') && $Security->allowAdd(CurrentProjectID() . 'assessments')) {
 				$caption = $Language->phrase("MasterDetailCopyLink");
 				$url = $this->getCopyUrl(Config("TABLE_SHOW_DETAIL") . "=results");
 				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
@@ -1882,12 +1902,12 @@ class assessments_list extends assessments
 
 		// "detail_answers"
 		$opt = $this->ListOptions["detail_answers"];
-		if ($Security->allowList(CurrentProjectID() . 'answers')) {
+		if ($Security->allowList(CurrentProjectID() . 'answers') && $this->showOptionLink()) {
 			$body = $Language->phrase("DetailLink") . $Language->TablePhrase("answers", "TblCaption");
 			$body .= "&nbsp;" . str_replace("%c", $this->answers_Count, $Language->phrase("DetailCount"));
 			$body = "<a class=\"btn btn-default ew-row-link ew-detail\" data-action=\"list\" href=\"" . HtmlEncode("answerslist.php?" . Config("TABLE_SHOW_MASTER") . "=assessments&fk_id=" . urlencode(strval($this->id->CurrentValue)) . "") . "\">" . $body . "</a>";
 			$links = "";
-			if ($GLOBALS["answers_grid"]->DetailView && $Security->canView() && $Security->allowView(CurrentProjectID() . 'assessments')) {
+			if ($GLOBALS["answers_grid"]->DetailView && $Security->canView() && $this->showOptionLink('view') && $Security->allowView(CurrentProjectID() . 'assessments')) {
 				$caption = $Language->phrase("MasterDetailViewLink");
 				$url = $this->getViewUrl(Config("TABLE_SHOW_DETAIL") . "=answers");
 				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
@@ -1895,7 +1915,7 @@ class assessments_list extends assessments
 					$detailViewTblVar .= ",";
 				$detailViewTblVar .= "answers";
 			}
-			if ($GLOBALS["answers_grid"]->DetailEdit && $Security->canEdit() && $Security->allowEdit(CurrentProjectID() . 'assessments')) {
+			if ($GLOBALS["answers_grid"]->DetailEdit && $Security->canEdit() && $this->showOptionLink('edit') && $Security->allowEdit(CurrentProjectID() . 'assessments')) {
 				$caption = $Language->phrase("MasterDetailEditLink");
 				$url = $this->getEditUrl(Config("TABLE_SHOW_DETAIL") . "=answers");
 				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
@@ -1903,7 +1923,7 @@ class assessments_list extends assessments
 					$detailEditTblVar .= ",";
 				$detailEditTblVar .= "answers";
 			}
-			if ($GLOBALS["answers_grid"]->DetailAdd && $Security->canAdd() && $Security->allowAdd(CurrentProjectID() . 'assessments')) {
+			if ($GLOBALS["answers_grid"]->DetailAdd && $Security->canAdd() && $this->showOptionLink('add') && $Security->allowAdd(CurrentProjectID() . 'assessments')) {
 				$caption = $Language->phrase("MasterDetailCopyLink");
 				$url = $this->getCopyUrl(Config("TABLE_SHOW_DETAIL") . "=answers");
 				$links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlTitle($caption) . "\" href=\"" . HtmlEncode($url) . "\">" . HtmlImageAndText($caption) . "</a></li>";
@@ -2873,6 +2893,15 @@ class assessments_list extends assessments
 				return $content;
 			}
 		}
+	}
+
+	// Show link optionally based on User ID
+	protected function showOptionLink($id = "")
+	{
+		global $Security;
+		if ($Security->isLoggedIn() && !$Security->isAdmin() && !$this->userIDAllow($id))
+			return $Security->isValidUserID($this->user_id->CurrentValue);
+		return TRUE;
 	}
 
 	// Set up master/detail based on QueryString

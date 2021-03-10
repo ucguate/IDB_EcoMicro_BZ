@@ -21,6 +21,14 @@ class assessments extends DbTable
 	public $OffsetColumnClass = "col-sm-10 offset-sm-2";
 	public $TableLeftColumnClass = "w-col-2";
 
+	// Audit trail
+	public $AuditTrailOnAdd = TRUE;
+	public $AuditTrailOnEdit = TRUE;
+	public $AuditTrailOnDelete = TRUE;
+	public $AuditTrailOnView = FALSE;
+	public $AuditTrailOnViewData = FALSE;
+	public $AuditTrailOnSearch = FALSE;
+
 	// Export
 	public $ExportDoc;
 
@@ -437,12 +445,7 @@ class assessments extends DbTable
 
 		// Add User ID filter
 		if ($Security->currentUserID() != "" && !$Security->isAdmin()) { // Non system admin
-			if ($this->getCurrentMasterTable() == "users" || $this->getCurrentMasterTable() == "")
-				$filter = $this->addDetailUserIDFilter($filter, "users"); // Add detail User ID filter
-			if ($this->getCurrentMasterTable() == "loan_purposes" || $this->getCurrentMasterTable() == "")
-				$filter = $this->addDetailUserIDFilter($filter, "loan_purposes"); // Add detail User ID filter
-			if ($this->getCurrentMasterTable() == "loan_section" || $this->getCurrentMasterTable() == "")
-				$filter = $this->addDetailUserIDFilter($filter, "loan_section"); // Add detail User ID filter
+			$filter = $this->addUserIDFilter($filter, $id);
 		}
 		return $filter;
 	}
@@ -614,6 +617,8 @@ class assessments extends DbTable
 			// Get insert id if necessary
 			$this->id->setDbValue($conn->insert_ID());
 			$rs['id'] = $this->id->DbValue;
+			if ($this->AuditTrailOnAdd)
+				$this->writeAuditTrailOnAdd($rs);
 		}
 		return $success;
 	}
@@ -674,6 +679,13 @@ class assessments extends DbTable
 			}
 		}
 		$success = $conn->execute($this->updateSql($rs, $where, $curfilter));
+		if ($success && $this->AuditTrailOnEdit && $rsold) {
+			$rsaudit = $rs;
+			$fldname = 'id';
+			if (!array_key_exists($fldname, $rsaudit))
+				$rsaudit[$fldname] = $rsold[$fldname];
+			$this->writeAuditTrailOnEdit($rsold, $rsaudit);
+		}
 		return $success;
 	}
 
@@ -729,6 +741,8 @@ class assessments extends DbTable
 		}
 		if ($success)
 			$success = $conn->execute($this->deleteSql($rs, $where, $curfilter));
+		if ($success && $this->AuditTrailOnDelete)
+			$this->writeAuditTrailOnDelete($rs);
 		return $success;
 	}
 
@@ -1324,6 +1338,31 @@ class assessments extends DbTable
 				$this->user_id->ViewValue = NULL;
 			}
 			$this->user_id->ViewCustomAttributes = "";
+		} elseif (!$Security->isAdmin() && $Security->isLoggedIn() && !$this->userIDAllow("info")) { // Non system admin
+			$this->user_id->CurrentValue = CurrentUserID();
+			$this->user_id->EditValue = $this->user_id->CurrentValue;
+			$curVal = strval($this->user_id->CurrentValue);
+			if ($curVal != "") {
+				$this->user_id->EditValue = $this->user_id->lookupCacheOption($curVal);
+				if ($this->user_id->EditValue === NULL) { // Lookup from database
+					$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
+					$sqlWrk = $this->user_id->Lookup->getSql(FALSE, $filterWrk, '', $this);
+					$rswrk = Conn()->execute($sqlWrk);
+					if ($rswrk && !$rswrk->EOF) { // Lookup values found
+						$arwrk = [];
+						$arwrk[1] = FormatNumber($rswrk->fields('df'), 0, -2, -2, -2);
+						$arwrk[2] = $rswrk->fields('df2');
+						$arwrk[3] = $rswrk->fields('df3');
+						$this->user_id->EditValue = $this->user_id->displayValue($arwrk);
+						$rswrk->Close();
+					} else {
+						$this->user_id->EditValue = $this->user_id->CurrentValue;
+					}
+				}
+			} else {
+				$this->user_id->EditValue = NULL;
+			}
+			$this->user_id->ViewCustomAttributes = "";
 		} else {
 			$this->user_id->EditValue = $this->user_id->CurrentValue;
 			$this->user_id->PlaceHolder = RemoveHtml($this->user_id->caption());
@@ -1630,6 +1669,58 @@ class assessments extends DbTable
 		}
 	}
 
+	// Add User ID filter
+	public function addUserIDFilter($filter = "", $id = "")
+	{
+		global $Security;
+		$filterWrk = "";
+		if ($id == "")
+			$id = (CurrentPageID() == "list") ? $this->CurrentAction : CurrentPageID();
+		if (!$this->userIDAllow($id) && !$Security->isAdmin()) {
+			$filterWrk = $Security->userIdList();
+			if ($filterWrk != "")
+				$filterWrk = '`user_id` IN (' . $filterWrk . ')';
+		}
+
+		// Call User ID Filtering event
+		$this->UserID_Filtering($filterWrk);
+		AddFilter($filter, $filterWrk);
+		return $filter;
+	}
+
+	// User ID subquery
+	public function getUserIDSubquery(&$fld, &$masterfld)
+	{
+		global $UserTable;
+		$wrk = "";
+		$sql = "SELECT " . $masterfld->Expression . " FROM `assessments`";
+		$filter = $this->addUserIDFilter("");
+		if ($filter != "")
+			$sql .= " WHERE " . $filter;
+
+		// Use subquery
+		if (Config("USE_SUBQUERY_FOR_MASTER_USER_ID")) {
+			$wrk = $sql;
+		} else {
+
+			// List all values
+			if ($rs = Conn($UserTable->Dbid)->execute($sql)) {
+				while (!$rs->EOF) {
+					if ($wrk != "")
+						$wrk .= ",";
+					$wrk .= QuotedValue($rs->fields[0], $masterfld->DataType, Config("USER_TABLE_DBID"));
+					$rs->moveNext();
+				}
+				$rs->close();
+			}
+		}
+		if ($wrk != "")
+			$wrk = $fld->Expression . " IN (" . $wrk . ")";
+		else
+			$wrk = "0=1"; // No User ID value found
+		return $wrk;
+	}
+
 	// Add master User ID filter
 	public function addMasterUserIDFilter($filter, $currentMasterTable)
 	{
@@ -1660,6 +1751,138 @@ class assessments extends DbTable
 
 		// No binary fields
 		return FALSE;
+	}
+
+	// Write Audit Trail start/end for grid update
+	public function writeAuditTrailDummy($typ)
+	{
+		$table = 'assessments';
+		$usr = CurrentUserID();
+		WriteAuditTrail("log", DbCurrentDateTime(), ScriptName(), $usr, $typ, $table, "", "", "", "");
+	}
+
+	// Write Audit Trail (add page)
+	public function writeAuditTrailOnAdd(&$rs)
+	{
+		global $Language;
+		if (!$this->AuditTrailOnAdd)
+			return;
+		$table = 'assessments';
+
+		// Get key value
+		$key = "";
+		if ($key != "")
+			$key .= Config("COMPOSITE_KEY_SEPARATOR");
+		$key .= $rs['id'];
+
+		// Write Audit Trail
+		$dt = DbCurrentDateTime();
+		$id = ScriptName();
+		$usr = CurrentUserID();
+		foreach (array_keys($rs) as $fldname) {
+			if (array_key_exists($fldname, $this->fields) && $this->fields[$fldname]->DataType != DATATYPE_BLOB) { // Ignore BLOB fields
+				if ($this->fields[$fldname]->HtmlTag == "PASSWORD") {
+					$newvalue = $Language->phrase("PasswordMask"); // Password Field
+				} elseif ($this->fields[$fldname]->DataType == DATATYPE_MEMO) {
+					if (Config("AUDIT_TRAIL_TO_DATABASE"))
+						$newvalue = $rs[$fldname];
+					else
+						$newvalue = "[MEMO]"; // Memo Field
+				} elseif ($this->fields[$fldname]->DataType == DATATYPE_XML) {
+					$newvalue = "[XML]"; // XML Field
+				} else {
+					$newvalue = $rs[$fldname];
+				}
+				WriteAuditTrail("log", $dt, $id, $usr, "A", $table, $fldname, $key, "", $newvalue);
+			}
+		}
+	}
+
+	// Write Audit Trail (edit page)
+	public function writeAuditTrailOnEdit(&$rsold, &$rsnew)
+	{
+		global $Language;
+		if (!$this->AuditTrailOnEdit)
+			return;
+		$table = 'assessments';
+
+		// Get key value
+		$key = "";
+		if ($key != "")
+			$key .= Config("COMPOSITE_KEY_SEPARATOR");
+		$key .= $rsold['id'];
+
+		// Write Audit Trail
+		$dt = DbCurrentDateTime();
+		$id = ScriptName();
+		$usr = CurrentUserID();
+		foreach (array_keys($rsnew) as $fldname) {
+			if (array_key_exists($fldname, $this->fields) && array_key_exists($fldname, $rsold) && $this->fields[$fldname]->DataType != DATATYPE_BLOB) { // Ignore BLOB fields
+				if ($this->fields[$fldname]->DataType == DATATYPE_DATE) { // DateTime field
+					$modified = (FormatDateTime($rsold[$fldname], 0) != FormatDateTime($rsnew[$fldname], 0));
+				} else {
+					$modified = !CompareValue($rsold[$fldname], $rsnew[$fldname]);
+				}
+				if ($modified) {
+					if ($this->fields[$fldname]->HtmlTag == "PASSWORD") { // Password Field
+						$oldvalue = $Language->phrase("PasswordMask");
+						$newvalue = $Language->phrase("PasswordMask");
+					} elseif ($this->fields[$fldname]->DataType == DATATYPE_MEMO) { // Memo field
+						if (Config("AUDIT_TRAIL_TO_DATABASE")) {
+							$oldvalue = $rsold[$fldname];
+							$newvalue = $rsnew[$fldname];
+						} else {
+							$oldvalue = "[MEMO]";
+							$newvalue = "[MEMO]";
+						}
+					} elseif ($this->fields[$fldname]->DataType == DATATYPE_XML) { // XML field
+						$oldvalue = "[XML]";
+						$newvalue = "[XML]";
+					} else {
+						$oldvalue = $rsold[$fldname];
+						$newvalue = $rsnew[$fldname];
+					}
+					WriteAuditTrail("log", $dt, $id, $usr, "U", $table, $fldname, $key, $oldvalue, $newvalue);
+				}
+			}
+		}
+	}
+
+	// Write Audit Trail (delete page)
+	public function writeAuditTrailOnDelete(&$rs)
+	{
+		global $Language;
+		if (!$this->AuditTrailOnDelete)
+			return;
+		$table = 'assessments';
+
+		// Get key value
+		$key = "";
+		if ($key != "")
+			$key .= Config("COMPOSITE_KEY_SEPARATOR");
+		$key .= $rs['id'];
+
+		// Write Audit Trail
+		$dt = DbCurrentDateTime();
+		$id = ScriptName();
+		$curUser = CurrentUserID();
+		foreach (array_keys($rs) as $fldname) {
+			if (array_key_exists($fldname, $this->fields) && $this->fields[$fldname]->DataType != DATATYPE_BLOB) { // Ignore BLOB fields
+				if ($this->fields[$fldname]->HtmlTag == "PASSWORD") {
+					$oldvalue = $Language->phrase("PasswordMask"); // Password Field
+				} elseif ($this->fields[$fldname]->DataType == DATATYPE_MEMO) {
+					if (Config("AUDIT_TRAIL_TO_DATABASE"))
+						$oldvalue = $rs[$fldname];
+					else
+						$oldvalue = "[MEMO]"; // Memo field
+				} elseif ($this->fields[$fldname]->DataType == DATATYPE_XML) {
+					$oldvalue = "[XML]"; // XML field
+				} else {
+					$oldvalue = $rs[$fldname];
+				}
+				WriteAuditTrail("log", $dt, $id, $curUser, "D", $table, $fldname, $key, $oldvalue, "");
+			}
+		}
 	}
 
 	// Table level events

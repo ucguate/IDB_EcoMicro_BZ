@@ -347,6 +347,10 @@ class questions_answers_search extends questions_answers
 			$GLOBALS["Table"] = &$GLOBALS["questions_answers"];
 		}
 
+		// Table object (assessments)
+		if (!isset($GLOBALS['assessments']))
+			$GLOBALS['assessments'] = new assessments();
+
 		// Table object (users)
 		if (!isset($GLOBALS['users']))
 			$GLOBALS['users'] = new users();

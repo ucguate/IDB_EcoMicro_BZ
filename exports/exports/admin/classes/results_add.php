@@ -1150,6 +1150,34 @@ class results_add extends results
 	{
 		global $Language, $Security;
 
+		// Check if valid key values for master user
+		if ($Security->currentUserID() != "" && !$Security->isAdmin()) { // Non system admin
+			$masterFilter = $this->sqlMasterFilter_assessments();
+			if (strval($this->assessment_id->CurrentValue) != "") {
+				$masterFilter = str_replace("@id@", AdjustSql($this->assessment_id->CurrentValue, "DB"), $masterFilter);
+			} else {
+				$masterFilter = "";
+			}
+			if ($masterFilter != "") {
+				$rsmaster = $GLOBALS["assessments"]->loadRs($masterFilter);
+				$this->MasterRecordExists = ($rsmaster && !$rsmaster->EOF);
+				$validMasterKey = TRUE;
+				if ($this->MasterRecordExists) {
+					$validMasterKey = $Security->isValidUserID($rsmaster->fields['user_id']);
+				} elseif ($this->getCurrentMasterTable() == "assessments") {
+					$validMasterKey = FALSE;
+				}
+				if (!$validMasterKey) {
+					$masterUserIdMsg = str_replace("%c", CurrentUserID(), $Language->phrase("UnAuthorizedMasterUserID"));
+					$masterUserIdMsg = str_replace("%f", $sMasterFilter, $masterUserIdMsg);
+					$this->setFailureMessage($masterUserIdMsg);
+					return FALSE;
+				}
+				if ($rsmaster)
+					$rsmaster->close();
+			}
+		}
+
 		// Check referential integrity for master table 'results'
 		$validMasterRecord = TRUE;
 		$masterFilter = $this->sqlMasterFilter_assessments();

@@ -161,7 +161,7 @@ $CONFIG = [
 
 	// General
 	"UNFORMAT_YEAR" => 50, // Unformat year
-	"RANDOM_KEY" => 'wpq1IjcFezlpLG2Y', // Random key for encryption
+	"RANDOM_KEY" => '40RXXu3xcUH8pwpT', // Random key for encryption
 	"ENCRYPTION_KEY" => '', // Encryption key for data protection
 	"PROJECT_STYLESHEET_FILENAME" => "css/IDB_EcoMicro_BZ.css", // Project stylesheet file name
 	"PROJECT_CHARSET" => "utf-8", // Project charset
@@ -305,19 +305,19 @@ $CONFIG = [
 	"TABLE_GRID_ADD_ROW_COUNT" => "gridaddcnt", // Grid add row count
 
 	// Audit Trail
-	"AUDIT_TRAIL_TO_DATABASE" => FALSE, // Write audit trail to DB
+	"AUDIT_TRAIL_TO_DATABASE" => TRUE, // Write audit trail to DB
 	"AUDIT_TRAIL_DBID" => "DB", // Audit trail DBID
-	"AUDIT_TRAIL_TABLE_NAME" => "", // Audit trail table name
-	"AUDIT_TRAIL_TABLE_VAR" => "", // Audit trail table var
-	"AUDIT_TRAIL_FIELD_NAME_DATETIME" => "", // Audit trail DateTime field name
-	"AUDIT_TRAIL_FIELD_NAME_SCRIPT" => "", // Audit trail Script field name
-	"AUDIT_TRAIL_FIELD_NAME_USER" => "", // Audit trail User field name
-	"AUDIT_TRAIL_FIELD_NAME_ACTION" => "", // Audit trail Action field name
-	"AUDIT_TRAIL_FIELD_NAME_TABLE" => "", // Audit trail Table field name
-	"AUDIT_TRAIL_FIELD_NAME_FIELD" => "", // Audit trail Field field name
-	"AUDIT_TRAIL_FIELD_NAME_KEYVALUE" => "", // Audit trail Key Value field name
-	"AUDIT_TRAIL_FIELD_NAME_OLDVALUE" => "", // Audit trail Old Value field name
-	"AUDIT_TRAIL_FIELD_NAME_NEWVALUE" => "", // Audit trail New Value field name
+	"AUDIT_TRAIL_TABLE_NAME" => "audittrail", // Audit trail table name
+	"AUDIT_TRAIL_TABLE_VAR" => "audittrail", // Audit trail table var
+	"AUDIT_TRAIL_FIELD_NAME_DATETIME" => "datetime", // Audit trail DateTime field name
+	"AUDIT_TRAIL_FIELD_NAME_SCRIPT" => "script", // Audit trail Script field name
+	"AUDIT_TRAIL_FIELD_NAME_USER" => "user", // Audit trail User field name
+	"AUDIT_TRAIL_FIELD_NAME_ACTION" => "action", // Audit trail Action field name
+	"AUDIT_TRAIL_FIELD_NAME_TABLE" => "table", // Audit trail Table field name
+	"AUDIT_TRAIL_FIELD_NAME_FIELD" => "field", // Audit trail Field field name
+	"AUDIT_TRAIL_FIELD_NAME_KEYVALUE" => "keyvalue", // Audit trail Key Value field name
+	"AUDIT_TRAIL_FIELD_NAME_OLDVALUE" => "oldvalue", // Audit trail Old Value field name
+	"AUDIT_TRAIL_FIELD_NAME_NEWVALUE" => "newvalue", // Audit trail New Value field name
 
 	// Security
 	"ENCRYPTION_ENABLED" => FALSE, // Encryption enabled

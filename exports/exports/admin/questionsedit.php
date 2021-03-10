@@ -336,8 +336,8 @@ loadjs.ready(["fquestionsedit"], function() {
 $selwrk = ConvertToBool($questions_edit->active->CurrentValue) ? " checked" : "";
 ?>
 <div class="custom-control custom-checkbox d-inline-block">
-	<input type="checkbox" class="custom-control-input" data-table="questions" data-field="x_active" name="x_active[]" id="x_active[]_829829" value="1"<?php echo $selwrk ?><?php echo $questions_edit->active->editAttributes() ?>>
-	<label class="custom-control-label" for="x_active[]_829829"></label>
+	<input type="checkbox" class="custom-control-input" data-table="questions" data-field="x_active" name="x_active[]" id="x_active[]_734832" value="1"<?php echo $selwrk ?><?php echo $questions_edit->active->editAttributes() ?>>
+	<label class="custom-control-label" for="x_active[]_734832"></label>
 </div>
 </span>
 <?php echo $questions_edit->active->CustomMsg ?></div></div>

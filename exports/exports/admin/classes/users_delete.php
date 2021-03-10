@@ -19,6 +19,14 @@ class users_delete extends users
 	// Page object name
 	public $PageObjName = "users_delete";
 
+	// Audit Trail
+	public $AuditTrailOnAdd = TRUE;
+	public $AuditTrailOnEdit = TRUE;
+	public $AuditTrailOnDelete = TRUE;
+	public $AuditTrailOnView = FALSE;
+	public $AuditTrailOnViewData = FALSE;
+	public $AuditTrailOnSearch = FALSE;
+
 	// Page headings
 	public $Heading = "";
 	public $Subheading = "";
@@ -929,6 +937,8 @@ class users_delete extends users
 		}
 		$rows = ($rs) ? $rs->getRows() : [];
 		$conn->beginTrans();
+		if ($this->AuditTrailOnDelete)
+			$this->writeAuditTrailDummy($Language->phrase("BatchDeleteBegin")); // Batch delete begin
 
 		// Clone old rows
 		$rsold = $rows;
@@ -977,8 +987,12 @@ class users_delete extends users
 		}
 		if ($deleteRows) {
 			$conn->commitTrans(); // Commit the changes
+			if ($this->AuditTrailOnDelete)
+				$this->writeAuditTrailDummy($Language->phrase("BatchDeleteSuccess")); // Batch delete success
 		} else {
 			$conn->rollbackTrans(); // Rollback changes
+			if ($this->AuditTrailOnDelete)
+				$this->writeAuditTrailDummy($Language->phrase("BatchDeleteRollback")); // Batch delete rollback
 		}
 
 		// Call Row Deleted event

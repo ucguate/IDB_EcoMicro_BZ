@@ -38,10 +38,14 @@ $USER_LEVEL_PRIVS = [["{98C27E89-2937-4D47-9B89-35CA334C4E82}answers","-2","0"],
 	["{98C27E89-2937-4D47-9B89-35CA334C4E82}view1","0","104"],
 	["{98C27E89-2937-4D47-9B89-35CA334C4E82}questions-answers","-2","0"],
 	["{98C27E89-2937-4D47-9B89-35CA334C4E82}questions-answers","0","0"],
+	["{98C27E89-2937-4D47-9B89-35CA334C4E82}key_value","-2","0"],
+	["{98C27E89-2937-4D47-9B89-35CA334C4E82}key_value","0","0"],
 	["{98C27E89-2937-4D47-9B89-35CA334C4E82}userlevelpermissions","-2","0"],
 	["{98C27E89-2937-4D47-9B89-35CA334C4E82}userlevelpermissions","0","0"],
 	["{98C27E89-2937-4D47-9B89-35CA334C4E82}userlevels","-2","0"],
-	["{98C27E89-2937-4D47-9B89-35CA334C4E82}userlevels","0","0"]];
+	["{98C27E89-2937-4D47-9B89-35CA334C4E82}userlevels","0","0"],
+	["{98C27E89-2937-4D47-9B89-35CA334C4E82}audittrail","-2","0"],
+	["{98C27E89-2937-4D47-9B89-35CA334C4E82}audittrail","0","0"]];
 
 // User level table info
 $USER_LEVEL_TABLES = [["answers","answers","Answers",true,"{98C27E89-2937-4D47-9B89-35CA334C4E82}"],
@@ -58,5 +62,7 @@ $USER_LEVEL_TABLES = [["answers","answers","Answers",true,"{98C27E89-2937-4D47-9
 	["question_groups","question_groups","Question Groups",true,"{98C27E89-2937-4D47-9B89-35CA334C4E82}"],
 	["view1","view1","view 1",true,"{98C27E89-2937-4D47-9B89-35CA334C4E82}"],
 	["questions-answers","questions_answers","questions answers",true,"{98C27E89-2937-4D47-9B89-35CA334C4E82}"],
-	["userlevelpermissions","userlevelpermissions","userlevelpermissions",true,"{98C27E89-2937-4D47-9B89-35CA334C4E82}"],
-	["userlevels","userlevels","userlevels",true,"{98C27E89-2937-4D47-9B89-35CA334C4E82}"]];
+	["key_value","key_value","key value",true,"{98C27E89-2937-4D47-9B89-35CA334C4E82}"],
+	["userlevelpermissions","userlevelpermissions","User Level Permissions",true,"{98C27E89-2937-4D47-9B89-35CA334C4E82}"],
+	["userlevels","userlevels","User Levels",true,"{98C27E89-2937-4D47-9B89-35CA334C4E82}"],
+	["audittrail","audittrail","Audit Log",true,"{98C27E89-2937-4D47-9B89-35CA334C4E82}"]];

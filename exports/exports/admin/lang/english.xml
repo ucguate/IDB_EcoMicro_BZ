@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<ew-language date="2021/3/4" version="16.0.1" id="en" name="English" desc="English" author="e.World Technology Ltd.">
+<ew-language date="2021/3/10" version="16.0.1" id="en" name="English" desc="English" author="e.World Technology Ltd.">
   <!--
 	*** Important Notes:
 	1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
@@ -856,6 +856,9 @@
   <project>
     <phrase id="bodytitle" value="Risk Assessment Tool" />
     <phrase id="footertext" value="&amp;copy;2020 IDB LAB" />
+    <menu id="44">
+      <phrase id="menutext" value="key value" />
+    </menu>
     <menu id="22">
       <phrase id="menutext" value="questions answers" />
     </menu>
@@ -907,14 +910,17 @@
     <menu id="7">
       <phrase id="menutext" value="User levels" />
     </menu>
-    <menu id="43">
-      <phrase id="menutext" value="Security" />
-    </menu>
     <menu id="24">
       <phrase id="menutext" value="User Levels" />
     </menu>
+    <menu id="43">
+      <phrase id="menutext" value="Security" />
+    </menu>
     <menu id="23">
       <phrase id="menutext" value="User Level Permissions" />
+    </menu>
+    <menu id="45">
+      <phrase id="menutext" value="Log" />
     </menu>
     <table id="answers">
       <phrase id="tblcaption" value="Answers" />
@@ -1461,8 +1467,20 @@
         <phrase id="fldcaption" value="loan sector id" />
       </field>
     </table>
+    <table id="key_value">
+      <phrase id="tblcaption" value="key value" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="name">
+        <phrase id="fldcaption" value="name" />
+      </field>
+      <field id="value">
+        <phrase id="fldcaption" value="value" />
+      </field>
+    </table>
     <table id="userlevelpermissions">
-      <phrase id="tblcaption" value="userlevelpermissions" />
+      <phrase id="tblcaption" value="User Level Permissions" />
       <field id="userlevelid">
         <phrase id="fldcaption" value="Level Id" />
       </field>
@@ -1474,12 +1492,45 @@
       </field>
     </table>
     <table id="userlevels">
-      <phrase id="tblcaption" value="userlevels" />
+      <phrase id="tblcaption" value="User Levels" />
       <field id="userlevelid">
         <phrase id="fldcaption" value="Level Id" />
       </field>
       <field id="userlevelname">
         <phrase id="fldcaption" value="Level Name" />
+      </field>
+    </table>
+    <table id="audittrail">
+      <phrase id="tblcaption" value="Audit Log" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="datetime">
+        <phrase id="fldcaption" value="datetime" />
+      </field>
+      <field id="script">
+        <phrase id="fldcaption" value="script" />
+      </field>
+      <field id="user">
+        <phrase id="fldcaption" value="user" />
+      </field>
+      <field id="_action">
+        <phrase id="fldcaption" value="action" />
+      </field>
+      <field id="_table">
+        <phrase id="fldcaption" value="table" />
+      </field>
+      <field id="field">
+        <phrase id="fldcaption" value="field" />
+      </field>
+      <field id="keyvalue">
+        <phrase id="fldcaption" value="keyvalue" />
+      </field>
+      <field id="oldvalue">
+        <phrase id="fldcaption" value="oldvalue" />
+      </field>
+      <field id="newvalue">
+        <phrase id="fldcaption" value="newvalue" />
       </field>
     </table>
   </project>

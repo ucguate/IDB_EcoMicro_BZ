@@ -51,6 +51,14 @@ class questions_view extends questions
 	public $MultiDeleteUrl;
 	public $MultiUpdateUrl;
 
+	// Audit Trail
+	public $AuditTrailOnAdd = TRUE;
+	public $AuditTrailOnEdit = TRUE;
+	public $AuditTrailOnDelete = TRUE;
+	public $AuditTrailOnView = FALSE;
+	public $AuditTrailOnViewData = FALSE;
+	public $AuditTrailOnSearch = FALSE;
+
 	// Page headings
 	public $Heading = "";
 	public $Subheading = "";
@@ -1047,6 +1055,8 @@ class questions_view extends questions
 		$this->Row_Selected($row);
 		if (!$rs || $rs->EOF)
 			return;
+		if ($this->AuditTrailOnView)
+			$this->writeAuditTrailOnView($row);
 		$this->id->setDbValue($row['id']);
 		$this->title->setDbValue($row['title']);
 		$this->placeholder->setDbValue($row['placeholder']);

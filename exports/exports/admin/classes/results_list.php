@@ -939,6 +939,12 @@ class results_list extends results
 		// Restore master/detail filter
 		$this->DbMasterFilter = $this->getMasterFilter(); // Restore master filter
 		$this->DbDetailFilter = $this->getDetailFilter(); // Restore detail filter
+
+		// Add master User ID filter
+		if ($Security->currentUserID() != "" && !$Security->isAdmin()) { // Non system admin
+			if ($this->getCurrentMasterTable() == "assessments")
+				$this->DbMasterFilter = $this->addMasterUserIDFilter($this->DbMasterFilter, "assessments"); // Add master User ID filter
+		}
 		AddFilter($filter, $this->DbDetailFilter);
 		AddFilter($filter, $this->SearchWhere);
 

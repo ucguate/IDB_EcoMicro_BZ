@@ -509,6 +509,11 @@ $assessments_grid->ListOptions->render("body", "left", $assessments_grid->RowCou
 <span<?php echo $assessments_grid->user_id->viewAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?php echo HtmlEncode(RemoveHtml($assessments_grid->user_id->ViewValue)) ?>"></span>
 </span>
 <input type="hidden" id="x<?php echo $assessments_grid->RowIndex ?>_user_id" name="x<?php echo $assessments_grid->RowIndex ?>_user_id" value="<?php echo HtmlEncode($assessments_grid->user_id->CurrentValue) ?>">
+<?php } elseif (!$Security->isAdmin() && $Security->isLoggedIn() && !$assessments->userIDAllow("grid")) { // Non system admin ?>
+<span id="el<?php echo $assessments_grid->RowCount ?>_assessments_user_id" class="form-group">
+<span<?php echo $assessments_grid->user_id->viewAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?php echo HtmlEncode(RemoveHtml($assessments_grid->user_id->EditValue)) ?>"></span>
+</span>
+<input type="hidden" data-table="assessments" data-field="x_user_id" name="x<?php echo $assessments_grid->RowIndex ?>_user_id" id="x<?php echo $assessments_grid->RowIndex ?>_user_id" value="<?php echo HtmlEncode($assessments_grid->user_id->CurrentValue) ?>">
 <?php } else { ?>
 <span id="el<?php echo $assessments_grid->RowCount ?>_assessments_user_id" class="form-group">
 <?php
@@ -536,6 +541,11 @@ loadjs.ready(["fassessmentsgrid"], function() {
 <span<?php echo $assessments_grid->user_id->viewAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?php echo HtmlEncode(RemoveHtml($assessments_grid->user_id->ViewValue)) ?>"></span>
 </span>
 <input type="hidden" id="x<?php echo $assessments_grid->RowIndex ?>_user_id" name="x<?php echo $assessments_grid->RowIndex ?>_user_id" value="<?php echo HtmlEncode($assessments_grid->user_id->CurrentValue) ?>">
+<?php } elseif (!$Security->isAdmin() && $Security->isLoggedIn() && !$assessments->userIDAllow("grid")) { // Non system admin ?>
+<span id="el<?php echo $assessments_grid->RowCount ?>_assessments_user_id" class="form-group">
+<span<?php echo $assessments_grid->user_id->viewAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?php echo HtmlEncode(RemoveHtml($assessments_grid->user_id->EditValue)) ?>"></span>
+</span>
+<input type="hidden" data-table="assessments" data-field="x_user_id" name="x<?php echo $assessments_grid->RowIndex ?>_user_id" id="x<?php echo $assessments_grid->RowIndex ?>_user_id" value="<?php echo HtmlEncode($assessments_grid->user_id->CurrentValue) ?>">
 <?php } else { ?>
 <span id="el<?php echo $assessments_grid->RowCount ?>_assessments_user_id" class="form-group">
 <?php
@@ -1079,6 +1089,11 @@ $assessments_grid->ListOptions->render("body", "left", $assessments_grid->RowInd
 <span<?php echo $assessments_grid->user_id->viewAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?php echo HtmlEncode(RemoveHtml($assessments_grid->user_id->ViewValue)) ?>"></span>
 </span>
 <input type="hidden" id="x<?php echo $assessments_grid->RowIndex ?>_user_id" name="x<?php echo $assessments_grid->RowIndex ?>_user_id" value="<?php echo HtmlEncode($assessments_grid->user_id->CurrentValue) ?>">
+<?php } elseif (!$Security->isAdmin() && $Security->isLoggedIn() && !$assessments->userIDAllow("grid")) { // Non system admin ?>
+<span id="el$rowindex$_assessments_user_id" class="form-group assessments_user_id">
+<span<?php echo $assessments_grid->user_id->viewAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?php echo HtmlEncode(RemoveHtml($assessments_grid->user_id->EditValue)) ?>"></span>
+</span>
+<input type="hidden" data-table="assessments" data-field="x_user_id" name="x<?php echo $assessments_grid->RowIndex ?>_user_id" id="x<?php echo $assessments_grid->RowIndex ?>_user_id" value="<?php echo HtmlEncode($assessments_grid->user_id->CurrentValue) ?>">
 <?php } else { ?>
 <span id="el$rowindex$_assessments_user_id" class="form-group assessments_user_id">
 <?php

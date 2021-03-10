@@ -19,6 +19,14 @@ class assessments_edit extends assessments
 	// Page object name
 	public $PageObjName = "assessments_edit";
 
+	// Audit Trail
+	public $AuditTrailOnAdd = TRUE;
+	public $AuditTrailOnEdit = TRUE;
+	public $AuditTrailOnDelete = TRUE;
+	public $AuditTrailOnView = FALSE;
+	public $AuditTrailOnViewData = FALSE;
+	public $AuditTrailOnSearch = FALSE;
+
 	// Page headings
 	public $Heading = "";
 	public $Subheading = "";
@@ -680,6 +688,11 @@ class assessments_edit extends assessments
 				$Security->UserID_Loading();
 				$Security->loadUserID();
 				$Security->UserID_Loaded();
+				if (strval($Security->currentUserID()) == "") {
+					$this->setFailureMessage(DeniedMessage()); // Set no permission
+					$this->terminate(GetUrl("assessmentslist.php"));
+					return;
+				}
 			}
 		}
 
@@ -1068,6 +1081,15 @@ class assessments_edit extends assessments
 			$this->loadRowValues($rs); // Load row values
 			$rs->close();
 		}
+
+		// Check if valid User ID
+		if ($res) {
+			$res = $this->showOptionLink('edit');
+			if (!$res) {
+				$userIdMsg = DeniedMessage();
+				$this->setFailureMessage($userIdMsg);
+			}
+		}
 		return $res;
 	}
 
@@ -1427,6 +1449,31 @@ class assessments_edit extends assessments
 					}
 				} else {
 					$this->user_id->ViewValue = NULL;
+				}
+				$this->user_id->ViewCustomAttributes = "";
+			} elseif (!$Security->isAdmin() && $Security->isLoggedIn() && !$this->userIDAllow("edit")) { // Non system admin
+				$this->user_id->CurrentValue = CurrentUserID();
+				$this->user_id->EditValue = $this->user_id->CurrentValue;
+				$curVal = strval($this->user_id->CurrentValue);
+				if ($curVal != "") {
+					$this->user_id->EditValue = $this->user_id->lookupCacheOption($curVal);
+					if ($this->user_id->EditValue === NULL) { // Lookup from database
+						$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
+						$sqlWrk = $this->user_id->Lookup->getSql(FALSE, $filterWrk, '', $this);
+						$rswrk = Conn()->execute($sqlWrk);
+						if ($rswrk && !$rswrk->EOF) { // Lookup values found
+							$arwrk = [];
+							$arwrk[1] = FormatNumber($rswrk->fields('df'), 0, -2, -2, -2);
+							$arwrk[2] = $rswrk->fields('df2');
+							$arwrk[3] = $rswrk->fields('df3');
+							$this->user_id->EditValue = $this->user_id->displayValue($arwrk);
+							$rswrk->Close();
+						} else {
+							$this->user_id->EditValue = $this->user_id->CurrentValue;
+						}
+					}
+				} else {
+					$this->user_id->EditValue = NULL;
 				}
 				$this->user_id->ViewCustomAttributes = "";
 			} else {
@@ -2058,6 +2105,15 @@ class assessments_edit extends assessments
 			WriteJson(["success" => TRUE, $this->TableVar => $row]);
 		}
 		return $editRow;
+	}
+
+	// Show link optionally based on User ID
+	protected function showOptionLink($id = "")
+	{
+		global $Security;
+		if ($Security->isLoggedIn() && !$Security->isAdmin() && !$this->userIDAllow($id))
+			return $Security->isValidUserID($this->user_id->CurrentValue);
+		return TRUE;
 	}
 
 	// Set up master/detail based on QueryString

@@ -373,6 +373,10 @@ class results_grid extends results
 		}
 		$this->AddUrl = "resultsadd.php";
 
+		// Table object (assessments)
+		if (!isset($GLOBALS['assessments']))
+			$GLOBALS['assessments'] = new assessments();
+
 		// Table object (users)
 		if (!isset($GLOBALS['users']))
 			$GLOBALS['users'] = new users();
@@ -816,6 +820,12 @@ class results_grid extends results
 		// Restore master/detail filter
 		$this->DbMasterFilter = $this->getMasterFilter(); // Restore master filter
 		$this->DbDetailFilter = $this->getDetailFilter(); // Restore detail filter
+
+		// Add master User ID filter
+		if ($Security->currentUserID() != "" && !$Security->isAdmin()) { // Non system admin
+			if ($this->getCurrentMasterTable() == "assessments")
+				$this->DbMasterFilter = $this->addMasterUserIDFilter($this->DbMasterFilter, "assessments"); // Add master User ID filter
+		}
 		AddFilter($filter, $this->DbDetailFilter);
 		AddFilter($filter, $this->SearchWhere);
 
@@ -2232,6 +2242,34 @@ class results_grid extends results
 	protected function addRow($rsold = NULL)
 	{
 		global $Language, $Security;
+
+		// Check if valid key values for master user
+		if ($Security->currentUserID() != "" && !$Security->isAdmin()) { // Non system admin
+			$masterFilter = $this->sqlMasterFilter_assessments();
+			if (strval($this->assessment_id->CurrentValue) != "") {
+				$masterFilter = str_replace("@id@", AdjustSql($this->assessment_id->CurrentValue, "DB"), $masterFilter);
+			} else {
+				$masterFilter = "";
+			}
+			if ($masterFilter != "") {
+				$rsmaster = $GLOBALS["assessments"]->loadRs($masterFilter);
+				$this->MasterRecordExists = ($rsmaster && !$rsmaster->EOF);
+				$validMasterKey = TRUE;
+				if ($this->MasterRecordExists) {
+					$validMasterKey = $Security->isValidUserID($rsmaster->fields['user_id']);
+				} elseif ($this->getCurrentMasterTable() == "assessments") {
+					$validMasterKey = FALSE;
+				}
+				if (!$validMasterKey) {
+					$masterUserIdMsg = str_replace("%c", CurrentUserID(), $Language->phrase("UnAuthorizedMasterUserID"));
+					$masterUserIdMsg = str_replace("%f", $sMasterFilter, $masterUserIdMsg);
+					$this->setFailureMessage($masterUserIdMsg);
+					return FALSE;
+				}
+				if ($rsmaster)
+					$rsmaster->close();
+			}
+		}
 
 		// Set up foreign key field value from Session
 			if ($this->getCurrentMasterTable() == "assessments") {

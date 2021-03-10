@@ -414,6 +414,7 @@ class logout
 				WriteCookie("Username", ""); // Clear user name cookie
 			WriteCookie("Password", ""); // Clear password cookie
 			WriteCookie("LastUrl", ""); // Clear last URL
+			$this->writeAuditTrailOnLogout($username);
 
 			// Call User LoggedOut event
 			$this->User_LoggedOut($username);
@@ -444,6 +445,13 @@ class logout
 			else
 				$this->terminate("login.php"); // Go to login page
 		}
+	}
+
+	// Write audit trail on logout
+	protected function writeAuditTrailOnLogout($usr)
+	{
+		global $Language;
+		WriteAuditTrail("log", DbCurrentDateTime(), ScriptName(), $usr, $Language->phrase("AuditTrailLogout"), CurrentUserIP(), "", "", "", "");
 	}
 
 	// Page Load event

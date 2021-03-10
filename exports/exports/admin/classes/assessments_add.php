@@ -19,6 +19,14 @@ class assessments_add extends assessments
 	// Page object name
 	public $PageObjName = "assessments_add";
 
+	// Audit Trail
+	public $AuditTrailOnAdd = TRUE;
+	public $AuditTrailOnEdit = TRUE;
+	public $AuditTrailOnDelete = TRUE;
+	public $AuditTrailOnView = FALSE;
+	public $AuditTrailOnViewData = FALSE;
+	public $AuditTrailOnSearch = FALSE;
+
 	// Page headings
 	public $Heading = "";
 	public $Subheading = "";
@@ -684,6 +692,11 @@ class assessments_add extends assessments
 				$Security->UserID_Loading();
 				$Security->loadUserID();
 				$Security->UserID_Loaded();
+				if (strval($Security->currentUserID()) == "") {
+					$this->setFailureMessage(DeniedMessage()); // Set no permission
+					$this->terminate(GetUrl("assessmentslist.php"));
+					return;
+				}
 			}
 		}
 
@@ -867,8 +880,7 @@ class assessments_add extends assessments
 	{
 		$this->id->CurrentValue = NULL;
 		$this->id->OldValue = $this->id->CurrentValue;
-		$this->user_id->CurrentValue = NULL;
-		$this->user_id->OldValue = $this->user_id->CurrentValue;
+		$this->user_id->CurrentValue = CurrentUserID();
 		$this->customer_id->CurrentValue = NULL;
 		$this->customer_id->OldValue = $this->customer_id->CurrentValue;
 		$this->customer_first_name->CurrentValue = NULL;
@@ -1076,6 +1088,15 @@ class assessments_add extends assessments
 			$res = TRUE;
 			$this->loadRowValues($rs); // Load row values
 			$rs->close();
+		}
+
+		// Check if valid User ID
+		if ($res) {
+			$res = $this->showOptionLink('add');
+			if (!$res) {
+				$userIdMsg = DeniedMessage();
+				$this->setFailureMessage($userIdMsg);
+			}
 		}
 		return $res;
 	}
@@ -1437,6 +1458,31 @@ class assessments_add extends assessments
 					}
 				} else {
 					$this->user_id->ViewValue = NULL;
+				}
+				$this->user_id->ViewCustomAttributes = "";
+			} elseif (!$Security->isAdmin() && $Security->isLoggedIn() && !$this->userIDAllow("add")) { // Non system admin
+				$this->user_id->CurrentValue = CurrentUserID();
+				$this->user_id->EditValue = $this->user_id->CurrentValue;
+				$curVal = strval($this->user_id->CurrentValue);
+				if ($curVal != "") {
+					$this->user_id->EditValue = $this->user_id->lookupCacheOption($curVal);
+					if ($this->user_id->EditValue === NULL) { // Lookup from database
+						$filterWrk = "`id`" . SearchString("=", $curVal, DATATYPE_NUMBER, "");
+						$sqlWrk = $this->user_id->Lookup->getSql(FALSE, $filterWrk, '', $this);
+						$rswrk = Conn()->execute($sqlWrk);
+						if ($rswrk && !$rswrk->EOF) { // Lookup values found
+							$arwrk = [];
+							$arwrk[1] = FormatNumber($rswrk->fields('df'), 0, -2, -2, -2);
+							$arwrk[2] = $rswrk->fields('df2');
+							$arwrk[3] = $rswrk->fields('df3');
+							$this->user_id->EditValue = $this->user_id->displayValue($arwrk);
+							$rswrk->Close();
+						} else {
+							$this->user_id->EditValue = $this->user_id->CurrentValue;
+						}
+					}
+				} else {
+					$this->user_id->EditValue = NULL;
 				}
 				$this->user_id->ViewCustomAttributes = "";
 			} else {
@@ -1850,6 +1896,18 @@ class assessments_add extends assessments
 	{
 		global $Language, $Security;
 
+		// Check if valid User ID
+		$validUser = FALSE;
+		if ($Security->currentUserID() != "" && !EmptyValue($this->user_id->CurrentValue) && !$Security->isAdmin()) { // Non system admin
+			$validUser = $Security->isValidUserID($this->user_id->CurrentValue);
+			if (!$validUser) {
+				$userIdMsg = str_replace("%c", CurrentUserID(), $Language->phrase("UnAuthorizedUserID"));
+				$userIdMsg = str_replace("%u", $this->user_id->CurrentValue, $userIdMsg);
+				$this->setFailureMessage($userIdMsg);
+				return FALSE;
+			}
+		}
+
 		// Check if valid key values for master user
 		if ($Security->currentUserID() != "" && !$Security->isAdmin()) { // Non system admin
 			$masterFilter = $this->sqlMasterFilter_users();
@@ -2068,6 +2126,15 @@ class assessments_add extends assessments
 			WriteJson(["success" => TRUE, $this->TableVar => $row]);
 		}
 		return $addRow;
+	}
+
+	// Show link optionally based on User ID
+	protected function showOptionLink($id = "")
+	{
+		global $Security;
+		if ($Security->isLoggedIn() && !$Security->isAdmin() && !$this->userIDAllow($id))
+			return $Security->isValidUserID($this->user_id->CurrentValue);
+		return TRUE;
 	}
 
 	// Set up master/detail based on QueryString

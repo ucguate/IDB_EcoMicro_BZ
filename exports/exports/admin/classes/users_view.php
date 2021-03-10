@@ -51,6 +51,14 @@ class users_view extends users
 	public $MultiDeleteUrl;
 	public $MultiUpdateUrl;
 
+	// Audit Trail
+	public $AuditTrailOnAdd = TRUE;
+	public $AuditTrailOnEdit = TRUE;
+	public $AuditTrailOnDelete = TRUE;
+	public $AuditTrailOnView = FALSE;
+	public $AuditTrailOnViewData = FALSE;
+	public $AuditTrailOnSearch = FALSE;
+
 	// Page headings
 	public $Heading = "";
 	public $Subheading = "";
@@ -1016,6 +1024,8 @@ class users_view extends users
 		$this->Row_Selected($row);
 		if (!$rs || $rs->EOF)
 			return;
+		if ($this->AuditTrailOnView)
+			$this->writeAuditTrailOnView($row);
 		$this->id->setDbValue($row['id']);
 		$this->first_names->setDbValue($row['first_names']);
 		$this->last_names->setDbValue($row['last_names']);

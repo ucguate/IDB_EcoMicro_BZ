@@ -19,6 +19,14 @@ class assessments_delete extends assessments
 	// Page object name
 	public $PageObjName = "assessments_delete";
 
+	// Audit Trail
+	public $AuditTrailOnAdd = TRUE;
+	public $AuditTrailOnEdit = TRUE;
+	public $AuditTrailOnDelete = TRUE;
+	public $AuditTrailOnView = FALSE;
+	public $AuditTrailOnViewData = FALSE;
+	public $AuditTrailOnSearch = FALSE;
+
 	// Page headings
 	public $Heading = "";
 	public $Subheading = "";
@@ -589,6 +597,11 @@ class assessments_delete extends assessments
 				$Security->UserID_Loading();
 				$Security->loadUserID();
 				$Security->UserID_Loaded();
+				if (strval($Security->currentUserID()) == "") {
+					$this->setFailureMessage(DeniedMessage()); // Set no permission
+					$this->terminate(GetUrl("assessmentslist.php"));
+					return;
+				}
 			}
 		}
 		$this->CurrentAction = Param("action"); // Set up current action
@@ -657,6 +670,28 @@ class assessments_delete extends assessments
 
 		// Set up filter (WHERE Clause)
 		$this->CurrentFilter = $filter;
+
+		// Check if valid User ID
+		$conn = $this->getConnection();
+		$sql = $this->getSql($this->CurrentFilter);
+		if ($rs = LoadRecordset($sql, $conn)) {
+			$res = TRUE;
+			while (!$rs->EOF) {
+				$this->loadRowValues($rs);
+				if (!$this->showOptionLink('delete')) {
+					$userIdMsg = $Language->phrase("NoDeletePermission");
+					$this->setFailureMessage($userIdMsg);
+					$res = FALSE;
+					break;
+				}
+				$rs->moveNext();
+			}
+			$rs->close();
+			if (!$res) {
+				$this->terminate("assessmentslist.php"); // Return to list
+				return;
+			}
+		}
 
 		// Get action
 		if (IsApi()) {
@@ -1089,6 +1124,8 @@ class assessments_delete extends assessments
 		}
 		$rows = ($rs) ? $rs->getRows() : [];
 		$conn->beginTrans();
+		if ($this->AuditTrailOnDelete)
+			$this->writeAuditTrailDummy($Language->phrase("BatchDeleteBegin")); // Batch delete begin
 
 		// Clone old rows
 		$rsold = $rows;
@@ -1137,8 +1174,12 @@ class assessments_delete extends assessments
 		}
 		if ($deleteRows) {
 			$conn->commitTrans(); // Commit the changes
+			if ($this->AuditTrailOnDelete)
+				$this->writeAuditTrailDummy($Language->phrase("BatchDeleteSuccess")); // Batch delete success
 		} else {
 			$conn->rollbackTrans(); // Rollback changes
+			if ($this->AuditTrailOnDelete)
+				$this->writeAuditTrailDummy($Language->phrase("BatchDeleteRollback")); // Batch delete rollback
 		}
 
 		// Call Row Deleted event
@@ -1154,6 +1195,15 @@ class assessments_delete extends assessments
 			WriteJson(["success" => TRUE, $this->TableVar => $row]);
 		}
 		return $deleteRows;
+	}
+
+	// Show link optionally based on User ID
+	protected function showOptionLink($id = "")
+	{
+		global $Security;
+		if ($Security->isLoggedIn() && !$Security->isAdmin() && !$this->userIDAllow($id))
+			return $Security->isValidUserID($this->user_id->CurrentValue);
+		return TRUE;
 	}
 
 	// Set up master/detail based on QueryString

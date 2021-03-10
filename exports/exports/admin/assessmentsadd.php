@@ -230,6 +230,11 @@ $assessments_add->showMessage();
 <span<?php echo $assessments_add->user_id->viewAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?php echo HtmlEncode(RemoveHtml($assessments_add->user_id->ViewValue)) ?>"></span>
 </span>
 <input type="hidden" id="x_user_id" name="x_user_id" value="<?php echo HtmlEncode($assessments_add->user_id->CurrentValue) ?>">
+<?php } elseif (!$Security->isAdmin() && $Security->isLoggedIn() && !$assessments->userIDAllow("add")) { // Non system admin ?>
+<span id="el_assessments_user_id">
+<span<?php echo $assessments_add->user_id->viewAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?php echo HtmlEncode(RemoveHtml($assessments_add->user_id->EditValue)) ?>"></span>
+</span>
+<input type="hidden" data-table="assessments" data-field="x_user_id" name="x_user_id" id="x_user_id" value="<?php echo HtmlEncode($assessments_add->user_id->CurrentValue) ?>">
 <?php } else { ?>
 <span id="el_assessments_user_id">
 <?php

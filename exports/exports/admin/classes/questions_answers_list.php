@@ -402,6 +402,10 @@ class questions_answers_list extends questions_answers
 		$this->MultiDeleteUrl = "questions_answersdelete.php";
 		$this->MultiUpdateUrl = "questions_answersupdate.php";
 
+		// Table object (assessments)
+		if (!isset($GLOBALS['assessments']))
+			$GLOBALS['assessments'] = new assessments();
+
 		// Table object (users)
 		if (!isset($GLOBALS['users']))
 			$GLOBALS['users'] = new users();

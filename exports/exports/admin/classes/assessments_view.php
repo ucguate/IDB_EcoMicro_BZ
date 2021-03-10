@@ -51,6 +51,14 @@ class assessments_view extends assessments
 	public $MultiDeleteUrl;
 	public $MultiUpdateUrl;
 
+	// Audit Trail
+	public $AuditTrailOnAdd = TRUE;
+	public $AuditTrailOnEdit = TRUE;
+	public $AuditTrailOnDelete = TRUE;
+	public $AuditTrailOnView = FALSE;
+	public $AuditTrailOnViewData = FALSE;
+	public $AuditTrailOnSearch = FALSE;
+
 	// Page headings
 	public $Heading = "";
 	public $Subheading = "";
@@ -744,6 +752,11 @@ class assessments_view extends assessments
 				$Security->UserID_Loading();
 				$Security->loadUserID();
 				$Security->UserID_Loaded();
+				if (strval($Security->currentUserID()) == "") {
+					$this->setFailureMessage(DeniedMessage()); // Set no permission
+					$this->terminate(GetUrl("assessmentslist.php"));
+					return;
+				}
 			}
 		}
 		$this->CurrentAction = Param("action"); // Set up current action
@@ -898,7 +911,7 @@ class assessments_view extends assessments
 			$item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"#\" onclick=\"return ew.modalDialogShow({lnk:this,url:'" . HtmlEncode($this->EditUrl) . "'});\">" . $Language->phrase("ViewPageEditLink") . "</a>";
 		else
 			$item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode($this->EditUrl) . "\">" . $Language->phrase("ViewPageEditLink") . "</a>";
-		$item->Visible = ($this->EditUrl != "" && $Security->canEdit());
+		$item->Visible = ($this->EditUrl != "" && $Security->canEdit()&& $this->showOptionLink('edit'));
 
 		// Copy
 		$item = &$option->add("copy");
@@ -907,12 +920,12 @@ class assessments_view extends assessments
 			$item->Body = "<a class=\"ew-action ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"#\" onclick=\"return ew.modalDialogShow({lnk:this,btn:'AddBtn',url:'" . HtmlEncode($this->CopyUrl) . "'});\">" . $Language->phrase("ViewPageCopyLink") . "</a>";
 		else
 			$item->Body = "<a class=\"ew-action ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"" . HtmlEncode($this->CopyUrl) . "\">" . $Language->phrase("ViewPageCopyLink") . "</a>";
-		$item->Visible = ($this->CopyUrl != "" && $Security->canAdd());
+		$item->Visible = ($this->CopyUrl != "" && $Security->canAdd() && $this->showOptionLink('add'));
 
 		// Delete
 		$item = &$option->add("delete");
 		$item->Body = "<a onclick=\"return ew.confirmDelete(this);\" class=\"ew-action ew-delete\" title=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) . "\" data-caption=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) . "\" href=\"" . HtmlEncode($this->DeleteUrl) . "\">" . $Language->phrase("ViewPageDeleteLink") . "</a>";
-		$item->Visible = ($this->DeleteUrl != "" && $Security->canDelete());
+		$item->Visible = ($this->DeleteUrl != "" && $Security->canDelete() && $this->showOptionLink('delete'));
 		$option = $options["detail"];
 		$detailTableLink = "";
 		$detailViewTblVar = "";
@@ -1081,6 +1094,8 @@ class assessments_view extends assessments
 		$this->Row_Selected($row);
 		if (!$rs || $rs->EOF)
 			return;
+		if ($this->AuditTrailOnView)
+			$this->writeAuditTrailOnView($row);
 		$this->id->setDbValue($row['id']);
 		$this->user_id->setDbValue($row['user_id']);
 		$this->customer_id->setDbValue($row['customer_id']);
@@ -1404,6 +1419,15 @@ class assessments_view extends assessments
 		// Call Row Rendered event
 		if ($this->RowType != ROWTYPE_AGGREGATEINIT)
 			$this->Row_Rendered();
+	}
+
+	// Show link optionally based on User ID
+	protected function showOptionLink($id = "")
+	{
+		global $Security;
+		if ($Security->isLoggedIn() && !$Security->isAdmin() && !$this->userIDAllow($id))
+			return $Security->isValidUserID($this->user_id->CurrentValue);
+		return TRUE;
 	}
 
 	// Set up master/detail based on QueryString
