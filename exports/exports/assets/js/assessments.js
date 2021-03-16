@@ -310,7 +310,7 @@ function buildReport(assessment_id, type){
       // CUSTOMER DATA
       $('#'+customerName).text(response.assessment[0].customer_first_name);
       // setting page title 
-      document.title = response.assessment[0].customer_first_name.replace(/ /g,"_")+'-'+assessment_id;
+      document.title = 'riskAssessmentTool-'+response.assessment[0].customer_first_name.replace(/ /g,"_")+'-'+assessment_id;
 
       if(response.assessment[0].customer_id.lenght > 3){
         $('#'+customerID).text(response.assessment[0].customer_id);
